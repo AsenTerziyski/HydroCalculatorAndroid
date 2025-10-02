@@ -18,7 +18,14 @@ import androidx.core.view.WindowCompat
 private val DarkColorScheme = darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
-    tertiary = Pink80
+    tertiary = Pink80,
+    background = Black, // Set the background to black
+    surface = Black,    // Also set the surface to black
+    onPrimary = Purple40,
+    onSecondary = PurpleGrey40,
+    onTertiary = Pink40,
+    onBackground = White, // Set text color on background to white
+    onSurface = White
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -51,7 +58,7 @@ fun HydrocalculatorTheme(
         }
 
         darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        else -> DarkColorScheme
     }
     val view = LocalView.current
     if (!view.isInEditMode) {
