@@ -1,6 +1,8 @@
 plugins {
     id("com.android.application")
+    id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
@@ -40,7 +42,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
+        kotlinCompilerExtensionVersion = "1.5.11"
     }
     packaging {
         resources {
@@ -50,6 +52,15 @@ android {
 }
 
 dependencies {
+
+    // --- Hilt Core Dependencies ---
+    implementation("com.google.dagger:hilt-android:2.51.1")
+    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+
+    // --- Hilt ViewModel Integration ---
+    // This allows you to inject ViewModels using @HiltViewModel
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
 
     implementation("androidx.core:core-ktx:1.17.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.4")
@@ -68,4 +79,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     implementation("androidx.navigation:navigation-compose:2.9.5")
     implementation("androidx.core:core-splashscreen:1.0.1")
+}
+
+kapt {
+    correctErrorTypes = true
 }
