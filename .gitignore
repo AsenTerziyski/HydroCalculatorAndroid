@@ -1,15 +1,18 @@
+gitignore
+# Android Studio IDE-specific files and metadata
+# This one line replaces all the separate /.idea/ entries
+.idea/
+
+# Other standard Android ignores
 *.iml
 .gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
 local.properties
+.DS_Store
+.cxx
+.externalNativeBuild
+
+# Build output
+/build
+
+# Captures (screenshots and videos from the emulator)
+/captures
