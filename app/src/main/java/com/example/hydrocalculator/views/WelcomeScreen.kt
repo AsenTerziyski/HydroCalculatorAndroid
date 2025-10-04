@@ -1,6 +1,8 @@
 package com.example.hydrocalculator.views
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -11,14 +13,18 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun WelcomeScreen() {
-    Box(
+    Column (
         modifier = Modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Welcome to Hydro Calculator!",
             color = Color.White,
             fontSize = 24.sp
         )
+
+        LoadingView()
+
     }
 }
