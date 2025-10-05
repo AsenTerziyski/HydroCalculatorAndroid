@@ -27,7 +27,7 @@ fun WelcomeScreen() {
             text = stringResource(R.string.welcome_hydro),
             style = TextStyle(
                 brush = MaterialTheme.hydroGradient,
-                fontSize = 42.sp,
+                fontSize = 37.sp,
                 fontWeight = FontWeight.ExtraBold
             )
         )
