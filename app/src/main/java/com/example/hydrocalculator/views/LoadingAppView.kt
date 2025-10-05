@@ -70,6 +70,6 @@ fun LoadingAppView(
 
 @Preview
 @Composable
-fun LoadingViewPreview() {
+fun LoadingAppViewPreview() {
     LoadingAppView()
 }
