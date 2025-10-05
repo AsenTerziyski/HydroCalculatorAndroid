@@ -26,7 +26,7 @@ import com.example.hydrocalculator.ui.theme.hydroGradient
 import kotlinx.coroutines.delay
 
 @Composable
-fun LoadingView(
+fun LoadingAppView(
     modifier: Modifier = Modifier,
     text: String = stringResource(R.string.loading),
 ) {
@@ -71,5 +71,5 @@ fun LoadingView(
 @Preview
 @Composable
 fun LoadingViewPreview() {
-    LoadingView()
+    LoadingAppView()
 }

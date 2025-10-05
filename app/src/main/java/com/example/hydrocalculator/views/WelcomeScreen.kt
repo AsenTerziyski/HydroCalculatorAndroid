@@ -31,6 +31,6 @@ fun WelcomeScreen() {
                 fontWeight = FontWeight.ExtraBold
             )
         )
-        LoadingView()
+        LoadingAppView()
     }
 }
