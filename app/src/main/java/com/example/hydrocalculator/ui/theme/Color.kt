@@ -12,3 +12,7 @@ val Pink40 = Color(0xFF7D5260)
 
 val Black = Color(0xFF000000)
 val White = Color(0xFFFFFFFF)
+
+// HYDRO CALCULATOR COLORS
+val HydroGreen = Color(0xFF00C853)
+val HydroCyan = Color(0xFF00B8D4)
