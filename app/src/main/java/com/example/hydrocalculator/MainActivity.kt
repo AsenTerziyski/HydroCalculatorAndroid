@@ -40,7 +40,11 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppScaffold(title: String, content: @Composable (Modifier) -> Unit) {
     Scaffold(
-        topBar = { HydroAppBar(title) }
+        topBar = {
+            HydroAppBar(title) {
+
+            }
+        }
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))
     }
