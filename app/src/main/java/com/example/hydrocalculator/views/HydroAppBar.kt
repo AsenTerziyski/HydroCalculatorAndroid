@@ -1,6 +1,7 @@
-package com.example.hydrocalculator
+package com.example.hydrocalculator.views
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +31,7 @@ fun HydroAppBar(title: String = "") {
     val animatedFontSize by animateFloatAsState(
         targetValue = if (startAnimation) maxFontSize.value else minFontSize.value,
         label = "fontSizeAnimation",
-        animationSpec = androidx.compose.animation.core.tween(durationMillis = fullTitle.length * 100)
+        animationSpec = tween(durationMillis = fullTitle.length * 100)
     )
 
     LaunchedEffect(fullTitle) {
