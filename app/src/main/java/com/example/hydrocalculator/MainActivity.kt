@@ -15,6 +15,7 @@ import androidx.core.view.WindowCompat
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.hydrocalculator.navigation.HydroAppNavigationGraph
 import com.example.hydrocalculator.navigation.HydroAppRoutes
 import com.example.hydrocalculator.ui.theme.HydrocalculatorTheme
 import com.example.hydrocalculator.views.MainScreen
@@ -37,31 +38,7 @@ class MainActivity : ComponentActivity() {
             HydrocalculatorTheme(
                 darkTheme = true,
                 dynamicColor = false
-            ) {
-
-                val navController = rememberNavController()
-                NavHost(
-                    navController = navController,
-                    startDestination = HydroAppRoutes.Welcome.route
-                ) {
-
-                    composable(route = HydroAppRoutes.Welcome.route) {
-                        WelcomeScreen(
-                            onWelcomeComplete = {
-                                navController.navigate(route = HydroAppRoutes.Main.route) {
-                                    popUpTo(HydroAppRoutes.Welcome.route) { inclusive = true }
-                                }
-                            }
-                        )
-                    }
-
-                    composable(route = HydroAppRoutes.Main.route) {
-                        AppScaffold(
-                            title = "Main Screen"
-                        ) { modifier -> MainScreen(modifier = modifier) }
-                    }
-                }
-            }
+            ) { HydroAppNavigationGraph() }
         }
     }
 }

@@ -33,7 +33,6 @@ fun HydroAppBar(title: String = "") {
         animationSpec = androidx.compose.animation.core.tween(durationMillis = fullTitle.length * 100)
     )
 
-    // 3. This effect handles the letter-by-letter reveal
     LaunchedEffect(fullTitle) {
         if (fullTitle.isNotEmpty()) {
             visibleTitle = ""

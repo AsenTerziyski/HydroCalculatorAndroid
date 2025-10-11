@@ -23,9 +23,7 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
-
     FullScreenEffect()
-
 
     LaunchedEffect(Unit) {
         delay(3000)
@@ -40,10 +38,6 @@ fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
-
-
-
-
             Text(
                 text = stringResource(R.string.welcome_hydro),
                 style = TextStyle(
