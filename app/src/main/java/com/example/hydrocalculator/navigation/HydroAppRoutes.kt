@@ -1,6 +1,11 @@
 package com.example.hydrocalculator.navigation
 
 sealed class HydroAppRoutes(val route: String) {
-    object Welcome: HydroAppRoutes("welcome_screen")
-    object Main: HydroAppRoutes("Main_screen")
+    object Welcome : HydroAppRoutes(WELCOME_ROUTE)
+    object Main : HydroAppRoutes(MAIN_ROUTE)
+
+    private companion object {
+        const val WELCOME_ROUTE = "welcome_screen"
+        const val MAIN_ROUTE = "main_screen"
+    }
 }

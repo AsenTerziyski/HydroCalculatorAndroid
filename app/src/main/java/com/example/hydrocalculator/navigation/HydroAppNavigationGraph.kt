@@ -16,7 +16,6 @@ fun HydroAppNavigationGraph() {
         navController = navController,
         startDestination = HydroAppRoutes.Welcome.route
     ) {
-        // Welcome Screen
         composable(route = HydroAppRoutes.Welcome.route) {
             WelcomeScreen(
                 onWelcomeComplete = {
