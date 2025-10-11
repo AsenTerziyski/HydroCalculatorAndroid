@@ -3,6 +3,9 @@ package com.example.hydrocalculator.views
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,8 +23,16 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
+
+    FullScreenEffect()
+
+
+    LaunchedEffect(Unit) {
+        delay(3000)
+        onWelcomeComplete.invoke()
+    }
     Surface(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding(),
         color = MaterialTheme.colorScheme.background //
     ) {
         Column(
@@ -30,12 +41,8 @@ fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
             verticalArrangement = Arrangement.Center
         ) {
 
-            FullScreenEffect()
 
-            LaunchedEffect(Unit) {
-                delay(3000)
-                onWelcomeComplete.invoke()
-            }
+
 
             Text(
                 text = stringResource(R.string.welcome_hydro),

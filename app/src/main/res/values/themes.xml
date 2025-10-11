@@ -1,12 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.Hydrocalculator" parent="android:Theme.Material.Light.NoActionBar" />
-
+    <!-- 1. This is the theme for the Splash Screen -->
     <style name="Theme.App.Starting" parent="Theme.SplashScreen">
+        <!-- This should be a color from your colors.xml, e.g., @color/splash_background -->
         <item name="windowSplashScreenBackground">@color/black</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/splash_screen_wrapper</item>
-        <item name="postSplashScreenTheme">@style/Theme.Hydrocalculator</item>
-        <item name="android:windowFullscreen">true</item>
+        <item name="postSplashScreenTheme">@style/Theme.HydroCalculator</item>
+
+        <!-- Setting the bar colors here is good practice -->
+        <item name="android:statusBarColor">@color/black</item>
+        <item name="android:navigationBarColor">@color/black</item>
+    </style>
+
+    <!--
+        2. This is the SINGLE definition for your main app theme.
+           It correctly uses Material 3 and has a transparent background.
+    -->
+    <style name="Theme.HydroCalculator" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Make the window background transparent to let Compose control the drawing -->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!-- This helps with smooth transitions -->
+        <item name="android:windowIsTranslucent">true</item>
     </style>
 </resources>
     
