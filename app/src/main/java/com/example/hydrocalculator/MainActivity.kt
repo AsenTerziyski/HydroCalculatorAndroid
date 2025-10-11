@@ -38,11 +38,15 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun AppScaffold(title: String, content: @Composable (Modifier) -> Unit) {
+fun AppScaffold(
+    title: String,
+    onBackPressed: (() -> Unit)? = null,
+    content: @Composable (Modifier) -> Unit
+) {
     Scaffold(
         topBar = {
             HydroAppBar(title) {
-
+                onBackPressed?.invoke()
             }
         }
     ) { innerPadding ->
