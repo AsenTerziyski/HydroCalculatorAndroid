@@ -7,11 +7,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hydrocalculator.AppScaffold
+import com.example.hydrocalculator.R
 import com.example.hydrocalculator.views.ConfirmationDialog
+import com.example.hydrocalculator.views.GoodbyeScreen
 import com.example.hydrocalculator.views.MainScreen
 import com.example.hydrocalculator.views.WelcomeScreen
 
@@ -38,22 +41,20 @@ fun HydroAppNavigationGraph() {
 
             var showDialog by remember { mutableStateOf(false) }
 
-            // 3. Show the dialog when the state is true
             if (showDialog) {
                 ConfirmationDialog(
-                    dialogTitle = "Exit HydroCalculator?",
-                    dialogText = "Are you sure you want to exit the app?",
+                    dialogTitle = stringResource(R.string.exit_hydrocalculator),
+                    dialogText = stringResource(R.string.are_you_sure_you_want_to_exit_the_app),
                     onDismissRequest = {
-                        // User clicked Cancel or outside the dialog
                         showDialog = false
                     },
                     onConfirmation = {
-                        // User clicked Exit, so finish the activity
-                        activity?.finish()
+                        navController.navigate(route = HydroAppRoutes.Goodbye.route) {
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 )
             }
-
 
             AppScaffold(
                 title = "Main Screen",
@@ -63,6 +64,10 @@ fun HydroAppNavigationGraph() {
             ) { modifier ->
                 MainScreen(modifier = modifier)
             }
+        }
+
+        composable(route = HydroAppRoutes.Goodbye.route) {
+            GoodbyeScreen { activity?.finish() }
         }
     }
 }
