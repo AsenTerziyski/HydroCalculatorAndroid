@@ -58,9 +58,7 @@ fun HydroAppNavigationGraph() {
 
             AppScaffold(
                 title = "Main Screen",
-                onBackPressed = {
-                    showDialog = true
-                }
+                onBackPressed = { showDialog = true }
             ) { modifier ->
                 MainScreen(modifier = modifier)
             }

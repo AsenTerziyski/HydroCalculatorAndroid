@@ -23,6 +23,7 @@ import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
 import com.example.hydrocalculator.ui.theme.hydroGradient
+import com.example.hydrocalculator.utils.UseTextAnimation
 import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,35 +33,15 @@ fun HydroAppBar(
     onBackPress: (() -> Unit)? = null
 ) {
 
-    val fullTitle = title
-    var visibleTitle by remember { mutableStateOf("") }
-    var startAnimation by remember { mutableStateOf(false) }
-
-    val minFontSize = 7.sp
-    val maxFontSize = MaterialTheme.typography.titleLarge.fontSize
-
-    val animatedFontSize by animateFloatAsState(
-        targetValue = if (startAnimation) maxFontSize.value else minFontSize.value,
-        label = "fontSizeAnimation",
-        animationSpec = tween(durationMillis = fullTitle.length * 100)
+    val (visibleTitle, animatedFontSize) = UseTextAnimation(
+        text = title,
+        minFontSize = 7.sp,
+        maxFontSize = MaterialTheme.typography.titleLarge.fontSize
     )
-
-    LaunchedEffect(fullTitle) {
-        if (fullTitle.isNotEmpty()) {
-            visibleTitle = ""
-            startAnimation = false
-            delay(100)
-            startAnimation = true
-            fullTitle.forEachIndexed { index, _ ->
-                visibleTitle = fullTitle.substring(0, index + 1)
-                delay(20)
-            }
-        }
-    }
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
-    val iconColor = if(isPressed) HydroGreen else HydroCyan
+    val iconColor = if (isPressed) HydroGreen else HydroCyan
 
     TopAppBar(
         title = {
@@ -68,7 +49,7 @@ fun HydroAppBar(
                 text = visibleTitle,
                 style = MaterialTheme.typography.titleLarge.copy(
                     brush = MaterialTheme.hydroGradient,
-                    fontSize = animatedFontSize.sp
+                    fontSize = animatedFontSize
                 )
             )
         },
