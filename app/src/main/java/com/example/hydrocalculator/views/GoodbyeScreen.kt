@@ -22,7 +22,7 @@ import kotlinx.coroutines.delay
 fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
 
     LaunchedEffect(Unit) {
-        delay(1000)
+        delay(3000)
         onGoodbyeComplete.invoke()
     }
     val title = "Goodbye, Hydro!"
