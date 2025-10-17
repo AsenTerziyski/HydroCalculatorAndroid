@@ -11,8 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.example.hydrocalculator.ui.theme.hydroGradient
+import com.example.hydrocalculator.utils.UseTextAnimation
 import kotlinx.coroutines.delay
 
 @Composable
@@ -22,6 +25,13 @@ fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
         delay(1000)
         onGoodbyeComplete.invoke()
     }
+    val title = "Goodbye, Hydro!"
+
+    val (visibleTitle, animatedFontSize) = UseTextAnimation(
+        text = title,
+        minFontSize = 32.sp,
+        maxFontSize = 0.sp
+    )
 
     Surface(
         modifier = Modifier.fillMaxSize(),
@@ -33,10 +43,12 @@ fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Goodbye!",
-                fontSize = 32.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                text = visibleTitle,
+                style = TextStyle(
+                    brush = MaterialTheme.hydroGradient,
+                    fontSize = animatedFontSize,
+                    fontWeight = FontWeight.Bold
+                )
             )
         }
     }
