@@ -1,24 +1,19 @@
 package com.example.hydrocalculator.navigation
 
 import android.app.Activity
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
-import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOut
-import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
-import androidx.compose.ui.unit.width
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,10 +21,8 @@ import com.example.hydrocalculator.AppScaffold
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.views.ConfirmationDialog
 import com.example.hydrocalculator.views.GoodbyeScreen
-import com.example.hydrocalculator.views.MainScreen
 import com.example.hydrocalculator.views.WelcomeScreen
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.example.hydrocalculator.views.calculationtype.CalculationTypeScreen
 
 @Composable
 fun HydroAppNavigationGraph() {
@@ -97,10 +90,10 @@ fun HydroAppNavigationGraph() {
             }
 
             AppScaffold(
-                title = "Main Screen",
+                title = "Select Calculation Type",
                 onBackPressed = { showDialog = true }
             ) { modifier ->
-                MainScreen(modifier = modifier)
+                CalculationTypeScreen(modifier = modifier)
             }
         }
 
