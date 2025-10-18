@@ -50,7 +50,7 @@ val MaterialTheme.hydroGradient: Brush
     @Composable
     @ReadOnlyComposable
     get() = Brush.linearGradient(
-        colors = listOf(White, HydroGreen, HydroCyan, White)
+        colors = listOf(HydroGreen, HydroCyan)
     )
 
 @Composable
