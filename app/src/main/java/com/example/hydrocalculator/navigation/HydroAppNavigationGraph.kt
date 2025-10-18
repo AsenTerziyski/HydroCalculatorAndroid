@@ -2,6 +2,8 @@ package com.example.hydrocalculator.navigation
 
 import android.app.Activity
 import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideInHorizontally
@@ -60,9 +62,9 @@ fun HydroAppNavigationGraph() {
             slideOut(
                 targetOffset = { fullSize -> IntOffset(fullSize.width, 0) },
                 animationSpec = animationSpec
-            )        }
+            )
+        }
     ) {
-
 
         composable(route = HydroAppRoutes.Welcome.route) {
             WelcomeScreen(
@@ -78,8 +80,6 @@ fun HydroAppNavigationGraph() {
 
             var showDialog by remember { mutableStateOf(false) }
 
-            val scope = rememberCoroutineScope()
-
             if (showDialog) {
                 ConfirmationDialog(
                     dialogTitle = stringResource(R.string.exit_hydrocalculator),
@@ -88,12 +88,9 @@ fun HydroAppNavigationGraph() {
                         showDialog = false
                     },
                     onConfirmation = {
-                        scope.launch {
-                            showDialog = false
-                            delay(200L)
-                            navController.navigate(route = HydroAppRoutes.Goodbye.route) {
-                                popUpTo(0) { inclusive = true }
-                            }
+                        showDialog = false
+                        navController.navigate(route = HydroAppRoutes.Goodbye.route) {
+                            popUpTo(0) { inclusive = true }
                         }
                     }
                 )
@@ -107,7 +104,13 @@ fun HydroAppNavigationGraph() {
             }
         }
 
-        composable(route = HydroAppRoutes.Goodbye.route) {
+        composable(
+            route = HydroAppRoutes.Goodbye.route,
+            enterTransition = { EnterTransition.None },
+            exitTransition = { ExitTransition.None },
+            popEnterTransition = { EnterTransition.None },
+            popExitTransition = { ExitTransition.None }
+        ) {
             GoodbyeScreen { activity?.finish() }
         }
     }

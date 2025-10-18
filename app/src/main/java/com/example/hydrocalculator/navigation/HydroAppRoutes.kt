@@ -9,7 +9,6 @@ sealed class HydroAppRoutes(val route: String) {
     private companion object {
         const val WELCOME_ROUTE = "welcome_screen"
         const val MAIN_ROUTE = "main_screen"
-
         const val GOODBYE_ROUTE = "goodbye_screen"
     }
 }
