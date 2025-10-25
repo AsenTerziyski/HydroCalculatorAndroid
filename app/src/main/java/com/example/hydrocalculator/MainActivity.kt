@@ -14,7 +14,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.example.hydrocalculator.navigation.HydroAppNavigationGraph
 import com.example.hydrocalculator.ui.theme.HydrocalculatorTheme
-import com.example.hydrocalculator.views.HydroAppBar
+import com.example.hydrocalculator.views.hydroappbars.HydroAppTopBar
 import com.example.hydrocalculator.vm.LoadingAppUiState
 import com.example.hydrocalculator.vm.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,7 +47,7 @@ fun AppScaffold(
 ) {
     Scaffold(
         topBar = {
-            HydroAppBar(title = title, icon = icon) { onBackPressed?.invoke() }
+            HydroAppTopBar(title = title, icon = icon) { onBackPressed?.invoke() }
         }
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))

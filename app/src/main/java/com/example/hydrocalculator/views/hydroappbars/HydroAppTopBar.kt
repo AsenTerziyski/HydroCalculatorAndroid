@@ -1,7 +1,5 @@
-package com.example.hydrocalculator.views
+package com.example.hydrocalculator.views.hydroappbars
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.material.icons.Icons
@@ -14,22 +12,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
 import com.example.hydrocalculator.ui.theme.hydroGradient
 import com.example.hydrocalculator.utils.UseTextAnimation
-import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HydroAppBar(
+fun HydroAppTopBar(
     title: String = "",
     icon: ImageVector? = null,
     onBackPress: (() -> Unit)? = null
