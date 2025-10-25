@@ -1,11 +1,10 @@
-package com.example.hydrocalculator.views
+package com.example.hydrocalculator.views.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,6 +18,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.theme.hydroGradient
+import com.example.hydrocalculator.views.FullScreenEffect
+import com.example.hydrocalculator.views.LoadingAppView
 import kotlinx.coroutines.delay
 
 @Composable

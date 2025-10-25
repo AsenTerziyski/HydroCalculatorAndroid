@@ -1,13 +1,12 @@
 package com.example.hydrocalculator.navigation
 
 import android.app.Activity
+import android.util.Log
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -21,11 +20,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.hydrocalculator.AppScaffold
 import com.example.hydrocalculator.R
+import com.example.hydrocalculator.utils.calculationTypeItems
 import com.example.hydrocalculator.views.ConfirmationDialog
-import com.example.hydrocalculator.views.GoodbyeScreen
-import com.example.hydrocalculator.views.WelcomeScreen
-import com.example.hydrocalculator.views.calculationtype.CalculationTypeScreen
+import com.example.hydrocalculator.views.screens.GoodbyeScreen
+import com.example.hydrocalculator.views.screens.WelcomeScreen
+import com.example.hydrocalculator.views.screens.CalculationTypeScreen
 import com.example.hydrocalculator.views.hydroappbars.HydroAppBottomBar
+import com.example.hydrocalculator.views.screens.CalculationPressureScreen
 
 @Composable
 fun HydroAppNavigationGraph() {
@@ -94,7 +95,7 @@ fun HydroAppNavigationGraph() {
 
             AppScaffold(
                 title = "Select Calculation Type",
-                icon =  null,
+                icon = null,
                 bottomBar = {
                     HydroAppBottomBar(
                         onSwitchOfClick = {
@@ -104,7 +105,29 @@ fun HydroAppNavigationGraph() {
                 },
                 onBackPressed = null
             ) { modifier ->
-                CalculationTypeScreen(modifier = modifier)
+                CalculationTypeScreen { calcType ->
+                    when (calcType.title) {
+                        "Pressurized Pipes" -> {
+                            Log.d("TAG101", "Go to Pressure")
+                            navController.navigate(
+                                route = HydroAppRoutes.PressureScreen.route
+                            )
+                        }
+
+                        "Gravity Pipes" -> {
+                            Log.d("TAG101", "Go to gravity")
+
+                        }
+
+                        "Your results" -> {
+                            Log.d("TAG101", "Got to results")
+                        }
+
+                        else -> {
+                            Log.d("TAG101", "Could not navigate!")
+                        }
+                    }
+                }
             }
         }
 
@@ -116,6 +139,12 @@ fun HydroAppNavigationGraph() {
             popExitTransition = { ExitTransition.None }
         ) {
             GoodbyeScreen { activity?.finish() }
+        }
+
+        composable(
+            route = HydroAppRoutes.PressureScreen.route
+        ) {
+            CalculationPressureScreen()
         }
     }
 }

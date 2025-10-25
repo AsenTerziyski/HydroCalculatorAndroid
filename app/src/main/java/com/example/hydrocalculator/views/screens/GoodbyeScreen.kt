@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views
+package com.example.hydrocalculator.views.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
