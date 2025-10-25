@@ -43,12 +43,14 @@ fun AppScaffold(
     title: String,
     icon: ImageVector? = null,
     onBackPressed: (() -> Unit)? = null,
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (Modifier) -> Unit
 ) {
     Scaffold(
         topBar = {
             HydroAppTopBar(title = title, icon = icon) { onBackPressed?.invoke() }
-        }
+        },
+        bottomBar = bottomBar
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))
     }

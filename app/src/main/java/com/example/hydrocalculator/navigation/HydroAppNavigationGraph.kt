@@ -25,6 +25,7 @@ import com.example.hydrocalculator.views.ConfirmationDialog
 import com.example.hydrocalculator.views.GoodbyeScreen
 import com.example.hydrocalculator.views.WelcomeScreen
 import com.example.hydrocalculator.views.calculationtype.CalculationTypeScreen
+import com.example.hydrocalculator.views.hydroappbars.HydroAppBottomBar
 
 @Composable
 fun HydroAppNavigationGraph() {
@@ -94,6 +95,9 @@ fun HydroAppNavigationGraph() {
             AppScaffold(
                 title = "Select Calculation Type",
                 icon =  Icons.Default.PowerSettingsNew,
+                bottomBar = {
+                    HydroAppBottomBar()
+                },
                 onBackPressed = { showDialog = true }
             ) { modifier ->
                 CalculationTypeScreen(modifier = modifier)

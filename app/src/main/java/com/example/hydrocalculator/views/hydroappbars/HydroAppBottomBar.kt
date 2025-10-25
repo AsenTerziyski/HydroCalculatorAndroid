@@ -1,10 +1,14 @@
 package com.example.hydrocalculator.views.hydroappbars
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.MaterialTheme
@@ -20,63 +24,127 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
 fun HydroAppBottomBar(
 
 ) {
-    Box(
-        modifier = Modifier.background(
-            brush = MaterialTheme.hydroGradient
-        )
+
+    BottomAppBar(
+        containerColor = Color.Transparent,
     ) {
-        BottomAppBar(
-            containerColor = Color.Transparent,
-        ) {
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                text = "test"
-            )
 
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                text = "test"
-            )
+        Spacer(modifier = Modifier.width(4.dp))
 
-            IconButton(
-                modifier = Modifier.weight(1f),
-                onClick = {}) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = Icons.Filled.PowerSettingsNew,
-                        contentDescription = "Switch Off",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                    Spacer(modifier = Modifier.height(2.dp))
-                    Text(
-                        text = "Switch Off",
-                        fontSize = 12.sp,
-                        color = MaterialTheme.colorScheme.primary,
-                        style = MaterialTheme.typography.labelSmall
-                    )
-                }
+        BottomBarItem(
+            modifier = Modifier.weight(1f),
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    lineHeight = 16.sp,
+                    text = "Pressurized Pipes"
+                )
             }
+        )
 
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                text = "test"
-            )
+        Spacer(modifier = Modifier.width(4.dp))
 
-            Text(
-                modifier = Modifier.weight(1f),
-                textAlign = TextAlign.Center,
-                text = "test"
-            )
+        BottomBarItem(
+            modifier = Modifier.weight(1f),
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    lineHeight = 16.sp,
+
+                    text = "Gravity pipes"
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        IconButton(
+            modifier = Modifier.weight(1f),
+            onClick = {}
+        ) {
+            Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                Icon(
+                    imageVector = Icons.Filled.PowerSettingsNew,
+                    contentDescription = "Switch Off",
+                    tint = Color.Red
+                )
+                Spacer(modifier = Modifier.height(2.dp))
+                Text(
+                    text = "Switch Off",
+                    fontSize = 10.sp,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.labelSmall
+                )
+            }
         }
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        BottomBarItem(
+            modifier = Modifier.weight(1f),
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    text = "Results"
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
+
+        BottomBarItem(
+            modifier = Modifier.weight(1f),
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    text = "Contacts"
+                )
+            }
+        )
+    }
+}
+
+@Composable
+fun BottomBarItem(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit
+) {
+    val itemShape = RoundedCornerShape(8.dp)
+
+    Box(
+        modifier = modifier
+            .fillMaxHeight()
+            .padding(vertical = 2.dp, horizontal = 4.dp)
+            .border(
+                width = 1.dp,
+                color = Color.White.copy(alpha = 0.2f),
+                shape = itemShape
+            )
+            .padding(horizontal = 4.dp, vertical = 2.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        content()
     }
 }
 
