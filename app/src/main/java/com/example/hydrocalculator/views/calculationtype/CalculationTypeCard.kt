@@ -1,5 +1,11 @@
 package com.example.hydrocalculator.views.calculationtype
 
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -18,13 +24,20 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Outline
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
@@ -33,9 +46,31 @@ fun CalculationTypeCard(
     description: String,
     onClick: () -> Unit
 ) {
+
+    var targetRotation by remember { mutableStateOf(-0.1f) }
+
+    val rotation by animateFloatAsState(
+        targetValue = targetRotation,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1000,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Reverse
+        ),
+        label = "trembleAnimation"
+    )
+
+    LaunchedEffect(Unit) {
+        targetRotation = 1f
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
+            .graphicsLayer {
+                rotationZ = rotation
+            }
             .clickable(
                 onClick = onClick
             ),
@@ -51,9 +86,11 @@ fun CalculationTypeCard(
         )
     ) {
         Box(
-            modifier = Modifier.background(
-                brush = MaterialTheme.hydroGradient
-            ).fillMaxWidth()
+            modifier = Modifier
+                .background(
+                    brush = MaterialTheme.hydroGradient
+                )
+                .fillMaxWidth()
                 .defaultMinSize(minHeight = 100.dp),
             contentAlignment = Alignment.CenterStart
         ) {
@@ -62,11 +99,10 @@ fun CalculationTypeCard(
                 modifier = Modifier.padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                Image(
+                    painter = painterResource(id = R.drawable.hydro_calc_logo), // <-- Change to your file name
                     contentDescription = null,
-                    modifier = Modifier.size(40.dp),
-                    tint = MaterialTheme.colorScheme.primary
+                    modifier = Modifier.size(48.dp),
                 )
                 Column(modifier = Modifier.padding(start = 16.dp)) {
                     Text(
