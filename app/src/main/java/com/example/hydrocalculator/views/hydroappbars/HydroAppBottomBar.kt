@@ -20,14 +20,16 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
 fun HydroAppBottomBar(
-
+    onSwitchOfClick: () -> Unit
 ) {
 
     BottomAppBar(
@@ -46,6 +48,9 @@ fun HydroAppBottomBar(
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
                     lineHeight = 16.sp,
+                    style = TextStyle(
+                        brush = MaterialTheme.hydroGradient
+                    ),
                     text = "Pressurized Pipes"
                 )
             }
@@ -73,7 +78,7 @@ fun HydroAppBottomBar(
 
         IconButton(
             modifier = Modifier.weight(1f),
-            onClick = {}
+            onClick = onSwitchOfClick
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
@@ -151,5 +156,5 @@ fun BottomBarItem(
 @Preview
 @Composable
 fun HydroAppBottomBarPreview() {
-    HydroAppBottomBar()
+    HydroAppBottomBar({})
 }

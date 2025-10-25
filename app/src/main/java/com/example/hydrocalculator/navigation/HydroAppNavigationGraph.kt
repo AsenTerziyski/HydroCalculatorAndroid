@@ -94,11 +94,15 @@ fun HydroAppNavigationGraph() {
 
             AppScaffold(
                 title = "Select Calculation Type",
-                icon =  Icons.Default.PowerSettingsNew,
+                icon =  null,
                 bottomBar = {
-                    HydroAppBottomBar()
+                    HydroAppBottomBar(
+                        onSwitchOfClick = {
+                            showDialog = true
+                        }
+                    )
                 },
-                onBackPressed = { showDialog = true }
+                onBackPressed = null
             ) { modifier ->
                 CalculationTypeScreen(modifier = modifier)
             }

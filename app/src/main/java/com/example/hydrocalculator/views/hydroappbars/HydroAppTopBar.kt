@@ -50,13 +50,13 @@ fun HydroAppTopBar(
             )
         },
         navigationIcon = {
-            if (onBackPress != null) {
+            if (onBackPress != null && icon != null) {
                 IconButton(
                     onClick = onBackPress,
                     interactionSource = interactionSource
                 ) {
                     Icon(
-                        imageVector = icon ?: Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = icon,
                         contentDescription = "Back",
                         tint = iconColor
                     )
