@@ -6,6 +6,8 @@ import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -91,6 +93,7 @@ fun HydroAppNavigationGraph() {
 
             AppScaffold(
                 title = "Select Calculation Type",
+                icon =  Icons.Default.PowerSettingsNew,
                 onBackPressed = { showDialog = true }
             ) { modifier ->
                 CalculationTypeScreen(modifier = modifier)

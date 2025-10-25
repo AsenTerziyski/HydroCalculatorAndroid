@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.WindowCompat
 import com.example.hydrocalculator.navigation.HydroAppNavigationGraph
@@ -40,14 +41,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun AppScaffold(
     title: String,
+    icon: ImageVector? = null,
     onBackPressed: (() -> Unit)? = null,
     content: @Composable (Modifier) -> Unit
 ) {
     Scaffold(
         topBar = {
-            HydroAppBar(title) {
-                onBackPressed?.invoke()
-            }
+            HydroAppBar(title = title, icon = icon) { onBackPressed?.invoke() }
         }
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))

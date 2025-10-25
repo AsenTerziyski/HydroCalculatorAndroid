@@ -19,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
@@ -30,6 +31,7 @@ import kotlinx.coroutines.delay
 @Composable
 fun HydroAppBar(
     title: String = "",
+    icon: ImageVector? = null,
     onBackPress: (() -> Unit)? = null
 ) {
 
@@ -60,7 +62,7 @@ fun HydroAppBar(
                     interactionSource = interactionSource
                 ) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                        imageVector = icon ?: Icons.AutoMirrored.Filled.ArrowBack,
                         contentDescription = "Back",
                         tint = iconColor
                     )
