@@ -5,4 +5,6 @@
     <string name="exit_hydrocalculator">Exit HydroCalculator?</string>
     <string name="are_you_sure_you_want_to_exit_the_app">Are you sure you want to exit the app?</string>
     <string name="goodbye_hydro">Goodbye, Hydro!</string>
+    <string name="calculation_type">Select calculation type</string>
+    <string name="pressurized_pipes">Pressurized Pipes</string>
 </resources>

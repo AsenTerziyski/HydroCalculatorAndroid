@@ -2,8 +2,7 @@ package com.example.hydrocalculator.navigation
 
 sealed class HydroAppRoutes(val route: String) {
     object Welcome : HydroAppRoutes(WELCOME_ROUTE)
-    object Main : HydroAppRoutes(CALC_TYPE_ROUTE)
-
+    object CalculationType : HydroAppRoutes(CALC_TYPE_ROUTE)
     object Goodbye : HydroAppRoutes(GOODBYE_ROUTE)
     object PressureScreen : HydroAppRoutes(PRESSURE_CALCULATION_SCREEN)
 

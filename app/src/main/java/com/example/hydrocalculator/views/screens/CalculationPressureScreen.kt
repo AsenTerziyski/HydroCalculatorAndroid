@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CalculationPressureScreen(
-) {
+fun CalculationPressureScreen(onNavigateBack: () -> Unit) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -26,5 +25,5 @@ fun CalculationPressureScreen(
 @Preview(showBackground = true)
 @Composable
 private fun CalculationResultsScreenPreview() {
-    CalculationPressureScreen()
+    CalculationPressureScreen(onNavigateBack = {})
 }
