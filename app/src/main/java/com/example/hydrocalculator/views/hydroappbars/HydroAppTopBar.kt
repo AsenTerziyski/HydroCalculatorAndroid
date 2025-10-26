@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.sp
@@ -20,6 +21,7 @@ import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
 import com.example.hydrocalculator.ui.theme.hydroGradient
 import com.example.hydrocalculator.utils.UseTextAnimation
+import kotlinx.coroutines.NonCancellable.key
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,11 +31,6 @@ fun HydroAppTopBar(
     onBackPress: (() -> Unit)? = null
 ) {
 
-    val (visibleTitle, animatedFontSize) = UseTextAnimation(
-        text = title,
-        minFontSize = 7.sp,
-        maxFontSize = MaterialTheme.typography.titleLarge.fontSize
-    )
 
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -41,13 +38,21 @@ fun HydroAppTopBar(
 
     TopAppBar(
         title = {
-            Text(
-                text = visibleTitle,
-                style = MaterialTheme.typography.titleLarge.copy(
-                    brush = MaterialTheme.hydroGradient,
-                    fontSize = animatedFontSize
+            key(title) {
+                val (visibleTitle, animatedFontSize) = UseTextAnimation(
+                    text = title,
+                    minFontSize = 7.sp,
+                    maxFontSize = MaterialTheme.typography.titleLarge.fontSize
                 )
-            )
+                Text(
+                    text = visibleTitle,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        brush = MaterialTheme.hydroGradient,
+                        fontSize = animatedFontSize
+                    )
+                )
+            }
+
         },
         navigationIcon = {
             if (onBackPress != null && icon != null) {
