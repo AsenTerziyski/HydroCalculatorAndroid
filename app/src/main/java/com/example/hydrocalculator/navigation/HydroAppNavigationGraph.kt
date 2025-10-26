@@ -2,6 +2,7 @@ package com.example.hydrocalculator.navigation
 
 import android.app.Activity
 import android.util.Log
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
@@ -71,10 +72,30 @@ fun HydroAppNavigationGraph() {
         NavHost(
             navController = navController,
             startDestination = HydroAppRoutes.Welcome.route,
-            enterTransition = { slideIn(initialOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec) },
-            exitTransition = { slideOut(targetOffset = { IntOffset(-it.width, 0) }, animationSpec = animationSpec) },
-            popEnterTransition = { slideIn(initialOffset = { IntOffset(-it.width, 0) }, animationSpec = animationSpec) },
-            popExitTransition = { slideOut(targetOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec) }
+            enterTransition = {
+                slideIn(
+                    initialOffset = { IntOffset(it.width, 0) },
+                    animationSpec = animationSpec
+                )
+            },
+            exitTransition = {
+                slideOut(
+                    targetOffset = { IntOffset(-it.width, 0) },
+                    animationSpec = animationSpec
+                )
+            },
+            popEnterTransition = {
+                slideIn(
+                    initialOffset = { IntOffset(-it.width, 0) },
+                    animationSpec = animationSpec
+                )
+            },
+            popExitTransition = {
+                slideOut(
+                    targetOffset = { IntOffset(it.width, 0) },
+                    animationSpec = animationSpec
+                )
+            }
         ) {
             composable(route = HydroAppRoutes.Welcome.route) {
                 WelcomeScreen(
@@ -91,6 +112,7 @@ fun HydroAppNavigationGraph() {
             }
 
             composable(route = HydroAppRoutes.CalculationType.route) {
+                BackHandler { showDialog = true }
                 CalculationTypeScreen { calcType ->
                     when (calcType.title) {
                         "Pressurized Pipes" -> navController.navigate(HydroAppRoutes.PressureScreen.route)
