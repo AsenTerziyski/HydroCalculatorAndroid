@@ -2,8 +2,6 @@ package com.example.hydrocalculator.views.hydroappbars
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -21,7 +19,6 @@ import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
 import com.example.hydrocalculator.ui.theme.hydroGradient
 import com.example.hydrocalculator.utils.UseTextAnimation
-import kotlinx.coroutines.NonCancellable.key
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -30,8 +27,6 @@ fun HydroAppTopBar(
     icon: ImageVector? = null,
     onBackPress: (() -> Unit)? = null
 ) {
-
-
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
     val iconColor = if (isPressed) HydroGreen else HydroCyan
