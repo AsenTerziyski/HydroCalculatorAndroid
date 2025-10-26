@@ -6,13 +6,17 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -20,10 +24,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.hydrocalculator.AppScaffold
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.views.ConfirmationDialog
 import com.example.hydrocalculator.views.hydroappbars.HydroAppBottomBar
+import com.example.hydrocalculator.views.hydroappbars.HydroAppTopBar
 import com.example.hydrocalculator.views.screens.CalculationPressureScreen
 import com.example.hydrocalculator.views.screens.CalculationTypeScreen
 import com.example.hydrocalculator.views.screens.GoodbyeScreen
@@ -52,7 +56,7 @@ fun HydroAppNavigationGraph() {
         )
     }
 
-    AppScaffold(
+    HydroAppScaffold(
         title = when (currentRoute) {
             HydroAppRoutes.CalculationType.route -> stringResource(R.string.calculation_type)
             HydroAppRoutes.PressureScreen.route -> stringResource(R.string.pressurized_pipes)
@@ -128,5 +132,23 @@ fun HydroAppNavigationGraph() {
                 )
             }
         }
+    }
+}
+
+@Composable
+fun HydroAppScaffold(
+    title: String,
+    icon: ImageVector? = null,
+    onBackPressed: (() -> Unit)? = null,
+    bottomBar: @Composable () -> Unit = {},
+    content: @Composable (Modifier) -> Unit
+) {
+    Scaffold(
+        topBar = {
+            HydroAppTopBar(title = title, icon = icon) { onBackPressed?.invoke() }
+        },
+        bottomBar = bottomBar
+    ) { innerPadding ->
+        content(Modifier.padding(innerPadding))
     }
 }
