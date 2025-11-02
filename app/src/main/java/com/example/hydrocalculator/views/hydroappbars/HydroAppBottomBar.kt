@@ -1,6 +1,8 @@
 package com.example.hydrocalculator.views.hydroappbars
 
+import android.util.Log
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -25,21 +27,28 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.hydrocalculator.navigation.BottomBarTab
 import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
 fun HydroAppBottomBar(
+    currentlySelectedTab: BottomBarTab?,
+    onClickPressurizedPipes: () -> Unit,
     onSwitchOfClick: () -> Unit
 ) {
 
-    BottomAppBar(
-        containerColor = Color.Transparent,
-    ) {
+    Log.d("TAG101", "Selected tab! ${currentlySelectedTab.toString()}")
+
+    BottomAppBar(containerColor = Color.Transparent) {
 
         Spacer(modifier = Modifier.width(4.dp))
 
         BottomBarItem(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onClickPressurizedPipes.invoke()
+                },
             {
                 Text(
                     modifier = Modifier
@@ -53,7 +62,8 @@ fun HydroAppBottomBar(
                     ),
                     text = "Pressurized Pipes"
                 )
-            }
+            },
+            isSelected = currentlySelectedTab == BottomBarTab.PRESSURIZED_PIPES
         )
 
         Spacer(modifier = Modifier.width(4.dp))
@@ -133,17 +143,21 @@ fun HydroAppBottomBar(
 @Composable
 fun BottomBarItem(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
+    isSelected: Boolean = false
 ) {
     val itemShape = RoundedCornerShape(8.dp)
+    val borderColor =
+        if (isSelected) MaterialTheme.colorScheme.primary else Color.White.copy(alpha = 0.2f)
+    val borderWidth = if (isSelected) 2.dp else 1.dp
 
     Box(
         modifier = modifier
             .fillMaxHeight()
             .padding(vertical = 2.dp, horizontal = 4.dp)
             .border(
-                width = 1.dp,
-                color = Color.White.copy(alpha = 0.2f),
+                width = borderWidth,
+                color = borderColor,
                 shape = itemShape
             )
             .padding(horizontal = 4.dp, vertical = 2.dp),
@@ -156,5 +170,5 @@ fun BottomBarItem(
 @Preview
 @Composable
 fun HydroAppBottomBarPreview() {
-    HydroAppBottomBar({})
+    HydroAppBottomBar(currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES, {}, {})
 }
