@@ -52,8 +52,7 @@ fun HydroAppNavigationGraph() {
                 navController.navigate(route = HydroAppRoutes.Goodbye.route) {
                     popUpTo(0) { inclusive = true }
                 }
-            }
-        )
+            })
     }
 
     HydroAppScaffold(
@@ -69,61 +68,49 @@ fun HydroAppNavigationGraph() {
                 else -> null
             }
 
-            if (currentRoute == HydroAppRoutes.CalculationType.route
-                || currentRoute == HydroAppRoutes.PressureScreen.route
-            ) {
-                HydroAppBottomBar(
-                    currentlySelectedTab = selectedTab,
-                    onClickPressurizedPipes = {
-                        if (currentRoute != HydroAppRoutes.PressureScreen.route) {
-                            navController.navigate(route = HydroAppRoutes.PressureScreen.route)
-                        }
-                    },
-                    onSwitchOfClick = { showDialog = true }
-                )
+            if (currentRoute == HydroAppRoutes.CalculationType.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
+                HydroAppBottomBar(currentlySelectedTab = selectedTab, onClickPressurizedPipes = {
+                    if (currentRoute != HydroAppRoutes.PressureScreen.route) {
+                        navController.navigate(route = HydroAppRoutes.PressureScreen.route)
+                    }
+                }, onSwitchOfClick = { showDialog = true })
             }
         },
         onBackPressed = {
             navController.popBackStack()
-        }
-    ) {
+        }) { scaffoldModifier ->
         val animationSpec = tween<IntOffset>(700)
         NavHost(
             navController = navController,
+            modifier = scaffoldModifier,
             startDestination = HydroAppRoutes.Welcome.route,
             enterTransition = {
                 slideIn(
-                    initialOffset = { IntOffset(it.width, 0) },
-                    animationSpec = animationSpec
+                    initialOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec
                 )
             },
             exitTransition = {
                 slideOut(
-                    targetOffset = { IntOffset(-it.width, 0) },
-                    animationSpec = animationSpec
+                    targetOffset = { IntOffset(-it.width, 0) }, animationSpec = animationSpec
                 )
             },
             popEnterTransition = {
                 slideIn(
-                    initialOffset = { IntOffset(-it.width, 0) },
-                    animationSpec = animationSpec
+                    initialOffset = { IntOffset(-it.width, 0) }, animationSpec = animationSpec
                 )
             },
             popExitTransition = {
                 slideOut(
-                    targetOffset = { IntOffset(it.width, 0) },
-                    animationSpec = animationSpec
+                    targetOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec
                 )
-            }
-        ) {
+            }) {
             composable(route = HydroAppRoutes.Welcome.route) {
                 WelcomeScreen(
                     onWelcomeComplete = {
                         navController.navigate(route = HydroAppRoutes.CalculationType.route) {
                             popUpTo(HydroAppRoutes.Welcome.route) { inclusive = true }
                         }
-                    }
-                )
+                    })
             }
 
             composable(route = HydroAppRoutes.Goodbye.route) {
@@ -143,8 +130,7 @@ fun HydroAppNavigationGraph() {
 
             composable(route = HydroAppRoutes.PressureScreen.route) {
                 CalculationPressureScreen(
-                    onNavigateBack = { navController.popBackStack() }
-                )
+                    onNavigateBack = { navController.popBackStack() })
             }
         }
     }
@@ -161,8 +147,7 @@ fun HydroAppScaffold(
     Scaffold(
         topBar = {
             HydroAppTopBar(title = title, icon = icon) { onBackPressed?.invoke() }
-        },
-        bottomBar = bottomBar
+        }, bottomBar = bottomBar
     ) { innerPadding ->
         content(Modifier.padding(innerPadding))
     }
