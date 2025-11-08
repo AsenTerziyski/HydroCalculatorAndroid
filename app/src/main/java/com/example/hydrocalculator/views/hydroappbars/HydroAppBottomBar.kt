@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -167,8 +168,10 @@ fun BottomBarItem(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 fun HydroAppBottomBarPreview() {
-    HydroAppBottomBar(currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES, {}, {})
+    Surface(color = MaterialTheme.colorScheme.surface) {
+        HydroAppBottomBar(currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES, {}, {})
+    }
 }

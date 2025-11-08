@@ -16,7 +16,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
@@ -42,6 +41,7 @@ fun HydroAppNavigationGraph() {
     val currentRoute = navBackStackEntry?.destination?.route
 
     var showDialog by remember { mutableStateOf(false) }
+
     if (showDialog) {
         ConfirmationDialog(
             dialogTitle = stringResource(R.string.exit_hydrocalculator),
@@ -56,18 +56,22 @@ fun HydroAppNavigationGraph() {
     }
 
     HydroAppScaffold(
-        title = when (currentRoute) {
-            HydroAppRoutes.CalculationType.route -> stringResource(R.string.calculation_type)
-            HydroAppRoutes.PressureScreen.route -> stringResource(R.string.pressurized_pipes)
-            else -> ""
+        topBar = {
+            val topBarTitle = when (currentRoute) {
+                HydroAppRoutes.CalculationType.route -> stringResource(R.string.calculation_type)
+                HydroAppRoutes.PressureScreen.route -> stringResource(R.string.pressurized_pipes)
+                else -> ""
+            }
+            HydroAppTopBar(
+                title = topBarTitle,
+                icon = if (currentRoute == HydroAppRoutes.PressureScreen.route) Icons.Default.ArrowBack else null
+            ) { navController.popBackStack() }
         },
-        icon = if (currentRoute == HydroAppRoutes.PressureScreen.route) Icons.Default.ArrowBack else null,
         bottomBar = {
             val selectedTab = when (currentRoute) {
                 HydroAppRoutes.PressureScreen.route -> BottomBarTab.PRESSURIZED_PIPES
                 else -> null
             }
-
             if (currentRoute == HydroAppRoutes.CalculationType.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
                 HydroAppBottomBar(currentlySelectedTab = selectedTab, onClickPressurizedPipes = {
                     if (currentRoute != HydroAppRoutes.PressureScreen.route) {
@@ -76,9 +80,8 @@ fun HydroAppNavigationGraph() {
                 }, onSwitchOfClick = { showDialog = true })
             }
         },
-        onBackPressed = {
-            navController.popBackStack()
-        }) { scaffoldModifier ->
+        ) { scaffoldModifier ->
+
         val animationSpec = tween<IntOffset>(700)
         NavHost(
             navController = navController,
@@ -104,6 +107,7 @@ fun HydroAppNavigationGraph() {
                     targetOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec
                 )
             }) {
+
             composable(route = HydroAppRoutes.Welcome.route) {
                 WelcomeScreen(
                     onWelcomeComplete = {
@@ -138,17 +142,12 @@ fun HydroAppNavigationGraph() {
 
 @Composable
 fun HydroAppScaffold(
-    title: String,
-    icon: ImageVector? = null,
-    onBackPressed: (() -> Unit)? = null,
+    topBar: @Composable () -> Unit = {},
     bottomBar: @Composable () -> Unit = {},
     content: @Composable (Modifier) -> Unit
 ) {
     Scaffold(
-        topBar = {
-            HydroAppTopBar(title = title, icon = icon) { onBackPressed?.invoke() }
-        }, bottomBar = bottomBar
-    ) { innerPadding ->
-        content(Modifier.padding(innerPadding))
-    }
+        topBar = topBar,
+        bottomBar = bottomBar
+    ) { innerPadding -> content(Modifier.padding(innerPadding)) }
 }
