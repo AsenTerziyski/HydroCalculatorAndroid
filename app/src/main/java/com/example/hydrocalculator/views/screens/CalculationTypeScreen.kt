@@ -3,11 +3,11 @@ package com.example.hydrocalculator.views.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,32 +28,36 @@ fun CalculationTypeScreen(onCardClick: (CalculationTypeItem) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
-        val pagerState = rememberPagerState(
-            pageCount = { calculationTypeItems.size })
+        val pagerState = rememberPagerState(pageCount = { calculationTypeItems.size })
 
-        Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+        Column(
+            modifier = Modifier.fillMaxSize().padding(top = 8.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxSize()
+                modifier = Modifier
+                    .fillMaxSize()
+                    .weight(1f)
             ) { page ->
                 val item = calculationTypeItems[page]
-                CalculationTypeCard(
-                    title = item.title,
-                    description = item.description
+
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
                 ) {
-                    onCardClick.invoke(item)
+                    CalculationTypeCard(
+                        title = item.title,
+                        description = item.description
+                    ) {
+                        onCardClick.invoke(item)
+                    }
                 }
             }
-
             PageIndicator(
                 pageCount = pagerState.pageCount,
                 currentPage = pagerState.currentPage,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .padding(bottom = 32.dp)
+                modifier = Modifier.padding(vertical = 32.dp) // Use vertical padding
             )
         }
     }
@@ -67,7 +71,7 @@ fun PageIndicator(
 ) {
     Row(
         modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp) // 2. Add spacing between the dots
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         repeat(pageCount) { pageIndex ->
             val color = if (pageIndex == currentPage) {

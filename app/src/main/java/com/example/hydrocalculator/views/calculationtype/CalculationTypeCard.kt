@@ -7,37 +7,40 @@ import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.defaultMinSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.clipToBounds
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hydrocalculator.R
+import com.example.hydrocalculator.ui.theme.HydroCyan
+import com.example.hydrocalculator.ui.theme.HydroGreen
 import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
@@ -46,81 +49,87 @@ fun CalculationTypeCard(
     description: String,
     onClick: () -> Unit
 ) {
-
-    var targetRotation by remember { mutableStateOf(-0.1f) }
-
+    var targetRotation by remember { mutableFloatStateOf(-0.1f) }
     val rotation by animateFloatAsState(
         targetValue = targetRotation,
         animationSpec = infiniteRepeatable(
-            animation = tween(
-                durationMillis = 1000,
-                easing = LinearEasing
-            ),
+            animation = tween(durationMillis = 1000, easing = LinearEasing),
             repeatMode = RepeatMode.Reverse
         ),
         label = "trembleAnimation"
     )
+    LaunchedEffect(Unit) { targetRotation = 1f }
 
-    LaunchedEffect(Unit) {
-        targetRotation = 1f
-    }
+    val cardShape = RoundedCornerShape(28.dp)
 
-    Card(
+    Box(
         modifier = Modifier
-            .fillMaxWidth()
-            .graphicsLayer {
-                rotationZ = rotation
-            }
-            .clickable(
-                onClick = onClick
-            ),
-        elevation = CardDefaults.cardElevation(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = Color.Transparent
-        ),
-        shape = RoundedCornerShape(
-            topStart = 8.dp,
-            topEnd = 8.dp,
-            bottomStart = 8.dp,
-            bottomEnd = 8.dp
-        )
+            .fillMaxSize()
+            .padding(horizontal = 16.dp)
+            .graphicsLayer { this.rotationZ = rotation }
+            .clipToBounds()
     ) {
         Box(
             modifier = Modifier
-                .background(
-                    brush = MaterialTheme.hydroGradient
-                )
-                .fillMaxWidth()
-                .defaultMinSize(minHeight = 100.dp),
-            contentAlignment = Alignment.CenterStart
+                .fillMaxSize()
+                .shadow(elevation = 4.dp, shape = cardShape)
+                .border(width = 2.dp, color = HydroCyan, shape = cardShape)
+                .clip(cardShape)
+                .clickable(onClick = onClick)
         ) {
+            Image(
+                painter = painterResource(id = R.drawable.hydro_calc_logo),
+                contentDescription = null,
+                contentScale = ContentScale.Inside,
+                modifier = Modifier.fillMaxSize()
+            )
 
-            Row(
-                modifier = Modifier.padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(
+                        brush = Brush.verticalGradient(
+                            colors = listOf(
+                                Color.Transparent,
+                                HydroGreen.copy(alpha = 0.1f),
+                                HydroCyan.copy(alpha = 0.5f),
+                                Color.Transparent,
+                                Color.Transparent,
+                            ),
+                            startY = 100f
+                        )
+                    )
+            )
+
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(vertical = 32.dp, horizontal = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Bottom
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.hydro_calc_logo), // <-- Change to your file name
-                    contentDescription = null,
-                    modifier = Modifier.size(48.dp),
+                Text(
+                    text = title,
+                    style = MaterialTheme.typography.headlineSmall,
+                    fontWeight = FontWeight.Bold,
+                    textAlign = TextAlign.Center,
+                    color = Color.White
                 )
-                Column(modifier = Modifier.padding(start = 16.dp)) {
-                    Text(
-                        text = title,
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold
-                    )
-                    Text(
-                        text = description,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
+
+                Spacer(modifier = Modifier.padding(12.dp))
+
+                Text(
+                    text = description,
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = Color.White.copy(alpha = 0.85f)
+                )
             }
         }
     }
 }
 
-@Preview
+@Preview(showBackground = true, widthDp = 360, heightDp = 640)
 @Composable
 fun CalculationTypeCardPreview() {
     CalculationTypeCard(
