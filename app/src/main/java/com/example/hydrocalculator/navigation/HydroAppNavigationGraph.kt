@@ -51,7 +51,7 @@ fun HydroAppNavigationGraph() {
             onDismissRequest = { showDialog = false },
             onConfirmation = {
                 showDialog = false
-                navController.navigate(route = HydroAppRoutes.Goodbye.route) {
+                navController.navigate(route = HydroAppRoutes.GoodbyeScreen.route) {
                     popUpTo(0) { inclusive = true }
                 }
             })
@@ -60,7 +60,7 @@ fun HydroAppNavigationGraph() {
     HydroAppScaffold(
         topBar = {
             val topBarTitle = when (currentRoute) {
-                HydroAppRoutes.CalculationType.route -> stringResource(R.string.calculation_type)
+                HydroAppRoutes.HomeScreen.route -> stringResource(R.string.calculation_type)
                 HydroAppRoutes.PressureScreen.route -> stringResource(R.string.pressurized_pipes)
                 else -> ""
             }
@@ -74,7 +74,7 @@ fun HydroAppNavigationGraph() {
                 HydroAppRoutes.PressureScreen.route -> BottomBarTab.PRESSURIZED_PIPES
                 else -> null
             }
-            if (currentRoute == HydroAppRoutes.CalculationType.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
+            if (currentRoute == HydroAppRoutes.HomeScreen.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
                 HydroAppBottomBar(currentlySelectedTab = selectedTab, onClickPressurizedPipes = {
                     if (currentRoute != HydroAppRoutes.PressureScreen.route) {
                         navController.navigate(route = HydroAppRoutes.PressureScreen.route)
@@ -88,7 +88,7 @@ fun HydroAppNavigationGraph() {
         NavHost(
             navController = navController,
             modifier = scaffoldModifier,
-            startDestination = HydroAppRoutes.Welcome.route,
+            startDestination = HydroAppRoutes.WelcomeScreen.route,
             enterTransition = {
                 slideIn(
                     initialOffset = { IntOffset(it.width, 0) }, animationSpec = animationSpec
@@ -110,20 +110,20 @@ fun HydroAppNavigationGraph() {
                 )
             }) {
 
-            composable(route = HydroAppRoutes.Welcome.route) {
+            composable(route = HydroAppRoutes.WelcomeScreen.route) {
                 WelcomeScreen(
                     onWelcomeComplete = {
-                        navController.navigate(route = HydroAppRoutes.CalculationType.route) {
-                            popUpTo(HydroAppRoutes.Welcome.route) { inclusive = true }
+                        navController.navigate(route = HydroAppRoutes.HomeScreen.route) {
+                            popUpTo(HydroAppRoutes.WelcomeScreen.route) { inclusive = true }
                         }
                     })
             }
 
-            composable(route = HydroAppRoutes.Goodbye.route) {
+            composable(route = HydroAppRoutes.GoodbyeScreen.route) {
                 GoodbyeScreen { activity?.finish() }
             }
 
-            composable(route = HydroAppRoutes.CalculationType.route) {
+            composable(route = HydroAppRoutes.HomeScreen.route) {
                 BackHandler { showDialog = true }
                 CalculationTypeScreen { calcType ->
                     when (calcType.title) {
