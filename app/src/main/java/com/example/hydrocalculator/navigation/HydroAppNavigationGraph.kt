@@ -72,14 +72,21 @@ fun HydroAppNavigationGraph() {
         bottomBar = {
             val selectedTab = when (currentRoute) {
                 HydroAppRoutes.PressureScreen.route -> BottomBarTab.PRESSURIZED_PIPES
+                HydroAppRoutes.HomeScreen.route -> BottomBarTab.HOME
                 else -> null
             }
             if (currentRoute == HydroAppRoutes.HomeScreen.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
-                HydroAppBottomBar(currentlySelectedTab = selectedTab, onClickPressurizedPipes = {
-                    if (currentRoute != HydroAppRoutes.PressureScreen.route) {
-                        navController.navigate(route = HydroAppRoutes.PressureScreen.route)
-                    }
-                }, onSwitchOfClick = { showDialog = true })
+                HydroAppBottomBar(
+                    currentlySelectedTab = selectedTab,
+                    onClickHome = {
+                        navController.navigate(route = HydroAppRoutes.HomeScreen.route)
+                    },
+                    onClickPressurizedPipes = {
+                        if (currentRoute != HydroAppRoutes.PressureScreen.route) {
+                            navController.navigate(route = HydroAppRoutes.PressureScreen.route)
+                        }
+                    },
+                    onSwitchOfClick = { showDialog = true })
             }
         },
     ) { scaffoldModifier ->

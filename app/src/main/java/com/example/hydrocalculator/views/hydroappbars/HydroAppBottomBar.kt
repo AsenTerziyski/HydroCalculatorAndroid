@@ -39,6 +39,7 @@ import com.example.hydrocalculator.ui.theme.hydroGradient
 @Composable
 fun HydroAppBottomBar(
     currentlySelectedTab: BottomBarTab?,
+    onClickHome: () -> Unit,
     onClickPressurizedPipes: () -> Unit,
     onSwitchOfClick: () -> Unit
 ) {
@@ -56,7 +57,26 @@ fun HydroAppBottomBar(
     ) {
 
         Spacer(modifier = Modifier.width(4.dp))
+        BottomBarItem(
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onClickHome.invoke()
+                },
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    text = "Home"
+                )
+            },
+            isSelected = currentlySelectedTab == BottomBarTab.HOME
+        )
 
+        Spacer(modifier = Modifier.width(4.dp))
         BottomBarItem(
             modifier = Modifier
                 .weight(1f)
@@ -81,25 +101,6 @@ fun HydroAppBottomBar(
         )
 
         Spacer(modifier = Modifier.width(4.dp))
-
-        BottomBarItem(
-            modifier = Modifier.weight(1f),
-            {
-                Text(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(2.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 10.sp,
-                    lineHeight = 16.sp,
-
-                    text = "Gravity pipes"
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.width(4.dp))
-
         IconButton(
             modifier = Modifier.weight(1f),
             onClick = onSwitchOfClick
@@ -121,7 +122,23 @@ fun HydroAppBottomBar(
         }
 
         Spacer(modifier = Modifier.width(4.dp))
+        BottomBarItem(
+            modifier = Modifier.weight(1f),
+            {
+                Text(
+                    modifier = Modifier
+                        .weight(0.5f)
+                        .padding(2.dp),
+                    textAlign = TextAlign.Center,
+                    fontSize = 10.sp,
+                    lineHeight = 16.sp,
 
+                    text = "Gravity pipes"
+                )
+            }
+        )
+
+        Spacer(modifier = Modifier.width(4.dp))
         BottomBarItem(
             modifier = Modifier.weight(1f),
             {
@@ -132,22 +149,6 @@ fun HydroAppBottomBar(
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
                     text = "Results"
-                )
-            }
-        )
-
-        Spacer(modifier = Modifier.width(4.dp))
-
-        BottomBarItem(
-            modifier = Modifier.weight(1f),
-            {
-                Text(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(2.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 10.sp,
-                    text = "Contacts"
                 )
             }
         )
@@ -185,6 +186,11 @@ fun BottomBarItem(
 @Composable
 fun HydroAppBottomBarPreview() {
     Surface(color = MaterialTheme.colorScheme.surface) {
-        HydroAppBottomBar(currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES, {}, {})
+        HydroAppBottomBar(
+            currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES,
+            onClickHome = {},
+            onClickPressurizedPipes = {},
+            onSwitchOfClick = {}
+        )
     }
 }
