@@ -6,6 +6,8 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideIn
 import androidx.compose.animation.slideOut
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
@@ -80,7 +82,7 @@ fun HydroAppNavigationGraph() {
                 }, onSwitchOfClick = { showDialog = true })
             }
         },
-        ) { scaffoldModifier ->
+    ) { scaffoldModifier ->
 
         val animationSpec = tween<IntOffset>(700)
         NavHost(
@@ -148,6 +150,13 @@ fun HydroAppScaffold(
 ) {
     Scaffold(
         topBar = topBar,
-        bottomBar = bottomBar
-    ) { innerPadding -> content(Modifier.padding(innerPadding)) }
+        bottomBar = bottomBar,
+        contentWindowInsets = WindowInsets(0, 0, 0, 0)
+    ) { innerPadding ->
+        content(
+            Modifier
+                .padding(innerPadding)
+                .consumeWindowInsets(innerPadding)
+        )
+    }
 }
