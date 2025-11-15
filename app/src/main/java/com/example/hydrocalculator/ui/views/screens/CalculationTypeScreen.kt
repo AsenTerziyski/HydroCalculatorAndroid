@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views.screens
+package com.example.hydrocalculator.ui.views.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.hydrocalculator.utils.CalculationTypeItem
 import com.example.hydrocalculator.utils.calculationTypeItems
-import com.example.hydrocalculator.views.calculationtype.CalculationTypeCard
+import com.example.hydrocalculator.ui.views.calculationtype.CalculationTypeCard
 
 @Composable
 fun CalculationTypeScreen(onCardClick: (CalculationTypeItem) -> Unit) {

@@ -26,13 +26,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hydrocalculator.R
-import com.example.hydrocalculator.views.ConfirmationDialog
-import com.example.hydrocalculator.views.hydroappbars.HydroAppBottomBar
-import com.example.hydrocalculator.views.hydroappbars.HydroAppTopBar
-import com.example.hydrocalculator.views.screens.CalculationPressureScreen
-import com.example.hydrocalculator.views.screens.CalculationTypeScreen
-import com.example.hydrocalculator.views.screens.GoodbyeScreen
-import com.example.hydrocalculator.views.screens.WelcomeScreen
+import com.example.hydrocalculator.ui.views.ConfirmationDialog
+import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppBottomBar
+import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppTopBar
+import com.example.hydrocalculator.ui.views.screens.CalculationPressureScreen
+import com.example.hydrocalculator.ui.views.screens.CalculationTypeScreen
+import com.example.hydrocalculator.ui.views.screens.GoodbyeScreen
+import com.example.hydrocalculator.ui.views.screens.WelcomeScreen
 
 @Composable
 fun HydroAppNavigationGraph() {

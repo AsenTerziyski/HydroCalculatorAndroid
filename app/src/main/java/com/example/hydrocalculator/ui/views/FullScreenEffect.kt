@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views
+package com.example.hydrocalculator.ui.views
 
 import android.app.Activity
 import androidx.compose.runtime.Composable

@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views.calculationtype
+package com.example.hydrocalculator.ui.views.calculationtype
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
@@ -41,7 +41,6 @@ import androidx.compose.ui.unit.dp
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.theme.HydroGreen
-import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
 fun CalculationTypeCard(

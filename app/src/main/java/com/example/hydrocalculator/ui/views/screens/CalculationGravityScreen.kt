@@ -1,5 +1,4 @@
-package com.example.hydrocalculator.views.screens
-
+package com.example.hydrocalculator.ui.views.screens
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,14 +10,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CalculationResultsScreen(
+fun CalculationGravityScreen(
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Calculation results will be displayed here.",
+            text = "Calculate gravity flow here!",
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -27,5 +26,5 @@ fun CalculationResultsScreen(
 @Preview(showBackground = true)
 @Composable
 private fun CalculationResultsScreenPreview() {
-    CalculationResultsScreen()
+    CalculationGravityScreen()
 }

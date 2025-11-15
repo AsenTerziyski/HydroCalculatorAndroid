@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views.hydroappbars
+package com.example.hydrocalculator.ui.views.hydroappbars
 
 import android.util.Log
 import androidx.compose.foundation.border

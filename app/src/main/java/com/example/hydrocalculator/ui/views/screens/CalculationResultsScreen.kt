@@ -1,4 +1,5 @@
-package com.example.hydrocalculator.views.screens
+package com.example.hydrocalculator.ui.views.screens
+
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,13 +11,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun CalculationPressureScreen(onNavigateBack: () -> Unit) {
+fun CalculationResultsScreen(
+) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Calculation pressure here!",
+            text = "Calculation results will be displayed here.",
             style = MaterialTheme.typography.titleMedium
         )
     }
@@ -25,5 +27,5 @@ fun CalculationPressureScreen(onNavigateBack: () -> Unit) {
 @Preview(showBackground = true)
 @Composable
 private fun CalculationResultsScreenPreview() {
-    CalculationPressureScreen(onNavigateBack = {})
+    CalculationResultsScreen()
 }

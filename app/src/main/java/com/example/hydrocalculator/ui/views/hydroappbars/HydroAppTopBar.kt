@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.views.hydroappbars
+package com.example.hydrocalculator.ui.views.hydroappbars
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.interaction.collectIsPressedAsState

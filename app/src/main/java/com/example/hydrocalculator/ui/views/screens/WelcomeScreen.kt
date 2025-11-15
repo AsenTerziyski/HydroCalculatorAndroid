@@ -1,8 +1,10 @@
-package com.example.hydrocalculator.views.screens
+package com.example.hydrocalculator.ui.views.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -16,27 +18,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.theme.hydroGradient
-import com.example.hydrocalculator.utils.UseTextAnimation
+import com.example.hydrocalculator.ui.views.FullScreenEffect
+import com.example.hydrocalculator.ui.views.LoadingAppView
 import kotlinx.coroutines.delay
 
 @Composable
-fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
+fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
+    FullScreenEffect()
 
     LaunchedEffect(Unit) {
-        delay(1000)
-        onGoodbyeComplete.invoke()
+        delay(3000)
+        onWelcomeComplete.invoke()
     }
-    val title = stringResource(R.string.goodbye_hydro)
-
-    val (visibleTitle, animatedFontSize) = UseTextAnimation(
-        text = title,
-        minFontSize = 42.sp,
-        maxFontSize = 0.sp
-    )
-
     Surface(
-        modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding(),
+        color = MaterialTheme.colorScheme.background //
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -44,13 +40,14 @@ fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = visibleTitle,
+                text = stringResource(R.string.welcome_hydro),
                 style = TextStyle(
                     brush = MaterialTheme.hydroGradient,
-                    fontSize = animatedFontSize,
-                    fontWeight = FontWeight.Bold
+                    fontSize = 37.sp,
+                    fontWeight = FontWeight.ExtraBold
                 )
             )
+            LoadingAppView()
         }
     }
 }

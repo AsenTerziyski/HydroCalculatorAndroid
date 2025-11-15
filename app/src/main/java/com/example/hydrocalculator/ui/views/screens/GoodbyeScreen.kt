@@ -1,10 +1,8 @@
-package com.example.hydrocalculator.views.screens
+package com.example.hydrocalculator.ui.views.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,21 +16,27 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.theme.hydroGradient
-import com.example.hydrocalculator.views.FullScreenEffect
-import com.example.hydrocalculator.views.LoadingAppView
+import com.example.hydrocalculator.utils.UseTextAnimation
 import kotlinx.coroutines.delay
 
 @Composable
-fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
-    FullScreenEffect()
+fun GoodbyeScreen(onGoodbyeComplete: () -> Unit) {
 
     LaunchedEffect(Unit) {
-        delay(3000)
-        onWelcomeComplete.invoke()
+        delay(1000)
+        onGoodbyeComplete.invoke()
     }
+    val title = stringResource(R.string.goodbye_hydro)
+
+    val (visibleTitle, animatedFontSize) = UseTextAnimation(
+        text = title,
+        minFontSize = 42.sp,
+        maxFontSize = 0.sp
+    )
+
     Surface(
-        modifier = Modifier.fillMaxSize().statusBarsPadding().navigationBarsPadding(),
-        color = MaterialTheme.colorScheme.background //
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -40,14 +44,13 @@ fun WelcomeScreen(onWelcomeComplete: () -> Unit = {}) {
             verticalArrangement = Arrangement.Center
         ) {
             Text(
-                text = stringResource(R.string.welcome_hydro),
+                text = visibleTitle,
                 style = TextStyle(
                     brush = MaterialTheme.hydroGradient,
-                    fontSize = 37.sp,
-                    fontWeight = FontWeight.ExtraBold
+                    fontSize = animatedFontSize,
+                    fontWeight = FontWeight.Bold
                 )
             )
-            LoadingAppView()
         }
     }
 }
