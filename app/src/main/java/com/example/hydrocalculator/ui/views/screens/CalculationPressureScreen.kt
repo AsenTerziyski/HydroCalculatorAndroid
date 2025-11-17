@@ -23,7 +23,6 @@ private enum class FocusedField { FLOW, DIAMETER }
 
 @Composable
 fun CalculationPressureScreen() {
-
     var flowText by remember { mutableStateOf("") }
     var diameterText by remember { mutableStateOf("") }
     var focusedField by remember { mutableStateOf(FocusedField.FLOW) }
@@ -44,6 +43,7 @@ fun CalculationPressureScreen() {
             if (flow > 0 && diameter > 0) flow * diameter else 0f
         }
     }
+
     val resultHeadLoss by remember {
         derivedStateOf {
             val flow = flowText.toFloatOrNull() ?: 0f
@@ -170,7 +170,6 @@ private fun ResultField(label: String, value: String, unit: String) {
         }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
