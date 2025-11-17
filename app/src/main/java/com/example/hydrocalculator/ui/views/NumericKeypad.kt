@@ -1,6 +1,11 @@
 package com.example.hydrocalculator.ui.views
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.aspectRatio
@@ -11,15 +16,18 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Backspace
+import androidx.compose.material.icons.automirrored.filled.Backspace
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,39 +64,65 @@ fun NumericKeypad(
     }
 }
 
-
-
-
-
-
-
 @Composable
 private fun KeyButton(
     key: String,
     onClick: () -> Unit
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isPressed) HydroCyan.copy(alpha = 0.2f) else Color.Black,
+        label = "backgroundColor"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.7f else 1f,
+        label = "scale"
+    )
+
+
     Surface(
         modifier = Modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
             .aspectRatio(1.618f)
-            .clip(RoundedCornerShape(16.dp))
-            .clickable(onClick = onClick),
-        color = HydroCyan,
+            .border(
+                width = 2.dp,
+                color = HydroCyan.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clickable
+                (
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            ),
+        color = backgroundColor,
     ) {
         Box(contentAlignment = Alignment.Center) {
             when (key) {
                 "BACKSPACE" -> Icon(
-                    Icons.Default.Backspace,
+                    Icons.AutoMirrored.Filled.Backspace,
                     contentDescription = "Backspace",
                     tint = HydroCyan
                 )
 
                 "." -> Text(
                     text = key,
-                    style = MaterialTheme.typography.headlineLarge,
+                    style = MaterialTheme.typography.headlineMedium,
+                    color = HydroCyan,
                     fontWeight = FontWeight.Bold
                 )
 
-                else -> Text(text = key, style = MaterialTheme.typography.headlineLarge)
+                else -> Text(
+                    text = key,
+                    color = HydroCyan,
+                    style = MaterialTheme.typography.headlineMedium
+                )
             }
         }
     }
