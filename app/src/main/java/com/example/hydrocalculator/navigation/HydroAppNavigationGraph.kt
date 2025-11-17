@@ -142,8 +142,7 @@ fun HydroAppNavigationGraph() {
             }
 
             composable(route = HydroAppRoutes.PressureScreen.route) {
-                CalculationPressureScreen(
-                    onNavigateBack = { navController.popBackStack() })
+                CalculationPressureScreen()
             }
         }
     }

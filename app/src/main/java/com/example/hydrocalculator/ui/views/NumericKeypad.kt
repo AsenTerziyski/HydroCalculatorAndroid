@@ -39,12 +39,6 @@ fun NumericKeypad(
     modifier: Modifier = Modifier,
     onKeyClick: (String) -> Unit
 ) {
-    val keys = listOf(
-        "1", "2", "3",
-        "4", "5", "6",
-        "7", "8", "9",
-        ".", "0", "BACKSPACE"
-    )
 
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
@@ -55,7 +49,7 @@ fun NumericKeypad(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         userScrollEnabled = false
     ) {
-        items(keys) { key ->
+        items(numericPadKeys) { key ->
             KeyButton(
                 key = key,
                 onClick = { onKeyClick(key) }
@@ -73,7 +67,7 @@ private fun KeyButton(
     val isPressed by interactionSource.collectIsPressedAsState()
 
     val backgroundColor by animateColorAsState(
-        targetValue = if (isPressed) HydroCyan.copy(alpha = 0.2f) else Color.Black,
+        targetValue = if (isPressed) HydroCyan.copy(alpha = 0.5f) else Color.Black,
         label = "backgroundColor"
     )
 
@@ -81,7 +75,6 @@ private fun KeyButton(
         targetValue = if (isPressed) 0.7f else 1f,
         label = "scale"
     )
-
 
     Surface(
         modifier = Modifier
@@ -103,7 +96,9 @@ private fun KeyButton(
             ),
         color = backgroundColor,
     ) {
-        Box(contentAlignment = Alignment.Center) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
             when (key) {
                 "BACKSPACE" -> Icon(
                     Icons.AutoMirrored.Filled.Backspace,
@@ -139,3 +134,10 @@ fun NumericKeypadPreview() {
 fun KeyButtonPreview() {
     KeyButton("7", {})
 }
+
+private val numericPadKeys = listOf(
+    "1", "2", "3",
+    "4", "5", "6",
+    "7", "8", "9",
+    ".", "0", "BACKSPACE"
+)
