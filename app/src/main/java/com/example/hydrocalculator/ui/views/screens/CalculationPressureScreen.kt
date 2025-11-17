@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.hydrocalculator.calculationengine.PressurePipeEngine
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.views.NumericKeypad
 
@@ -40,7 +41,9 @@ fun CalculationPressureScreen() {
         derivedStateOf {
             val flow = flowText.toFloatOrNull() ?: 0f
             val diameter = diameterText.toFloatOrNull() ?: 0f
-            if (flow > 0 && diameter > 0) flow * diameter else 0f
+            if (flow > 0 && diameter > 0)
+                PressurePipeEngine.estimateVelocity(flow, diameter)
+            else 0f
         }
     }
 
