@@ -65,12 +65,12 @@ class CalculationPressureViewModel
     }
 
     private fun recalculateResults() {
-        val flow = _uiState.value.flowText.toFloatOrNull() ?: 0f
-        val diameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
+        val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
+        val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
 
-        if (flow > 0 && diameter > 0) {
-            val velocityResult = pressurePipeEngine.estimateVelocity(flow, diameter)
-            val headLossResult = flow / diameter // Dummy formula
+        if (waterFlow > 0 && pipeDiameter > 0) {
+            val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter)
+            val headLossResult = waterFlow / pipeDiameter // Dummy formula
             _uiState.update {
                 it.copy(velocity = velocityResult, headLoss = headLossResult)
             }
