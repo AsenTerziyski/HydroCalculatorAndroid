@@ -82,7 +82,7 @@ private fun KeyButton(
                 scaleX = scale
                 scaleY = scale
             }
-            .aspectRatio(1.618f)
+            .aspectRatio(2.5f)
             .border(
                 width = 2.dp,
                 color = HydroCyan.copy(alpha = 0.5f),

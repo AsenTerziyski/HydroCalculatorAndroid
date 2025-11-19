@@ -1,25 +1,30 @@
 package com.example.hydrocalculator.ui.views.screens
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.hydrocalculator.calculationengine.PressurePipeEngine
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.views.NumericKeypad
 import com.example.hydrocalculator.vm.CalculationPressureViewModel
@@ -64,7 +69,7 @@ fun CalculationPressureScreen(
                     label = "Diameter",
                     unit = "mm",
                     isFocused = uiState.focusedField == FocusedField.DIAMETER,
-                    onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER)}
+                    onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
                 )
                 HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                 ResultField(
@@ -79,10 +84,19 @@ fun CalculationPressureScreen(
                 )
             }
         }
+
         NumericKeypad { key -> viewModel.onKeyClick(key) }
+
+        SaveButton(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 28.dp)
+                .padding(vertical = 12.dp),
+        ) {
+
+        }
     }
 }
-
 
 @Composable
 private fun UnitInputField(
@@ -146,8 +160,58 @@ private fun ResultField(label: String, value: String, unit: String) {
     }
 }
 
-@Preview(showBackground = true)
 @Composable
-private fun CalculationResultsScreenPreview() {
-    CalculationPressureScreen()
+private fun SaveButton(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
+    val backgroundColor by animateColorAsState(
+        targetValue = if (isPressed) HydroCyan.copy(alpha = 0.5f) else Color.Black,
+        label = "backgroundColor"
+    )
+
+    val scale by animateFloatAsState(
+        targetValue = if (isPressed) 0.7f else 1f,
+        label = "scale"
+    )
+
+    Surface(
+        modifier = modifier
+            .graphicsLayer {
+                scaleX = scale
+                scaleY = scale
+            }
+            .height(48.dp)
+            .border(
+                width = 2.dp,
+                color = HydroCyan.copy(alpha = 0.5f),
+                shape = RoundedCornerShape(16.dp)
+            )
+            .clip(RoundedCornerShape(16.dp))
+            .clickable(
+                interactionSource = interactionSource,
+                indication = null,
+                onClick = onClick
+            ),
+        color = backgroundColor,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Box(contentAlignment = Alignment.Center) {
+            Text(
+                text = "Save Result",
+                color = HydroCyan,
+                style = MaterialTheme.typography.titleMedium
+            )
+        }
+    }
 }
+
+@Preview
+@Composable
+fun SaveButtonPreview() {
+    SaveButton(onClick = {})
+}
+
