@@ -25,11 +25,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.views.NumericKeypad
 import com.example.hydrocalculator.vm.CalculationPressureViewModel
 
-enum class FocusedField { FLOW, DIAMETER }
 
 @Composable
 fun CalculationPressureScreen(

@@ -2,8 +2,8 @@ package com.example.hydrocalculator.vm
 
 import androidx.lifecycle.ViewModel
 import com.example.hydrocalculator.calculationengine.CalculationPressureUiState
+import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.calculationengine.PressurePipeEngine
-import com.example.hydrocalculator.ui.views.screens.FocusedField
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

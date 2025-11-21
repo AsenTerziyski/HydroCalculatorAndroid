@@ -26,7 +26,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hydrocalculator.R
-import com.example.hydrocalculator.ui.views.ConfirmationDialog
+import com.example.hydrocalculator.ui.views.dialogs.ConfirmationDialog
 import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppBottomBar
 import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppTopBar
 import com.example.hydrocalculator.ui.views.screens.CalculationPressureScreen

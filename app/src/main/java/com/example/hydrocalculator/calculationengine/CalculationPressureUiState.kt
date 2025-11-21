@@ -1,6 +1,6 @@
 package com.example.hydrocalculator.calculationengine
 
-import com.example.hydrocalculator.ui.views.screens.FocusedField
+enum class FocusedField { FLOW, DIAMETER }
 
 data class CalculationPressureUiState(
     val flowText: String = EMPTY_STRING,

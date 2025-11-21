@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.ui.views
+package com.example.hydrocalculator.ui.views.dialogs
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.size
@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import com.example.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
@@ -87,7 +88,6 @@ fun ConfirmationDialog(
             }
         }
     )
-
 }
 
 @Composable
@@ -113,3 +113,12 @@ fun GradientIcon(icon: ImageVector, contentDescription: String?, brush: Brush) {
         )
     }
 }
+
+@Preview
+@Composable
+fun ConfirmationDialogPreview() = ConfirmationDialog(
+    onDismissRequest = {},
+    onConfirmation = {},
+    dialogTitle = "Exit App",
+    dialogText = "Are you sure you want to exit the app?"
+)
