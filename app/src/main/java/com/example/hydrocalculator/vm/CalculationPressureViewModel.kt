@@ -80,4 +80,22 @@ class CalculationPressureViewModel
             }
         }
     }
+
+    fun onSaveResultIntent() {
+        _uiState.update { state -> state.copy(isSaveDialogVisible = true) }
+    }
+
+    fun onDescriptionChange(description: String) {
+        _uiState.update { state -> state.copy(description = description) }
+    }
+
+    fun onConfirmSave() {
+        val currentState = _uiState.value
+        _uiState.update { state -> state.copy(isSaveDialogVisible = false) }
+    }
+
+    fun onDismissDialog() {
+        _uiState.update { state -> state.copy(isSaveDialogVisible = false) }
+    }
+
 }

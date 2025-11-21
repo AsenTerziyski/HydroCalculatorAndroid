@@ -7,7 +7,9 @@ data class CalculationPressureUiState(
     val diameterText: String = EMPTY_STRING,
     val velocity: Float = 0f,
     val headLoss: Float = 0f,
-    val focusedField: FocusedField? = FocusedField.FLOW
+    val focusedField: FocusedField? = FocusedField.FLOW,
+    val description: String = EMPTY_STRING,
+    val isSaveDialogVisible: Boolean = false
 )
 
 private const val EMPTY_STRING = ""

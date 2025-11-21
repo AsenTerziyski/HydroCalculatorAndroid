@@ -10,7 +10,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-private fun SaveCalculationDialog(
+fun SaveCalculationDialog(
     description: String,
     onDescriptionChange: (String) -> Unit,
     onConfirm: () -> Unit,

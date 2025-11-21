@@ -28,8 +28,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.views.NumericKeypad
+import com.example.hydrocalculator.ui.views.dialogs.SaveCalculationDialog
 import com.example.hydrocalculator.vm.CalculationPressureViewModel
-
 
 @Composable
 fun CalculationPressureScreen(
@@ -37,6 +37,15 @@ fun CalculationPressureScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
+
+    if (uiState.isSaveDialogVisible) {
+        SaveCalculationDialog(
+            description = uiState.description,
+            onDescriptionChange = viewModel::onDescriptionChange,
+            onConfirm = viewModel::onConfirmSave,
+            onDismiss = viewModel::onDismissDialog
+        )
+    }
 
     Column(
         modifier = Modifier
@@ -93,7 +102,7 @@ fun CalculationPressureScreen(
                 .padding(horizontal = 28.dp)
                 .padding(vertical = 12.dp),
         ) {
-
+            viewModel.onSaveResultIntent()
         }
     }
 }
