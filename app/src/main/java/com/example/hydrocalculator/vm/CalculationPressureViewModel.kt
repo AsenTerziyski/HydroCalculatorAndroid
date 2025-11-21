@@ -71,12 +71,12 @@ class CalculationPressureViewModel
         if (waterFlow > 0 && pipeDiameter > 0) {
             val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter)
             val headLossResult = waterFlow / pipeDiameter // Dummy formula
-            _uiState.update {
-                it.copy(velocity = velocityResult, headLoss = headLossResult)
+            _uiState.update { state ->
+                state.copy(velocity = velocityResult, headLoss = headLossResult)
             }
         } else {
-            _uiState.update {
-                it.copy(velocity = 0f, headLoss = 0f)
+            _uiState.update { state ->
+                state.copy(velocity = 0f, headLoss = 0f)
             }
         }
     }
