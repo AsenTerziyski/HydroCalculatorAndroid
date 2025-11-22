@@ -1,14 +1,19 @@
 package com.example.hydrocalculator.vm
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.hydrocalculator.calculationengine.CalculationPressureUiState
 import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.calculationengine.PressurePipeEngine
+import com.example.hydrocalculator.ui.views.screens.CalculationPressureScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -17,6 +22,9 @@ class CalculationPressureViewModel
 
     private val _uiState = MutableStateFlow(CalculationPressureUiState())
     val uiState: StateFlow<CalculationPressureUiState> = _uiState.asStateFlow()
+
+    private val _eventChannel = Channel<CalculationPressureEvent>()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
     fun onKeyClick(key: String) {
         val currentState = _uiState.value
@@ -81,8 +89,10 @@ class CalculationPressureViewModel
         }
     }
 
-    fun onSaveResultIntent() {
-        _uiState.update { state -> state.copy(isSaveDialogVisible = true) }
+    fun onSaveIntent() {
+        viewModelScope.launch {
+            _eventChannel.send(CalculationPressureEvent.ShowSaveDialog)
+        }
     }
 
     fun onDescriptionChange(description: String) {
@@ -91,11 +101,22 @@ class CalculationPressureViewModel
 
     fun onConfirmSave() {
         val currentState = _uiState.value
-        _uiState.update { state -> state.copy(isSaveDialogVisible = false) }
+        _uiState.update { state -> state.copy(description = "") }
+        viewModelScope.launch {
+            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+        }
     }
 
     fun onDismissDialog() {
-        _uiState.update { state -> state.copy(isSaveDialogVisible = false) }
+        _uiState.update { state -> state.copy(description = "") }
+        viewModelScope.launch {
+            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+        }
     }
 
+}
+
+sealed interface CalculationPressureEvent {
+    data object ShowSaveDialog : CalculationPressureEvent
+    data object HideSaveDialog : CalculationPressureEvent
 }

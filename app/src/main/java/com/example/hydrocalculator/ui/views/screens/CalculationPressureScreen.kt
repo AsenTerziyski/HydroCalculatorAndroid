@@ -16,6 +16,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,6 +30,7 @@ import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.ui.theme.HydroCyan
 import com.example.hydrocalculator.ui.views.NumericKeypad
 import com.example.hydrocalculator.ui.views.dialogs.SaveCalculationDialog
+import com.example.hydrocalculator.vm.CalculationPressureEvent
 import com.example.hydrocalculator.vm.CalculationPressureViewModel
 
 @Composable
@@ -38,7 +40,23 @@ fun CalculationPressureScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
-    if (uiState.isSaveDialogVisible) {
+    var isDialogVisible by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        viewModel.eventChannel.collect { event ->
+            isDialogVisible = when (event) {
+                is CalculationPressureEvent.ShowSaveDialog -> {
+                    true
+                }
+
+                CalculationPressureEvent.HideSaveDialog -> {
+                    false
+                }
+            }
+        }
+    }
+
+    if (isDialogVisible) {
         SaveCalculationDialog(
             description = uiState.description,
             onDescriptionChange = viewModel::onDescriptionChange,
@@ -101,9 +119,7 @@ fun CalculationPressureScreen(
                 .fillMaxWidth()
                 .padding(horizontal = 28.dp)
                 .padding(vertical = 12.dp),
-        ) {
-            viewModel.onSaveResultIntent()
-        }
+        ) { viewModel.onSaveIntent() }
     }
 }
 
@@ -223,4 +239,3 @@ private fun SaveButton(
 fun SaveButtonPreview() {
     SaveButton(onClick = {})
 }
-
