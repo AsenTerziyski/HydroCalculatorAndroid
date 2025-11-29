@@ -3,6 +3,7 @@ plugins {
     id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -99,6 +100,11 @@ dependencies {
     implementation("androidx.compose.animation:animation:1.7.0-beta01") // Or a recent version
 
     implementation("androidx.compose.material:material-icons-extended")
+
+    val roomVersion = "2.6.1"
+    implementation("androidx.room:room-runtime:$roomVersion")
+    implementation("androidx.room:room-ktx:$roomVersion") // For coroutines support
+    ksp("androidx.room:room-compiler:$roomVersion")
 
 }
 
