@@ -1,0 +1,17 @@
+package com.asentt.hydrocalculator.ui.views.screens.pressurecalculation
+
+import com.asentt.hydrocalculator.utils.Resource
+
+enum class FocusedField { FLOW, DIAMETER }
+
+data class CalculationPressureUiState(
+    val flowText: String = EMPTY_STRING,
+    val diameterText: String = EMPTY_STRING,
+    val velocity: Float = 0f,
+    val headLoss: Float = 0f,
+    val description: String = EMPTY_STRING,
+    val focusedField: FocusedField? = FocusedField.FLOW,
+    val saveOperationState: Resource<Unit> = Resource.Idle
+)
+
+private const val EMPTY_STRING = ""

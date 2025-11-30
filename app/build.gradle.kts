@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.hydrocalculator"
+    namespace = "com.asentt.hydrocalculator"
     compileSdk = 36
 
     defaultConfig {

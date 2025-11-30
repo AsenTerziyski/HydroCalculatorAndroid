@@ -1,0 +1,82 @@
+package com.asentt.hydrocalculator.ui.views.hydroappbars
+
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeDrawing
+import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.sp
+import com.asentt.hydrocalculator.ui.theme.HydroCyan
+import com.asentt.hydrocalculator.ui.theme.HydroGreen
+import com.asentt.hydrocalculator.ui.theme.hydroGradient
+import com.asentt.hydrocalculator.utils.UseTextAnimation
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HydroAppTopBar(
+    title: String = "",
+    icon: ImageVector? = null,
+    onBackPress: (() -> Unit)? = null
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val iconColor = if (isPressed) HydroGreen else HydroCyan
+
+    TopAppBar(
+        modifier = Modifier
+            .windowInsetsPadding(
+                WindowInsets.safeDrawing.only(
+                    WindowInsetsSides.Top + WindowInsetsSides.Horizontal
+                )
+            ),
+        title = {
+            key(title) {
+                val (visibleTitle, animatedFontSize) = UseTextAnimation(
+                    text = title,
+                    minFontSize = 7.sp,
+                    maxFontSize = MaterialTheme.typography.titleLarge.fontSize
+                )
+                Text(
+                    text = visibleTitle,
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        brush = MaterialTheme.hydroGradient,
+                        fontSize = animatedFontSize
+                    )
+                )
+            }
+
+        },
+        navigationIcon = {
+            if (onBackPress != null && icon != null) {
+                IconButton(
+                    onClick = onBackPress,
+                    interactionSource = interactionSource
+                ) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = "Back",
+                        tint = iconColor
+                    )
+                }
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surface
+        )
+    )
+}
