@@ -29,7 +29,7 @@ import com.example.hydrocalculator.R
 import com.example.hydrocalculator.ui.views.dialogs.ConfirmationDialog
 import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppBottomBar
 import com.example.hydrocalculator.ui.views.hydroappbars.HydroAppTopBar
-import com.example.hydrocalculator.ui.views.screens.CalculationPressureScreen
+import com.example.hydrocalculator.ui.views.screens.pressurecalculation.CalculationPressureScreen
 import com.example.hydrocalculator.ui.views.screens.CalculationTypeScreen
 import com.example.hydrocalculator.ui.views.screens.GoodbyeScreen
 import com.example.hydrocalculator.ui.views.screens.WelcomeScreen

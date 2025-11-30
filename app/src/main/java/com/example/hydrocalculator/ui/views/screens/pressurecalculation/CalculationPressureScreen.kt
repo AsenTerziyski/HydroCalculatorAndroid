@@ -1,6 +1,5 @@
-package com.example.hydrocalculator.ui.views.screens
+package com.example.hydrocalculator.ui.views.screens.pressurecalculation
 
-import android.widget.ProgressBar
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -29,15 +27,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.ui.theme.HydroCyan
-import com.example.hydrocalculator.ui.views.LoadingView
 import com.example.hydrocalculator.ui.views.NumericKeypad
 import com.example.hydrocalculator.ui.views.SavingView
 import com.example.hydrocalculator.ui.views.dialogs.SaveCalculationDialog
 import com.example.hydrocalculator.utils.Resource
-import com.example.hydrocalculator.vm.CalculationPressureEvent
-import com.example.hydrocalculator.vm.CalculationPressureViewModel
 
 @Composable
 fun CalculationPressureScreen(

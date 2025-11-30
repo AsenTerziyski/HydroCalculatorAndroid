@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.calculationengine
+package com.example.hydrocalculator.ui.views.screens.pressurecalculation
 
 import com.example.hydrocalculator.utils.Resource
 
@@ -9,8 +9,8 @@ data class CalculationPressureUiState(
     val diameterText: String = EMPTY_STRING,
     val velocity: Float = 0f,
     val headLoss: Float = 0f,
-    val focusedField: FocusedField? = FocusedField.FLOW,
     val description: String = EMPTY_STRING,
+    val focusedField: FocusedField? = FocusedField.FLOW,
     val saveOperationState: Resource<Unit> = Resource.Idle
 )
 

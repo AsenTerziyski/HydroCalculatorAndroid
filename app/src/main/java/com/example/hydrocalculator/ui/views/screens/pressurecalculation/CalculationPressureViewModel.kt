@@ -1,10 +1,8 @@
-package com.example.hydrocalculator.vm
+package com.example.hydrocalculator.ui.views.screens.pressurecalculation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.hydrocalculator.calculationengine.CalculationPressureUiState
-import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.calculationengine.PressurePipeEngine
 import com.example.hydrocalculator.domain.usecase.SaveCalculationUseCase
 import com.example.hydrocalculator.utils.Resource
