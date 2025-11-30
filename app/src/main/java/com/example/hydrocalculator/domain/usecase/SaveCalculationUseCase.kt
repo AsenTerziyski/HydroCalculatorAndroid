@@ -14,17 +14,13 @@ class SaveCalculationUseCase @Inject constructor(private val calculationReposito
         velocity: Float,
         headLoss: Float,
         description: String
-    ): Resource<Unit> {
-
-        val savedDescription = description.ifEmpty { "N/A" }
-        val resultToSave =
-            CalculationResultEntity(
-                flow = waterFlow,
-                diameter = pipeDiameter,
-                velocity = velocity,
-                headloss = headLoss,
-                description = savedDescription
-            )
-        return calculationRepository.saveCalculation(resultToSave)
-    }
+    ): Resource<Unit> = calculationRepository.saveCalculation(
+        CalculationResultEntity(
+            flow = waterFlow,
+            diameter = pipeDiameter,
+            velocity = velocity,
+            headloss = headLoss,
+            description = description.ifEmpty { "N/A" }
+        )
+    )
 }
