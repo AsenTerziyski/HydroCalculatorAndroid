@@ -108,6 +108,8 @@ class CalculationPressureViewModel
     fun onConfirmSave() {
 
         viewModelScope.launch {
+            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+
             val currentState = _uiState.value
 
             _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
@@ -124,7 +126,6 @@ class CalculationPressureViewModel
             when (result) {
                 Resource.Idle -> {
                     Log.d("TAG101", "Idle")
-                    // no-op
                 }
 
                 Resource.Loading -> {
@@ -147,9 +148,6 @@ class CalculationPressureViewModel
                     _uiState.update { state -> state.copy(saveOperationState = Resource.Error(result.exeption)) }
                 }
             }
-
-            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
-
         }
     }
 
