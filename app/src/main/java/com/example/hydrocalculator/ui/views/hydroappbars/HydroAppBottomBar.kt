@@ -43,9 +43,6 @@ fun HydroAppBottomBar(
     onClickPressurizedPipes: () -> Unit,
     onSwitchOfClick: () -> Unit
 ) {
-
-    Log.d("TAG101", "Selected tab! ${currentlySelectedTab.toString()}")
-
     BottomAppBar(
         modifier = Modifier
             .windowInsetsPadding(

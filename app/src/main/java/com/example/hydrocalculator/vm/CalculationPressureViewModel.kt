@@ -1,13 +1,16 @@
 package com.example.hydrocalculator.vm
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.hydrocalculator.calculationengine.CalculationPressureUiState
 import com.example.hydrocalculator.calculationengine.FocusedField
 import com.example.hydrocalculator.calculationengine.PressurePipeEngine
-import com.example.hydrocalculator.ui.views.screens.CalculationPressureScreen
+import com.example.hydrocalculator.domain.usecase.SaveCalculationUseCase
+import com.example.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -18,7 +21,10 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CalculationPressureViewModel
-@Inject constructor(private val pressurePipeEngine: PressurePipeEngine) : ViewModel() {
+@Inject constructor(
+    private val pressurePipeEngine: PressurePipeEngine,
+    private val saveCalculationUseCase: SaveCalculationUseCase
+) : ViewModel() {
 
     private val _uiState = MutableStateFlow(CalculationPressureUiState())
     val uiState: StateFlow<CalculationPressureUiState> = _uiState.asStateFlow()
@@ -78,7 +84,7 @@ class CalculationPressureViewModel
 
         if (waterFlow > 0 && pipeDiameter > 0) {
             val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter)
-            val headLossResult = pressurePipeEngine.estimateHeadloss( waterFlow, velocityResult)
+            val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult)
             _uiState.update { state ->
                 state.copy(velocity = velocityResult, headLoss = headLossResult)
             }
@@ -100,10 +106,50 @@ class CalculationPressureViewModel
     }
 
     fun onConfirmSave() {
-        val currentState = _uiState.value
-        _uiState.update { state -> state.copy(description = "") }
+
         viewModelScope.launch {
+            val currentState = _uiState.value
+
+            _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
+            delay(2000)
+
+            val result = saveCalculationUseCase(
+                waterFlow = currentState.flowText.toFloat(),
+                pipeDiameter = currentState.diameterText.toFloat(),
+                velocity = currentState.velocity,
+                headLoss = currentState.headLoss,
+                description = currentState.description
+            )
+
+            when (result) {
+                Resource.Idle -> {
+                    Log.d("TAG101", "Idle")
+                    // no-op
+                }
+
+                Resource.Loading -> {
+                    Log.d("TAG101", "Loading...")
+                    _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
+                }
+
+                is Resource.Success<*> -> {
+                    Log.d("TAG101", "Success!")
+                    _uiState.update { state ->
+                        state.copy(
+                            description = currentState.description,
+                            saveOperationState = Resource.Success(Unit)
+                        )
+                    }
+                }
+
+                is Resource.Error -> {
+                    Log.d("TAG101", "Error!")
+                    _uiState.update { state -> state.copy(saveOperationState = Resource.Error(result.exeption)) }
+                }
+            }
+
             _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+
         }
     }
 

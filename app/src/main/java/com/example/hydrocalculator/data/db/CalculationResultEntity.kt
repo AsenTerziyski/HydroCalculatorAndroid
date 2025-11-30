@@ -7,10 +7,10 @@ import androidx.room.PrimaryKey
 data class CalculationResultEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val description: String,
     val flow: Float,
     val diameter: Float,
     val velocity: Float,
     val headloss: Float,
+    val description: String,
     val timestamp: Long = System.currentTimeMillis()
 )

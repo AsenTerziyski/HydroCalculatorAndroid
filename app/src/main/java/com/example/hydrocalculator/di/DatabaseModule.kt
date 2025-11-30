@@ -20,13 +20,11 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "hydro_calculator_db" // actual file name of the database on the device.
+            "hydro_calculator_db"
         ).build()
     }
 
     @Provides
-    // No need for @Singleton here, as Hilt provides the same DAO instance
-    // from the singleton AppDatabase instance.
     fun provideCalculationResultDao(appDatabase: AppDatabase): PressureCalculationResultsDao {
         return appDatabase.calculationResultsDao()
     }
