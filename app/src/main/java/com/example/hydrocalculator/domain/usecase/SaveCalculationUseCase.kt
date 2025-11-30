@@ -1,7 +1,7 @@
 package com.example.hydrocalculator.domain.usecase
 
 import com.example.hydrocalculator.data.db.CalculationResultEntity
-import com.example.hydrocalculator.domain.CalculationRepository
+import com.example.hydrocalculator.domain.repo.CalculationRepository
 import com.example.hydrocalculator.utils.Resource
 import javax.inject.Inject
 import kotlin.String

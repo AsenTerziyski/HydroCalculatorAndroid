@@ -1,4 +1,4 @@
-package com.example.hydrocalculator.domain
+package com.example.hydrocalculator.domain.repo
 
 import com.example.hydrocalculator.data.db.CalculationResultEntity
 import com.example.hydrocalculator.data.db.PressureCalculationResultsDao
@@ -6,7 +6,6 @@ import com.example.hydrocalculator.utils.Resource
 import kotlinx.coroutines.delay
 import javax.inject.Inject
 import javax.inject.Singleton
-
 
 @Singleton
 class CalculationRepository @Inject constructor(private val calculationDao: PressureCalculationResultsDao) {
