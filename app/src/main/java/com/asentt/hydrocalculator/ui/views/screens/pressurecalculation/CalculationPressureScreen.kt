@@ -11,8 +11,14 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -23,6 +29,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,6 +39,7 @@ import com.asentt.hydrocalculator.ui.views.NumericKeypad
 import com.asentt.hydrocalculator.ui.views.SavingView
 import com.asentt.hydrocalculator.ui.views.dialogs.SaveCalculationDialog
 import com.asentt.hydrocalculator.utils.Resource
+import kotlinx.coroutines.launch
 
 @Composable
 fun CalculationPressureScreen(
@@ -56,6 +64,38 @@ fun CalculationPressureScreen(
         }
     }
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(uiState.saveOperationState) {
+        when (uiState.saveOperationState) {
+            is Resource.Error -> {
+                scope.launch {
+                    snackBarHostState.showSnackbar(
+                        message = "Oops! Something went wrong",
+                        withDismissAction = true
+                    )
+                }
+                viewModel.resetSaveState()
+            }
+
+            Resource.Idle -> {
+
+            }
+
+            Resource.Loading -> {
+
+            }
+
+            is Resource.Success<*> -> {
+                scope.launch {
+                    snackBarHostState.showSnackbar(message = "Calculation saved successfully")
+                    viewModel.resetSaveState()
+                }
+            }
+        }
+    }
+
     if (isDialogVisible) {
         SaveCalculationDialog(
             description = uiState.description,
@@ -65,75 +105,103 @@ fun CalculationPressureScreen(
         )
     }
 
-    when (uiState.saveOperationState) {
-        Resource.Loading -> {
-            SavingView()
-        }
-
-        is Resource.Error -> {
-
-        }
-
-        else -> {
-            Column(
+    Scaffold(
+        snackbarHost = {
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .windowInsetsPadding(WindowInsets.safeDrawing)
+                    .padding(top = 16.dp),
+                contentAlignment = Alignment.TopCenter
             ) {
+                SnackbarHost(hostState = snackBarHostState) { data ->
+                    Snackbar(
+                        modifier = Modifier.padding(horizontal = 12.dp),
+                        shape = RoundedCornerShape(12.dp),
+                        containerColor = Color.Black,
+                        contentColor = HydroCyan,
+                    ) {
+                        Text(data.visuals.message)
+                    }
+                }
+            }
+        },
+        containerColor = MaterialTheme.colorScheme.background
+    ) { innerPadding ->
+
+        when (uiState.saveOperationState) {
+            Resource.Loading -> {
+                SavingView()
+            }
+
+            is Resource.Error -> {
+
+            }
+
+            else -> {
                 Column(
                     modifier = Modifier
-                        .weight(1f)
-                        .verticalScroll(rememberScrollState()),
-                    horizontalAlignment = Alignment.CenterHorizontally
+                        .fillMaxSize()
+                        .padding(innerPadding)
                 ) {
                     Column(
                         modifier = Modifier
+                            .weight(1f)
+                            .verticalScroll(rememberScrollState()),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 28.dp)
+                                .padding(top = 16.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.spacedBy(16.dp)
+                        ) {
+                            UnitInputField(
+                                value = uiState.flowText,
+                                label = "Flow",
+                                unit = "l/s",
+                                isFocused = uiState.focusedField == FocusedField.FLOW,
+                                onFocus = { viewModel.onFocusChanged(FocusedField.FLOW) }
+                            )
+                            UnitInputField(
+                                value = uiState.diameterText,
+                                label = "Diameter",
+                                unit = "mm",
+                                isFocused = uiState.focusedField == FocusedField.DIAMETER,
+                                onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
+                            )
+                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
+                            ResultField(
+                                label = "Velocity",
+                                value = "%.2f".format(uiState.velocity),
+                                unit = "m/s"
+                            )
+                            ResultField(
+                                label = "Head loss",
+                                value = "%.4f".format(uiState.headLoss),
+                                unit = "m/m"
+                            )
+                        }
+                    }
+
+                    NumericKeypad { key -> viewModel.onKeyClick(key) }
+
+                    SaveButton(
+                        modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 28.dp)
-                            .padding(top = 16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally,
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        UnitInputField(
-                            value = uiState.flowText,
-                            label = "Flow",
-                            unit = "l/s",
-                            isFocused = uiState.focusedField == FocusedField.FLOW,
-                            onFocus = { viewModel.onFocusChanged(FocusedField.FLOW) }
-                        )
-                        UnitInputField(
-                            value = uiState.diameterText,
-                            label = "Diameter",
-                            unit = "mm",
-                            isFocused = uiState.focusedField == FocusedField.DIAMETER,
-                            onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
-                        )
-                        HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
-                        ResultField(
-                            label = "Velocity",
-                            value = "%.2f".format(uiState.velocity),
-                            unit = "m/s"
-                        )
-                        ResultField(
-                            label = "Head loss",
-                            value = "%.4f".format(uiState.headLoss),
-                            unit = "m/m"
-                        )
-                    }
+                            .padding(vertical = 12.dp),
+                    ) { viewModel.onSaveIntent() }
                 }
 
-                NumericKeypad { key -> viewModel.onKeyClick(key) }
-
-                SaveButton(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 28.dp)
-                        .padding(vertical = 12.dp),
-                ) { viewModel.onSaveIntent() }
             }
-
         }
+
+
     }
+
+
 }
 
 @Composable

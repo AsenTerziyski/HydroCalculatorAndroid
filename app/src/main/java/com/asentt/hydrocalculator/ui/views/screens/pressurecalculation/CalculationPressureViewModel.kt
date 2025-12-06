@@ -149,6 +149,10 @@ class CalculationPressureViewModel
         }
     }
 
+    fun resetSaveState() {
+        _uiState.update { state -> state.copy(saveOperationState = Resource.Idle) }
+    }
+
     fun onDismissDialog() {
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
