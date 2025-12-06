@@ -127,10 +127,6 @@ fun CalculationPressureScreen(
                 SavingView()
             }
 
-            is Resource.Error -> {
-
-            }
-
             else -> {
                 Column(
                     modifier = Modifier
@@ -188,7 +184,6 @@ fun CalculationPressureScreen(
                             .padding(vertical = 12.dp),
                     ) { viewModel.onSaveIntent() }
                 }
-
             }
         }
     }
