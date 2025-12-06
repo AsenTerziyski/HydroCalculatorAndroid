@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -29,7 +27,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -48,11 +45,11 @@ fun CalculationPressureScreen(
 
     val uiState by viewModel.uiState.collectAsState()
 
-    var isDialogVisible by remember { mutableStateOf(false) }
+    var isSaveResultDialogVisible by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         viewModel.eventChannel.collect { event ->
-            isDialogVisible = when (event) {
+            isSaveResultDialogVisible = when (event) {
                 is CalculationPressureEvent.ShowSaveDialog -> {
                     true
                 }
@@ -62,6 +59,15 @@ fun CalculationPressureScreen(
                 }
             }
         }
+    }
+
+    if (isSaveResultDialogVisible) {
+        SaveCalculationDialog(
+            description = uiState.description,
+            onDescriptionChange = viewModel::onDescriptionChange,
+            onConfirm = viewModel::onConfirmSave,
+            onDismiss = viewModel::onDismissDialog
+        )
     }
 
     val snackBarHostState = remember { SnackbarHostState() }
@@ -79,30 +85,15 @@ fun CalculationPressureScreen(
                 viewModel.resetSaveState()
             }
 
-            Resource.Idle -> {
-
-            }
-
-            Resource.Loading -> {
-
-            }
-
             is Resource.Success<*> -> {
                 scope.launch {
                     snackBarHostState.showSnackbar(message = "Calculation saved successfully")
                     viewModel.resetSaveState()
                 }
             }
-        }
-    }
 
-    if (isDialogVisible) {
-        SaveCalculationDialog(
-            description = uiState.description,
-            onDescriptionChange = viewModel::onDescriptionChange,
-            onConfirm = viewModel::onConfirmSave,
-            onDismiss = viewModel::onDismissDialog
-        )
+            else -> {}
+        }
     }
 
     Scaffold(
@@ -115,13 +106,16 @@ fun CalculationPressureScreen(
             ) {
                 SnackbarHost(hostState = snackBarHostState) { data ->
                     Snackbar(
-                        modifier = Modifier.padding(horizontal = 12.dp),
-                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .border(
+                                width = 2.dp,
+                                color = HydroCyan.copy(alpha = 0.8f),
+                                shape = RoundedCornerShape(12.dp)
+                            ),
                         containerColor = Color.Black,
                         contentColor = HydroCyan,
-                    ) {
-                        Text(data.visuals.message)
-                    }
+                    ) { Text(data.visuals.message) }
                 }
             }
         },
@@ -197,11 +191,7 @@ fun CalculationPressureScreen(
 
             }
         }
-
-
     }
-
-
 }
 
 @Composable

@@ -41,7 +41,15 @@ class CalculationPressureViewModel
         val newText = when (key) {
             "BACKSPACE" -> currentText.dropLast(1)
             "." -> if (currentText.contains(".")) currentText else if (currentText.isEmpty()) "0." else "$currentText."
-            else -> if (currentText.length < 8) currentText + key else currentText
+            else ->  {
+                val isEditingANumber = key.all { it.isDigit() }
+
+                when {
+                    currentText == "0" && isEditingANumber -> key
+                    currentText.length < 8 -> currentText + key
+                    else -> currentText
+                }
+            }
         }
 
         _uiState.update { state ->
