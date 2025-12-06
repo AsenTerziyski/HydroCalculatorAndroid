@@ -1,6 +1,5 @@
 plugins {
     id("com.android.application")
-    id("kotlin-kapt")
     id("org.jetbrains.kotlin.android")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
@@ -56,7 +55,8 @@ dependencies {
 
     // --- Hilt Core Dependencies ---
     implementation("com.google.dagger:hilt-android:2.51.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+//    kapt("com.google.dagger:hilt-android-compiler:2.51.1")
+    ksp("com.google.dagger:hilt-compiler:2.51.1") // <-- ADD THIS LINE
 
     // --- Hilt ViewModel Integration ---
     // This allows you to inject ViewModels using @HiltViewModel
@@ -96,18 +96,14 @@ dependencies {
 
     implementation("com.google.android.material:material:1.12.0")
 
-    implementation("androidx.navigation:navigation-compose:2.8.0-beta01") // Or a recent version
-    implementation("androidx.compose.animation:animation:1.7.0-beta01") // Or a recent version
+    implementation("androidx.navigation:navigation-compose:2.8.0-beta01")
+    implementation("androidx.compose.animation:animation:1.7.0-beta01")
 
     implementation("androidx.compose.material:material-icons-extended")
 
     val roomVersion = "2.6.1"
     implementation("androidx.room:room-runtime:$roomVersion")
-    implementation("androidx.room:room-ktx:$roomVersion") // For coroutines support
+    implementation("androidx.room:room-ktx:$roomVersion")
     ksp("androidx.room:room-compiler:$roomVersion")
 
-}
-
-kapt {
-    correctErrorTypes = true
 }
