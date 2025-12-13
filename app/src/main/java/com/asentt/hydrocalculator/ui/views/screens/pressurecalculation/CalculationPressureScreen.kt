@@ -30,7 +30,8 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asentt.hydrocalculator.ui.theme.HydroCyan
 import com.asentt.hydrocalculator.ui.views.NumericKeypad
 import com.asentt.hydrocalculator.ui.views.SavingView
@@ -43,11 +44,11 @@ fun CalculationPressureScreen(
     viewModel: CalculationPressureViewModel = hiltViewModel()
 ) {
 
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(key1 = Unit) {
         viewModel.eventChannel.collect { event ->
             isSaveResultDialogVisible = when (event) {
                 is CalculationPressureEvent.ShowSaveDialog -> {
@@ -73,7 +74,7 @@ fun CalculationPressureScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(uiState.saveOperationState) {
+    LaunchedEffect(key1 = uiState.saveOperationState) {
         when (uiState.saveOperationState) {
             is Resource.Error -> {
                 scope.launch {
