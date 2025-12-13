@@ -119,10 +119,6 @@ class CalculationPressureViewModel
             val currentState = _uiState.value
 
             _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
-            delay(2000)
-
-            Log.d("TAG101", "water flow ${currentState.flowText}")
-            Log.d("TAG101", "diameter ${currentState.diameterText}")
 
             if (currentState.flowText.isEmpty() || currentState.diameterText.isEmpty()) {
                 _uiState.update {
@@ -138,17 +134,13 @@ class CalculationPressureViewModel
                 )
 
                 when (result) {
-                    Resource.Idle -> {
-                        Log.d("TAG101", "Idle")
-                    }
+                    Resource.Idle -> {}
 
                     Resource.Loading -> {
-                        Log.d("TAG101", "Loading...")
                         _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
                     }
 
                     is Resource.Success<*> -> {
-                        Log.d("TAG101", "Success!")
                         _uiState.update { state ->
                             state.copy(
                                 description = currentState.description,
@@ -158,7 +150,6 @@ class CalculationPressureViewModel
                     }
 
                     is Resource.Error -> {
-                        Log.d("TAG101", "Error!")
                         _uiState.update { state ->
                             state.copy(
                                 saveOperationState = Resource.Error(

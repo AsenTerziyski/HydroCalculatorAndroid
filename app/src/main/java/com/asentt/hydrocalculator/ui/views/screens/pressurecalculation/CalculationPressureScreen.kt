@@ -77,9 +77,10 @@ fun CalculationPressureScreen(
     LaunchedEffect(key1 = uiState.saveOperationState) {
         when (uiState.saveOperationState) {
             is Resource.Error -> {
+                val message = (uiState.saveOperationState as Resource.Error).exeption.message
                 scope.launch {
                     snackBarHostState.showSnackbar(
-                        message = "Oops! Something went wrong",
+                        message = message.toString(),
                         withDismissAction = true
                     )
                 }

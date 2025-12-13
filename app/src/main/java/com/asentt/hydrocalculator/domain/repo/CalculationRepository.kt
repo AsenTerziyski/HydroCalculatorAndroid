@@ -9,14 +9,13 @@ import javax.inject.Singleton
 
 @Singleton
 class CalculationRepository @Inject constructor(private val calculationDao: PressureCalculationResultsDao) {
-    suspend fun saveCalculation(calculation: CalculationResultEntity): Resource<Unit> {
-        try {
-            delay(3000)
-            calculationDao.insert(calculation)
-            return Resource.Success(Unit)
-        } catch (e: Exception) {
-            delay(3000)
-            return Resource.Error(e)
-        }
+    suspend fun saveCalculation(calculation: CalculationResultEntity): Resource<Unit> = try {
+        delay(500)
+        calculationDao.insert(calculation)
+        Resource.Success(Unit)
+    } catch (e: Exception) {
+        delay(500)
+        Resource.Error(e)
     }
+
 }
