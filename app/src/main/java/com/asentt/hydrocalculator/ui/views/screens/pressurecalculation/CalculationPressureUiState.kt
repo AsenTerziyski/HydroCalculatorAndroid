@@ -2,7 +2,7 @@ package com.asentt.hydrocalculator.ui.views.screens.pressurecalculation
 
 import com.asentt.hydrocalculator.utils.Resource
 
-enum class FocusedField { FLOW, DIAMETER }
+enum class FocusedField { FLOW, DIAMETER, NONE }
 
 data class CalculationPressureUiState(
     val flowText: String = EMPTY_STRING,

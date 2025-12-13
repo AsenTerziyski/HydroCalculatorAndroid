@@ -183,7 +183,12 @@ fun CalculationPressureScreen(
                             .fillMaxWidth()
                             .padding(horizontal = 28.dp)
                             .padding(vertical = 12.dp),
-                    ) { viewModel.onSaveIntent() }
+                    ) {
+                        viewModel.apply {
+                            onSaveIntent()
+                            onFocusChanged(FocusedField.NONE)
+                        }
+                    }
                 }
             }
         }
