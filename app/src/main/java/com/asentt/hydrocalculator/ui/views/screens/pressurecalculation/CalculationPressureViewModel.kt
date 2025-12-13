@@ -41,7 +41,7 @@ class CalculationPressureViewModel
         val newText = when (key) {
             "BACKSPACE" -> currentText.dropLast(1)
             "." -> if (currentText.contains(".")) currentText else if (currentText.isEmpty()) "0." else "$currentText."
-            else ->  {
+            else -> {
                 val isEditingANumber = key.all { it.isDigit() }
 
                 when {
@@ -121,37 +121,52 @@ class CalculationPressureViewModel
             _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
             delay(2000)
 
-            val result = saveCalculationUseCase(
-                waterFlow = currentState.flowText.toFloat(),
-                pipeDiameter = currentState.diameterText.toFloat(),
-                velocity = currentState.velocity,
-                headLoss = currentState.headLoss,
-                description = currentState.description
-            )
+            Log.d("TAG101", "water flow ${currentState.flowText}")
+            Log.d("TAG101", "diameter ${currentState.diameterText}")
 
-            when (result) {
-                Resource.Idle -> {
-                    Log.d("TAG101", "Idle")
+            if (currentState.flowText.isEmpty() || currentState.diameterText.isEmpty()) {
+                _uiState.update {
+                    it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
                 }
+            } else {
+                val result = saveCalculationUseCase(
+                    waterFlow = currentState.flowText.toFloat(),
+                    pipeDiameter = currentState.diameterText.toFloat(),
+                    velocity = currentState.velocity,
+                    headLoss = currentState.headLoss,
+                    description = currentState.description
+                )
 
-                Resource.Loading -> {
-                    Log.d("TAG101", "Loading...")
-                    _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
-                }
-
-                is Resource.Success<*> -> {
-                    Log.d("TAG101", "Success!")
-                    _uiState.update { state ->
-                        state.copy(
-                            description = currentState.description,
-                            saveOperationState = Resource.Success(Unit)
-                        )
+                when (result) {
+                    Resource.Idle -> {
+                        Log.d("TAG101", "Idle")
                     }
-                }
 
-                is Resource.Error -> {
-                    Log.d("TAG101", "Error!")
-                    _uiState.update { state -> state.copy(saveOperationState = Resource.Error(result.exeption)) }
+                    Resource.Loading -> {
+                        Log.d("TAG101", "Loading...")
+                        _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
+                    }
+
+                    is Resource.Success<*> -> {
+                        Log.d("TAG101", "Success!")
+                        _uiState.update { state ->
+                            state.copy(
+                                description = currentState.description,
+                                saveOperationState = Resource.Success(Unit)
+                            )
+                        }
+                    }
+
+                    is Resource.Error -> {
+                        Log.d("TAG101", "Error!")
+                        _uiState.update { state ->
+                            state.copy(
+                                saveOperationState = Resource.Error(
+                                    result.exeption
+                                )
+                            )
+                        }
+                    }
                 }
             }
         }
