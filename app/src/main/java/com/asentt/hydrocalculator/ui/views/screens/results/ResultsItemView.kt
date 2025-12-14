@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.asentt.hydrocalculator.data.db.CalculationResultEntity
-import com.asentt.hydrocalculator.domain.usecase.ResultData
+import com.asentt.hydrocalculator.domain.model.ResultData
 
 @Composable
 fun ResultItem(calculationResult: ResultData) {

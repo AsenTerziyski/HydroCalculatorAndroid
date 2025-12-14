@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.data.db.CalculationResultEntity
 import com.asentt.hydrocalculator.domain.usecase.FetchAllResultsUseCase
-import com.asentt.hydrocalculator.domain.usecase.ResultData
+import com.asentt.hydrocalculator.domain.model.ResultData
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay

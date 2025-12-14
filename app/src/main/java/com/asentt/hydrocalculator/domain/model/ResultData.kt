@@ -1,4 +1,4 @@
-package com.asentt.hydrocalculator.domain.usecase
+package com.asentt.hydrocalculator.domain.model
 
 data class ResultData(
     val id: Long = 0,
