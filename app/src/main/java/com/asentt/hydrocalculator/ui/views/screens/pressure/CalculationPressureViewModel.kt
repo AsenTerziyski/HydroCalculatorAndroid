@@ -1,6 +1,5 @@
-package com.asentt.hydrocalculator.ui.views.screens.pressurecalculation
+package com.asentt.hydrocalculator.ui.views.screens.pressure
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.calculationengine.PressurePipeEngine
@@ -8,7 +7,6 @@ import com.asentt.hydrocalculator.domain.usecase.SaveCalculationUseCase
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

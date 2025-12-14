@@ -1,4 +1,4 @@
-package com.asentt.hydrocalculator.ui.views.screens
+package com.asentt.hydrocalculator.ui.views.screens.gravity
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

@@ -1,4 +1,4 @@
-package com.asentt.hydrocalculator.ui.views.screens.pressurecalculation
+package com.asentt.hydrocalculator.ui.views.screens.pressure
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
