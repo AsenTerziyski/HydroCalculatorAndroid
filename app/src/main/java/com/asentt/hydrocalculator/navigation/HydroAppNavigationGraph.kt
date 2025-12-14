@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -33,6 +34,7 @@ import com.asentt.hydrocalculator.ui.views.screens.pressurecalculation.Calculati
 import com.asentt.hydrocalculator.ui.views.screens.CalculationTypeScreen
 import com.asentt.hydrocalculator.ui.views.screens.GoodbyeScreen
 import com.asentt.hydrocalculator.ui.views.screens.WelcomeScreen
+import com.asentt.hydrocalculator.ui.views.screens.results.CalculationResultsScreen
 
 @Composable
 fun HydroAppNavigationGraph() {
@@ -62,28 +64,62 @@ fun HydroAppNavigationGraph() {
             val topBarTitle = when (currentRoute) {
                 HydroAppRoutes.HomeScreen.route -> stringResource(R.string.calculation_type)
                 HydroAppRoutes.PressureScreen.route -> stringResource(R.string.pressurized_pipes)
+                HydroAppRoutes.ResultsScreen.route -> stringResource(R.string.your_results)
                 else -> ""
             }
+
+            val shouldShowBackIcon = currentRoute == HydroAppRoutes.PressureScreen.route
+                    || currentRoute == HydroAppRoutes.ResultsScreen.route
+
             HydroAppTopBar(
                 title = topBarTitle,
-                icon = if (currentRoute == HydroAppRoutes.PressureScreen.route) Icons.Default.ArrowBack else null
-            ) { navController.popBackStack() }
+                icon = if (shouldShowBackIcon) Icons.AutoMirrored.Filled.ArrowBack else null
+            ) {
+                if (shouldShowBackIcon) {
+                    navController.popBackStack()
+                }
+            }
         },
         bottomBar = {
             val selectedTab = when (currentRoute) {
                 HydroAppRoutes.PressureScreen.route -> BottomBarTab.PRESSURIZED_PIPES
                 HydroAppRoutes.HomeScreen.route -> BottomBarTab.HOME
+                HydroAppRoutes.ResultsScreen.route -> BottomBarTab.RESULTS_SCREEN
                 else -> null
             }
-            if (currentRoute == HydroAppRoutes.HomeScreen.route || currentRoute == HydroAppRoutes.PressureScreen.route) {
+            if (currentRoute == HydroAppRoutes.HomeScreen.route || currentRoute == HydroAppRoutes.PressureScreen.route
+                || currentRoute == HydroAppRoutes.ResultsScreen.route
+            ) {
+
                 HydroAppBottomBar(
                     currentlySelectedTab = selectedTab,
                     onClickHome = {
-                        navController.navigate(route = HydroAppRoutes.HomeScreen.route)
+                        navController.navigate(route = HydroAppRoutes.HomeScreen.route) {
+                            popUpTo(HydroAppRoutes.HomeScreen.route) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
+                        }
                     },
                     onClickPressurizedPipes = {
                         if (currentRoute != HydroAppRoutes.PressureScreen.route) {
-                            navController.navigate(route = HydroAppRoutes.PressureScreen.route)
+                            navController.navigate(route = HydroAppRoutes.PressureScreen.route) {
+                                popUpTo(HydroAppRoutes.HomeScreen.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
+                            }
+                        }
+                    },
+                    onClickResults = {
+                        navController.navigate(route = HydroAppRoutes.ResultsScreen.route) {
+                            popUpTo(HydroAppRoutes.HomeScreen.route) {
+                                saveState = true
+                            }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     },
                     onSwitchOfClick = { showDialog = true })
@@ -143,6 +179,10 @@ fun HydroAppNavigationGraph() {
 
             composable(route = HydroAppRoutes.PressureScreen.route) {
                 CalculationPressureScreen()
+            }
+
+            composable(route = HydroAppRoutes.ResultsScreen.route) {
+                CalculationResultsScreen()
             }
         }
     }

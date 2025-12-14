@@ -5,11 +5,15 @@ sealed class HydroAppRoutes(val route: String) {
     object HomeScreen : HydroAppRoutes(HOME_ROUTE)
     object GoodbyeScreen : HydroAppRoutes(GOODBYE_ROUTE)
     object PressureScreen : HydroAppRoutes(PRESSURE_CALCULATION_SCREEN)
+    object ResultsScreen : HydroAppRoutes(RESULTS_SCREEN)
+
 
     private companion object {
         const val WELCOME_ROUTE = "welcome_screen"
         const val HOME_ROUTE = "home_screen"
         const val GOODBYE_ROUTE = "goodbye_screen"
         const val PRESSURE_CALCULATION_SCREEN = "pressure_screen"
+
+        const val RESULTS_SCREEN = "results_screen"
     }
 }

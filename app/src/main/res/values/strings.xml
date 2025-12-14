@@ -7,4 +7,5 @@
     <string name="goodbye_hydro">Goodbye, Hydro!</string>
     <string name="calculation_type">Select calculation type</string>
     <string name="pressurized_pipes">Pressurized Pipes</string>
+    <string name="your_results">Your results</string>
 </resources>

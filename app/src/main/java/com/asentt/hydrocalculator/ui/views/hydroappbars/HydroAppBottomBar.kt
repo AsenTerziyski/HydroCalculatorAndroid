@@ -40,6 +40,7 @@ fun HydroAppBottomBar(
     currentlySelectedTab: BottomBarTab?,
     onClickHome: () -> Unit,
     onClickPressurizedPipes: () -> Unit,
+    onClickResults: () -> Unit,
     onSwitchOfClick: () -> Unit
 ) {
     BottomAppBar(
@@ -128,7 +129,6 @@ fun HydroAppBottomBar(
                     textAlign = TextAlign.Center,
                     fontSize = 10.sp,
                     lineHeight = 16.sp,
-
                     text = "Gravity pipes"
                 )
             }
@@ -136,7 +136,11 @@ fun HydroAppBottomBar(
 
         Spacer(modifier = Modifier.width(4.dp))
         BottomBarItem(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier
+                .weight(1f)
+                .clickable {
+                    onClickResults.invoke()
+                },
             {
                 Text(
                     modifier = Modifier
@@ -186,6 +190,7 @@ fun HydroAppBottomBarPreview() {
             currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES,
             onClickHome = {},
             onClickPressurizedPipes = {},
+            onClickResults = {},
             onSwitchOfClick = {}
         )
     }
