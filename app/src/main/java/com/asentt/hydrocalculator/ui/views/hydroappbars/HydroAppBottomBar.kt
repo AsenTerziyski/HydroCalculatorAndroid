@@ -150,7 +150,8 @@ fun HydroAppBottomBar(
                     fontSize = 10.sp,
                     text = "Results"
                 )
-            }
+            },
+            isSelected = currentlySelectedTab == BottomBarTab.RESULTS_SCREEN
         )
     }
 }
