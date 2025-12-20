@@ -33,54 +33,71 @@ fun ResultItem(
             .padding(horizontal = 16.dp, vertical = 8.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
     ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.Bottom,
-            horizontalArrangement = Arrangement.Absolute.SpaceBetween
-        ) {
-            ResultRow(
-                modifier = Modifier.weight(1f),
-                firstText = "Diameter: ",
-                secondText = "%.2f".format(calculationResult.diameter),
-                thirdText = "mm"
-            )
 
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { onShareClick(calculationResult) }) {
-                    Icon(
-                        imageVector = Icons.Default.Share,
-                        contentDescription = "Share Result",
-                        tint = MaterialTheme.colorScheme.primary
-                    )
-                }
-                IconButton(onClick = { onDeleteClick(calculationResult) }) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Delete Result",
-                        tint = MaterialTheme.colorScheme.error
-                    )
-                }
-            }
-        }
+        HeaderResultRow(
+            calculationResult = calculationResult,
+            onShareClick = onShareClick,
+            onDeleteClick = onDeleteClick
+        )
+
         ResultRow(
             firstText = "Flow: ",
             secondText = "%.2f".format(calculationResult.flow),
             thirdText = "l/s"
         )
+
         ResultRow(
             firstText = "Velocity: ",
             secondText = "%.2f".format(calculationResult.velocity),
             thirdText = "m/s"
         )
+
         ResultRow(
             firstText = "Description: ",
             secondText = calculationResult.description,
             thirdText = ""
         )
+
         Spacer(modifier = Modifier.padding(8.dp))
     }
 }
 
+@Composable
+fun HeaderResultRow(
+    calculationResult: ResultData,
+    onShareClick: (ResultData) -> Unit,
+    onDeleteClick: (ResultData) -> Unit
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.Bottom,
+        horizontalArrangement = Arrangement.Absolute.SpaceBetween
+    ) {
+        ResultRow(
+            modifier = Modifier.weight(1f),
+            firstText = "Diameter: ",
+            secondText = "%.2f".format(calculationResult.diameter),
+            thirdText = "mm"
+        )
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            IconButton(onClick = { onShareClick(calculationResult) }) {
+                Icon(
+                    imageVector = Icons.Default.Share,
+                    contentDescription = "Share Result",
+                    tint = MaterialTheme.colorScheme.primary
+                )
+            }
+            IconButton(onClick = { onDeleteClick(calculationResult) }) {
+                Icon(
+                    imageVector = Icons.Default.Delete,
+                    contentDescription = "Delete Result",
+                    tint = MaterialTheme.colorScheme.error
+                )
+            }
+        }
+    }
+}
 
 @Composable
 fun ResultRow(
@@ -117,13 +134,25 @@ fun ResultRow(
 @Composable
 fun ResultItemPreview() {
     ResultItem(
-        calculationResult = ResultData(
-            id = 100L,
-            flow = 100F,
-            diameter = 100.10F,
-            velocity = 1.1F,
-            headloss = 0.001F,
-            description = "N/A"
-        )
+        calculationResult = getPreviewResult()
     )
 }
+
+@Preview(showBackground = true, backgroundColor = 0xFFF0F0F0)
+@Composable
+fun HeaderResultRowPreview() {
+    HeaderResultRow(
+        calculationResult = getPreviewResult(),
+        {},
+        {}
+    )
+}
+
+private fun getPreviewResult() = ResultData(
+    id = 100L,
+    flow = 100F,
+    diameter = 100.10F,
+    velocity = 1.1F,
+    headloss = 0.001F,
+    description = "N/A"
+)
