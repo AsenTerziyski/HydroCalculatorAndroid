@@ -18,9 +18,7 @@ import com.asentt.hydrocalculator.ui.views.LoadingView
 import com.asentt.hydrocalculator.utils.Resource
 
 @Composable
-fun CalculationResultsScreen(
-    viewModel: ResultsViewModel = hiltViewModel()
-) {
+fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
