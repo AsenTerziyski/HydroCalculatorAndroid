@@ -6,7 +6,7 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "pressure_calculation_results")
 data class CalculationResultEntity(
     @PrimaryKey(autoGenerate = true)
-    val id: Long = 0,
+    val id: Long,
     val flow: Float,
     val diameter: Float,
     val velocity: Float,

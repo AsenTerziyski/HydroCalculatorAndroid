@@ -1,7 +1,7 @@
 package com.asentt.hydrocalculator.domain.model
 
 data class ResultData(
-    val id: Long = 0,
+    val id: Long,
     val flow: Float,
     val diameter: Float,
     val velocity: Float,

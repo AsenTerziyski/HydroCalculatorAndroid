@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.data.db.CalculationResultEntity
 import com.asentt.hydrocalculator.domain.usecase.FetchAllResultsUseCase
 import com.asentt.hydrocalculator.domain.model.ResultData
+import com.asentt.hydrocalculator.domain.usecase.DeleteResultByIdUseCase
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
@@ -15,12 +16,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 
 @HiltViewModel
 class ResultsViewModel @Inject constructor(
-    private val fetchAllResultsUseCase: FetchAllResultsUseCase
+    private val fetchAllResultsUseCase: FetchAllResultsUseCase,
+    private val deleteResultByIdUseCase: DeleteResultByIdUseCase
 ) : ViewModel() {
 
     private val _resultHistoryState =
@@ -31,20 +34,30 @@ class ResultsViewModel @Inject constructor(
         fetchAllResults()
     }
 
+    fun deleteResultById(resultId: Long) {
+        viewModelScope.launch {
+            _resultHistoryState.update { Resource.Loading }
+            try {
+                deleteResultByIdUseCase.invoke(resultId)
+            } catch (e: Exception) {
+                _resultHistoryState.update {
+                    Resource.Error(e)
+                }
+            }
+        }
+    }
+
     private fun fetchAllResults() =
         fetchAllResultsUseCase()
             .onStart {
                 _resultHistoryState.value = Resource.Loading
-                delay(1000)
             }
             .onEach { results ->
-                delay(1000)
                 _resultHistoryState.update {
                     Resource.Success(results)
                 }
             }
             .catch { e ->
-                delay(1000)
                 _resultHistoryState.update {
                     Resource.Error(e as? Exception ?: Exception(e))
                 }

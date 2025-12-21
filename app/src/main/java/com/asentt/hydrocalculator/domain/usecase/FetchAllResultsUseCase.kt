@@ -12,7 +12,7 @@ class FetchAllResultsUseCase @Inject constructor(
         repo.fetchAllResults().map {
             it.mapIndexed { index, entity ->
                 ResultData(
-                    id = index.toLong(),
+                    id = entity.id,
                     flow = entity.flow,
                     diameter = entity.diameter,
                     velocity = entity.velocity,

@@ -16,6 +16,7 @@ class SaveCalculationUseCase @Inject constructor(private val calculationReposito
         description: String
     ): Resource<Unit> = calculationRepository.saveCalculation(
         CalculationResultEntity(
+            id = 10,
             flow = waterFlow,
             diameter = pipeDiameter,
             velocity = velocity,
