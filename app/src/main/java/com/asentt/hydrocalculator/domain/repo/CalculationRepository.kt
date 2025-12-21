@@ -21,11 +21,9 @@ class CalculationRepository @Inject constructor(private val calculationDao: Pres
 
     suspend fun deleteCalculation(calculationId: Long): Resource<Unit> =
         try {
-            delay(1000)
             calculationDao.deleteById(calculationId)
             Resource.Success(Unit)
         } catch (e: Exception) {
-            delay(1000)
             Resource.Error(e)
         }
 
