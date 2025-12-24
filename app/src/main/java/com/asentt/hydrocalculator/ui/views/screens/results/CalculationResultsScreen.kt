@@ -42,7 +42,7 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
 }
 
 @Composable
-fun CalculationResultsScreen(
+private fun CalculationResultsScreen(
     resultsState: Resource<List<ResultData>>,
     currentSortOption: SortOption,
     onSortSelected: (SortOption) -> Unit,
@@ -66,11 +66,11 @@ fun CalculationResultsScreen(
                     label = {
                         Text(
                             text = when (sortOption) {
-                                SortOption.NEWEST -> "Newest"
-                                SortOption.FLOW -> "Flow"
-                                SortOption.DIAMETER -> "Diameter"
-                                SortOption.VELOCITY -> "Velocity"
-                                SortOption.HEADLOSSES -> "Head Loss"
+                                SortOption.NEWEST -> SortOption.NEWEST.name
+                                SortOption.FLOW -> SortOption.FLOW.name
+                                SortOption.DIAMETER -> SortOption.DIAMETER.name
+                                SortOption.VELOCITY -> SortOption.VELOCITY.name
+                                SortOption.HEADLOSSES -> SortOption.HEADLOSSES.name
                             }
                         )
                     }
