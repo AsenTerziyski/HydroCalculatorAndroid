@@ -40,27 +40,9 @@ import com.asentt.hydrocalculator.utils.Resource
 import kotlinx.coroutines.launch
 
 @Composable
-fun CalculationPressureScreen(
-    viewModel: CalculationPressureViewModel = hiltViewModel()
-) {
-
+fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.eventChannel.collect { event ->
-            isSaveResultDialogVisible = when (event) {
-                is CalculationPressureEvent.ShowSaveDialog -> {
-                    true
-                }
-
-                CalculationPressureEvent.HideSaveDialog -> {
-                    false
-                }
-            }
-        }
-    }
 
     if (isSaveResultDialogVisible) {
         SaveCalculationDialog(
@@ -77,27 +59,26 @@ fun CalculationPressureScreen(
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(key1 = uiState.saveOperationState) {
-        when (uiState.saveOperationState) {
-            is Resource.Error -> {
-                val message = (uiState.saveOperationState as Resource.Error).exeption.message
-                scope.launch {
-                    snackBarHostState.showSnackbar(
-                        message = message.toString(),
-                        withDismissAction = true
-                    )
+    LaunchedEffect(key1 = Unit) {
+        viewModel.eventChannel.collect { event ->
+            when (event) {
+                CalculationPressureEvent.HideSaveDialog -> {
+                    isSaveResultDialogVisible = false
                 }
-                viewModel.resetSaveState()
-            }
 
-            is Resource.Success<*> -> {
-                scope.launch {
-                    snackBarHostState.showSnackbar(message = "Calculation saved successfully")
-                    viewModel.resetSaveState()
+                CalculationPressureEvent.ShowSaveDialog -> {
+                    isSaveResultDialogVisible = true
+                }
+
+                is CalculationPressureEvent.ShowSnackBar -> {
+                    scope.launch {
+                        snackBarHostState.showSnackbar(
+                            message = event.message,
+                            withDismissAction = true
+                        )
+                    }
                 }
             }
-
-            else -> {}
         }
     }
 

@@ -119,10 +119,13 @@ class CalculationPressureViewModel
 
             _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
 
-            if (currentState.flowText.isEmpty() || currentState.diameterText.isEmpty()) {
+            if ((currentState.flowText.isEmpty() || currentState.diameterText.isEmpty()) ||
+                currentState.flowText == "0" || currentState.diameterText == "0"
+            ) {
                 _uiState.update {
                     it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
                 }
+                _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Flow and diameter cannot be empty"))
             } else {
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
@@ -146,15 +149,19 @@ class CalculationPressureViewModel
                                 saveOperationState = Resource.Success(Unit)
                             )
                         }
+                        delay(1000)
+                        _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Calculation saved successfully"))
                     }
 
                     is Resource.Error -> {
-                        _uiState.update { state ->
-                            state.copy(
-                                saveOperationState = Resource.Error(
-                                    result.exeption
-                                )
+                        val exception = result.exeption
+                        _eventChannel.send(
+                            CalculationPressureEvent.ShowSnackBar(
+                                exception.message ?: "Unknown Error"
                             )
+                        )
+                        _uiState.update { state ->
+                            state.copy(saveOperationState = Resource.Error(exception))
                         }
                     }
                 }
@@ -178,6 +185,11 @@ class CalculationPressureViewModel
             it.copy(
                 flowText = "0",
                 diameterText = "0",
+                velocity = 0f,
+                headLoss = 0f,
+                description = "",
+                saveOperationState = Resource.Idle,
+                focusedField = FocusedField.FLOW
             )
         }
     }
@@ -187,4 +199,5 @@ class CalculationPressureViewModel
 sealed interface CalculationPressureEvent {
     data object ShowSaveDialog : CalculationPressureEvent
     data object HideSaveDialog : CalculationPressureEvent
+    data class ShowSnackBar(val message: String) : CalculationPressureEvent
 }
