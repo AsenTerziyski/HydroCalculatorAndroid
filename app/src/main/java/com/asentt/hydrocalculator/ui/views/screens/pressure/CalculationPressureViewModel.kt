@@ -145,7 +145,7 @@ class CalculationPressureViewModel
                     is Resource.Success<*> -> {
                         _uiState.update { state ->
                             state.copy(
-                                description = currentState.description,
+                                description = "",
                                 saveOperationState = Resource.Success(Unit)
                             )
                         }
