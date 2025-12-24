@@ -66,7 +66,10 @@ fun CalculationPressureScreen(
         SaveCalculationDialog(
             description = uiState.description,
             onDescriptionChange = viewModel::onDescriptionChange,
-            onConfirm = viewModel::onConfirmSave,
+            onConfirm = {
+                viewModel.onConfirmSave()
+                viewModel.onClearInputFields()
+            },
             onDismiss = viewModel::onDismissDialog
         )
     }

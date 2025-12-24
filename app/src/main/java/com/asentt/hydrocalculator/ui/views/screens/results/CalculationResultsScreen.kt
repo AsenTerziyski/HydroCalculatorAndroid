@@ -66,11 +66,11 @@ private fun CalculationResultsScreen(
                     label = {
                         Text(
                             text = when (sortOption) {
-                                SortOption.NEWEST -> SortOption.NEWEST.name
-                                SortOption.FLOW -> SortOption.FLOW.name
-                                SortOption.DIAMETER -> SortOption.DIAMETER.name
-                                SortOption.VELOCITY -> SortOption.VELOCITY.name
-                                SortOption.HEADLOSSES -> SortOption.HEADLOSSES.name
+                                SortOption.Newest -> SortOption.Newest.name
+                                SortOption.Flow -> SortOption.Flow.name
+                                SortOption.Diameter -> SortOption.Diameter.name
+                                SortOption.Velocity -> SortOption.Velocity.name
+                                SortOption.Headlosses -> SortOption.Headlosses.name
                             }
                         )
                     }

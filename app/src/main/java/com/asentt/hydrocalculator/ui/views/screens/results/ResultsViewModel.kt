@@ -2,13 +2,11 @@ package com.asentt.hydrocalculator.ui.views.screens.results
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.asentt.hydrocalculator.data.db.CalculationResultEntity
 import com.asentt.hydrocalculator.domain.usecase.FetchAllResultsUseCase
 import com.asentt.hydrocalculator.domain.model.ResultData
 import com.asentt.hydrocalculator.domain.usecase.DeleteResultByIdUseCase
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -68,7 +66,7 @@ class ResultsViewModel @Inject constructor(
             .launchIn(viewModelScope)
 
 
-    private val _sortOption = MutableStateFlow(SortOption.NEWEST)
+    private val _sortOption = MutableStateFlow(SortOption.Newest)
     val sortOption = _sortOption.asStateFlow()
 
     val sortedResultState = combine(
@@ -76,11 +74,11 @@ class ResultsViewModel @Inject constructor(
         _sortOption
     ) { resultResource, sortOption ->
         val sortedList = when (sortOption) {
-            SortOption.NEWEST -> resultResource.sortedByDescending { it.id }
-            SortOption.FLOW -> resultResource.sortedByDescending { it.flow }
-            SortOption.DIAMETER -> resultResource.sortedByDescending { it.diameter }
-            SortOption.VELOCITY -> resultResource.sortedByDescending { it.velocity }
-            SortOption.HEADLOSSES -> resultResource.sortedByDescending { it.headloss }
+            SortOption.Newest -> resultResource.sortedByDescending { it.id }
+            SortOption.Flow -> resultResource.sortedByDescending { it.flow }
+            SortOption.Diameter -> resultResource.sortedByDescending { it.diameter }
+            SortOption.Velocity -> resultResource.sortedByDescending { it.velocity }
+            SortOption.Headlosses -> resultResource.sortedByDescending { it.headloss }
         }
         Resource.Success(sortedList) as Resource<List<ResultData>>
     }.onStart {

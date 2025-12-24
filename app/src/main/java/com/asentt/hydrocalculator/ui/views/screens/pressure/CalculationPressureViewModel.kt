@@ -7,6 +7,7 @@ import com.asentt.hydrocalculator.domain.usecase.SaveCalculationUseCase
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -169,6 +170,15 @@ class CalculationPressureViewModel
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
             _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+        }
+    }
+
+    fun onClearInputFields() {
+        _uiState.update {
+            it.copy(
+                flowText = "0",
+                diameterText = "0",
+            )
         }
     }
 
