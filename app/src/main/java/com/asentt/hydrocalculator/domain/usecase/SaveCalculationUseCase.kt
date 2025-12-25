@@ -11,6 +11,7 @@ class SaveCalculationUseCase @Inject constructor(private val calculationReposito
     suspend operator fun invoke(
         waterFlow: Float,
         pipeDiameter: Float,
+        roughness: Float,
         velocity: Float,
         headLoss: Float,
         description: String
@@ -18,6 +19,7 @@ class SaveCalculationUseCase @Inject constructor(private val calculationReposito
         CalculationResultEntity(
             flow = waterFlow,
             diameter = pipeDiameter,
+            roughness = roughness,
             velocity = velocity,
             headloss = headLoss,
             description = description.ifEmpty { "N/A" }

@@ -34,6 +34,7 @@ class CalculationPressureViewModel
         val currentText = when (currentState.focusedField) {
             FocusedField.FLOW -> currentState.flowText
             FocusedField.DIAMETER -> currentState.diameterText
+            FocusedField.ROUGHNESS -> currentState.roughnessText
             else -> return
         }
 
@@ -52,10 +53,18 @@ class CalculationPressureViewModel
         }
 
         _uiState.update { state ->
-            if (state.focusedField == FocusedField.FLOW) {
-                state.copy(flowText = newText)
-            } else {
-                state.copy(diameterText = newText)
+            when (state.focusedField) {
+                FocusedField.FLOW -> {
+                    state.copy(flowText = newText)
+                }
+
+                FocusedField.DIAMETER -> {
+                    state.copy(diameterText = newText)
+                }
+
+                else -> {
+                    state.copy(roughnessText = newText)
+                }
             }
         }
         recalculateResults()
@@ -75,10 +84,17 @@ class CalculationPressureViewModel
                 currentState.diameterText
             }
 
+            val cleanedRoughnessText = if (newFocus != FocusedField.ROUGHNESS) {
+                currentState.roughnessText.removeSuffix(".")
+            } else {
+                currentState.roughnessText
+            }
+
             currentState.copy(
                 focusedField = newFocus,
                 flowText = cleanedFlowText,
-                diameterText = cleanedDiameterText
+                diameterText = cleanedDiameterText,
+                roughnessText = cleanedRoughnessText
             )
         }
     }
@@ -119,8 +135,13 @@ class CalculationPressureViewModel
 
             _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
 
-            if ((currentState.flowText.isEmpty() || currentState.diameterText.isEmpty()) ||
-                currentState.flowText == "0" || currentState.diameterText == "0"
+            if ((currentState.flowText.isEmpty()
+                        || currentState.diameterText.isEmpty()
+                        || currentState.roughnessText.isEmpty())
+                ||
+                (currentState.flowText == "0"
+                        || currentState.diameterText == "0"
+                        || currentState.roughnessText == "0")
             ) {
                 _uiState.update {
                     it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
@@ -130,6 +151,7 @@ class CalculationPressureViewModel
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
                     pipeDiameter = currentState.diameterText.toFloat(),
+                    roughness = currentState.roughnessText.toFloat(),
                     velocity = currentState.velocity,
                     headLoss = currentState.headLoss,
                     description = currentState.description
@@ -149,7 +171,6 @@ class CalculationPressureViewModel
                                 saveOperationState = Resource.Success(Unit)
                             )
                         }
-                        delay(1000)
                         _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Calculation saved successfully"))
                     }
 

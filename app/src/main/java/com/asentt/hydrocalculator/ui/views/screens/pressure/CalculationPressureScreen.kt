@@ -147,6 +147,13 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 isFocused = uiState.focusedField == FocusedField.DIAMETER,
                                 onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
                             )
+                            UnitInputField(
+                                value = uiState.roughnessText,
+                                label = "Roughness",
+                                unit = "m",
+                                isFocused = uiState.focusedField == FocusedField.ROUGHNESS,
+                                onFocus = { viewModel.onFocusChanged(FocusedField.ROUGHNESS) }
+                            )
                             HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                             ResultField(
                                 label = "Velocity",

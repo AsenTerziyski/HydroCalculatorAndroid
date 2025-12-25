@@ -11,11 +11,9 @@ import javax.inject.Singleton
 class CalculationRepository @Inject constructor(private val calculationDao: PressureCalculationResultsDao) {
     suspend fun saveCalculation(calculation: CalculationResultEntity): Resource<Unit> =
         try {
-            delay(500)
             calculationDao.insert(calculation)
             Resource.Success(Unit)
         } catch (e: Exception) {
-            delay(500)
             Resource.Error(e)
         }
 
