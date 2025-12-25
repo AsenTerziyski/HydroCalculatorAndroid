@@ -5,8 +5,10 @@ import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.domain.usecase.FetchAllResultsUseCase
 import com.asentt.hydrocalculator.domain.model.ResultData
 import com.asentt.hydrocalculator.domain.usecase.DeleteResultByIdUseCase
+import com.asentt.hydrocalculator.ui.views.screens.pressure.CalculationPressureEvent
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -15,6 +17,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -29,7 +32,8 @@ class ResultsViewModel @Inject constructor(
 
     private val _resultHistoryState =
         MutableStateFlow<Resource<List<ResultData>>>(Resource.Idle)
-    val resultHistoryState = _resultHistoryState.asStateFlow()
+    private val _eventChannel = Channel<CalculationPressureEvent>()
+    val eventChannel = _eventChannel.receiveAsFlow()
 
     init {
         fetchAllResults()
@@ -40,6 +44,7 @@ class ResultsViewModel @Inject constructor(
             _resultHistoryState.update { Resource.Loading }
             try {
                 deleteResultByIdUseCase.invoke(resultId)
+                _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Deleted successfully"))
             } catch (e: Exception) {
                 _resultHistoryState.update {
                     Resource.Error(e)
