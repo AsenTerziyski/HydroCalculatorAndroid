@@ -69,6 +69,7 @@ private fun CalculationResultsScreen(
                                 SortOption.Newest -> SortOption.Newest.name
                                 SortOption.Flow -> SortOption.Flow.name
                                 SortOption.Diameter -> SortOption.Diameter.name
+                                SortOption.Roughness -> SortOption.Roughness.name
                                 SortOption.Velocity -> SortOption.Velocity.name
                                 SortOption.Headlosses -> SortOption.Headlosses.name
                             }
@@ -129,17 +130,17 @@ fun ResultsListPreview() {
     ResultsList(
         resultList = listOf(
             ResultData(
-                id = 1, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 1, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             ), ResultData(
-                id = 2, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 2, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             ), ResultData(
-                id = 7, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 7, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             ), ResultData(
-                id = 9, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 9, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             ), ResultData(
-                id = 90, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 90, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             ), ResultData(
-                id = 99, flow = 100f, diameter = 10f, headloss = 10f, velocity = 10f
+                id = 99, flow = 100f, diameter = 10f, roughness = 0.01F, headloss = 10f, velocity = 10f
             )
         ), onDeleteClick = {}, onShareClick = {})
 }

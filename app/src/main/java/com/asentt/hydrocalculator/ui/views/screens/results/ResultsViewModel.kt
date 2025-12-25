@@ -76,6 +76,7 @@ class ResultsViewModel @Inject constructor(
         val sortedList = when (sortOption) {
             SortOption.Newest -> resultResource.sortedByDescending { it.id }
             SortOption.Flow -> resultResource.sortedByDescending { it.flow }
+            SortOption.Roughness -> resultResource.sortedByDescending { it.roughness }
             SortOption.Diameter -> resultResource.sortedByDescending { it.diameter }
             SortOption.Velocity -> resultResource.sortedByDescending { it.velocity }
             SortOption.Headlosses -> resultResource.sortedByDescending { it.headloss }

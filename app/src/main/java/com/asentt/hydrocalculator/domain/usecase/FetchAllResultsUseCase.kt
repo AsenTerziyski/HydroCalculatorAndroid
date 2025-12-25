@@ -15,6 +15,7 @@ class FetchAllResultsUseCase @Inject constructor(
                     id = entity.id,
                     flow = entity.flow,
                     diameter = entity.diameter,
+                    roughness = entity.roughness,
                     velocity = entity.velocity,
                     headloss = entity.headloss,
                     description = entity.description

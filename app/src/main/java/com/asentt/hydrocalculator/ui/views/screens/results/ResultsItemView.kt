@@ -152,6 +152,7 @@ private fun getPreviewResult() = ResultData(
     id = 100L,
     flow = 100F,
     diameter = 100.10F,
+    roughness = 0.00001F,
     velocity = 1.1F,
     headloss = 0.001F,
     description = "N/A"
