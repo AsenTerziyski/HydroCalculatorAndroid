@@ -47,6 +47,12 @@ fun ResultItem(
         )
 
         ResultRow(
+            firstText = "Roughness: ",
+            secondText = "%.4f".format(calculationResult.roughness),
+            thirdText = "mm"
+        )
+
+        ResultRow(
             firstText = "Velocity: ",
             secondText = "%.2f".format(calculationResult.velocity),
             thirdText = "m/s"
