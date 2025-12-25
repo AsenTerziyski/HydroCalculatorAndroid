@@ -1,4 +1,4 @@
-package com.asentt.hydrocalculator.ui
+package com.asentt.hydrocalculator.ui.views.snackbar
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box

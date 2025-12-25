@@ -22,14 +22,13 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.asentt.hydrocalculator.domain.model.ResultData
-import com.asentt.hydrocalculator.ui.SnackBarToastView
+import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
 import com.asentt.hydrocalculator.ui.views.LoadingView
 import com.asentt.hydrocalculator.ui.views.screens.pressure.CalculationPressureEvent
 import com.asentt.hydrocalculator.utils.Resource
