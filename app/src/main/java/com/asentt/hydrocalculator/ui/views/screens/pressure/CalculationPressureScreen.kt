@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.asentt.hydrocalculator.ui.SnackBarToastView
 import com.asentt.hydrocalculator.ui.theme.HydroCyan
 import com.asentt.hydrocalculator.ui.views.NumericKeypad
 import com.asentt.hydrocalculator.ui.views.SavingView
@@ -83,28 +84,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
     }
 
     Scaffold(
-        snackbarHost = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(top = 16.dp),
-                contentAlignment = Alignment.TopCenter
-            ) {
-                SnackbarHost(hostState = snackBarHostState) { data ->
-                    Snackbar(
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .border(
-                                width = 2.dp,
-                                color = HydroCyan.copy(alpha = 0.8f),
-                                shape = RoundedCornerShape(12.dp)
-                            ),
-                        containerColor = Color.Black,
-                        contentColor = HydroCyan,
-                    ) { Text(data.visuals.message) }
-                }
-            }
-        },
+        snackbarHost = { SnackBarToastView(snackBarHostState) },
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
 

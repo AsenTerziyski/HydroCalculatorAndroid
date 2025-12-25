@@ -29,6 +29,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import com.asentt.hydrocalculator.domain.model.ResultData
+import com.asentt.hydrocalculator.ui.SnackBarToastView
 import com.asentt.hydrocalculator.ui.views.LoadingView
 import com.asentt.hydrocalculator.ui.views.screens.pressure.CalculationPressureEvent
 import com.asentt.hydrocalculator.utils.Resource
@@ -41,6 +42,7 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
 
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+
 
     LaunchedEffect(key1 = Unit) {
         viewModel.eventChannel.collect {
@@ -80,8 +82,8 @@ private fun CalculationResultsScreen(
     onShareClick: (ResultData) -> Unit
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(hostState = snackBarHostState) })
-    { paddingValues ->
+        snackbarHost = { SnackBarToastView(snackBarHostState) }
+    ) { paddingValues ->
 
         Column(
             modifier = Modifier
