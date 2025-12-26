@@ -32,7 +32,7 @@ import com.asentt.hydrocalculator.ui.views.dialogs.ConfirmationDialog
 import com.asentt.hydrocalculator.ui.views.hydroappbars.HydroAppBottomBar
 import com.asentt.hydrocalculator.ui.views.hydroappbars.HydroAppTopBar
 import com.asentt.hydrocalculator.ui.views.screens.pressure.CalculationPressureScreen
-import com.asentt.hydrocalculator.ui.views.screens.CalculationTypeScreen
+import com.asentt.hydrocalculator.ui.views.screens.calculationtype.CalculationTypeScreen
 import com.asentt.hydrocalculator.ui.views.screens.GoodbyeScreen
 import com.asentt.hydrocalculator.ui.views.screens.WelcomeScreen
 import com.asentt.hydrocalculator.ui.views.screens.results.CalculationResultsScreen

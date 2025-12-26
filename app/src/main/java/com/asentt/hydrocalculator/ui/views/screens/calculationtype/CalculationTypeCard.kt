@@ -1,6 +1,5 @@
-package com.asentt.hydrocalculator.ui.views.calculationtype
+package com.asentt.hydrocalculator.ui.views.screens.calculationtype
 
-import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloatAsState

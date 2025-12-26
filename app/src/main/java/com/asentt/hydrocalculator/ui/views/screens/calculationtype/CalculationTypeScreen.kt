@@ -1,4 +1,4 @@
-package com.asentt.hydrocalculator.ui.views.screens
+package com.asentt.hydrocalculator.ui.views.screens.calculationtype
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,7 +21,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.asentt.hydrocalculator.utils.CalculationTypeItem
 import com.asentt.hydrocalculator.utils.calculationTypeItems
-import com.asentt.hydrocalculator.ui.views.calculationtype.CalculationTypeCard
 
 @Composable
 fun CalculationTypeScreen(badgeCount: Int = 0, onCardClick: (CalculationTypeItem) -> Unit) {
