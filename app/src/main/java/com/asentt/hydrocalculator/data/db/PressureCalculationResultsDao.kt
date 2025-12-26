@@ -18,4 +18,7 @@ interface PressureCalculationResultsDao {
     @Query("DELETE FROM pressure_calculation_results WHERE id = :id")
     suspend fun deleteById(id: Long)
 
+    @Query("SELECT COUNT(*) FROM pressure_calculation_results")
+    fun getResultsCount(): Flow<Int>
+
 }

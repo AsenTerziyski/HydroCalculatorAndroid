@@ -21,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.IntOffset
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -34,15 +36,15 @@ import com.asentt.hydrocalculator.ui.views.screens.CalculationTypeScreen
 import com.asentt.hydrocalculator.ui.views.screens.GoodbyeScreen
 import com.asentt.hydrocalculator.ui.views.screens.WelcomeScreen
 import com.asentt.hydrocalculator.ui.views.screens.results.CalculationResultsScreen
+import com.asentt.hydrocalculator.vm.MainViewModel
 
 @Composable
-fun HydroAppNavigationGraph() {
+fun HydroAppNavigationGraph(mainViewModel: MainViewModel = hiltViewModel()) {
     val navController = rememberNavController()
     val activity = (LocalContext.current as? Activity)
-
+    val resultsBadgeCount by mainViewModel.resultsBadgeCount.collectAsStateWithLifecycle()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
-
     var showDialog by remember { mutableStateOf(false) }
 
     if (showDialog) {
@@ -91,6 +93,7 @@ fun HydroAppNavigationGraph() {
             ) {
 
                 HydroAppBottomBar(
+                    resultsBadgeCount = resultsBadgeCount,
                     currentlySelectedTab = selectedTab,
                     onClickHome = {
                         navController.navigate(route = HydroAppRoutes.HomeScreen.route) {

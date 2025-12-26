@@ -26,4 +26,6 @@ class CalculationRepository @Inject constructor(private val calculationDao: Pres
         }
 
     fun fetchAllResults() = calculationDao.getAllResults()
+
+    fun getResultsCount() = calculationDao.getResultsCount()
 }

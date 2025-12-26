@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.PowerSettingsNew
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.material3.BottomAppBar
@@ -37,6 +39,7 @@ import com.asentt.hydrocalculator.ui.theme.hydroGradient
 
 @Composable
 fun HydroAppBottomBar(
+    resultsBadgeCount: Int,
     currentlySelectedTab: BottomBarTab?,
     onClickHome: () -> Unit,
     onClickPressurizedPipes: () -> Unit,
@@ -142,14 +145,32 @@ fun HydroAppBottomBar(
                     onClickResults.invoke()
                 },
             {
-                Text(
-                    modifier = Modifier
-                        .weight(0.5f)
-                        .padding(2.dp),
-                    textAlign = TextAlign.Center,
-                    fontSize = 10.sp,
-                    text = "Results"
-                )
+                BadgedBox(
+                    badge = {
+                        if (resultsBadgeCount > 0) {
+                            Badge(
+                                modifier = Modifier.padding(bottom = 6.dp),
+                                containerColor = Color.Red,
+                                contentColor = Color.White
+                            ) {
+                                val badgeText =
+                                    if (resultsBadgeCount > 10) "10+" else resultsBadgeCount.toString()
+                                Text(
+                                    text = badgeText,
+                                    fontSize = 10.sp
+                                )
+                            }
+                        }
+                    }
+
+                ) {
+                    Text(
+                        modifier = Modifier.padding(2.dp),
+                        textAlign = TextAlign.Center,
+                        fontSize = 10.sp,
+                        text = "Results"
+                    )
+                }
             },
             isSelected = currentlySelectedTab == BottomBarTab.RESULTS_SCREEN
         )
@@ -188,6 +209,7 @@ fun BottomBarItem(
 fun HydroAppBottomBarPreview() {
     Surface(color = MaterialTheme.colorScheme.surface) {
         HydroAppBottomBar(
+            resultsBadgeCount = 17,
             currentlySelectedTab = BottomBarTab.PRESSURIZED_PIPES,
             onClickHome = {},
             onClickPressurizedPipes = {},
