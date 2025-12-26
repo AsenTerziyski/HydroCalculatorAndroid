@@ -3,6 +3,7 @@ package com.asentt.hydrocalculator.utils
 data class CalculationTypeItem(
     val title: String,
     val description: String,
+    val hasBadge: Boolean = false
 )
 
 val calculationTypeItems = listOf<CalculationTypeItem>(
@@ -18,6 +19,7 @@ val calculationTypeItems = listOf<CalculationTypeItem>(
 
     CalculationTypeItem(
         title = "Your results",
-        description = "See your calculations"
+        description = "See your calculations",
+        hasBadge = true
     )
 )

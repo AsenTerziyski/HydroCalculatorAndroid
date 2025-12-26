@@ -24,14 +24,16 @@ import com.asentt.hydrocalculator.utils.calculationTypeItems
 import com.asentt.hydrocalculator.ui.views.calculationtype.CalculationTypeCard
 
 @Composable
-fun CalculationTypeScreen(onCardClick: (CalculationTypeItem) -> Unit) {
+fun CalculationTypeScreen(badgeCount: Int = 0, onCardClick: (CalculationTypeItem) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
     ) {
         val pagerState = rememberPagerState(pageCount = { calculationTypeItems.size })
 
         Column(
-            modifier = Modifier.fillMaxSize().padding(top = 8.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = 8.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             HorizontalPager(
@@ -48,7 +50,9 @@ fun CalculationTypeScreen(onCardClick: (CalculationTypeItem) -> Unit) {
                 ) {
                     CalculationTypeCard(
                         title = item.title,
-                        description = item.description
+                        description = item.description,
+                        hasBadge = item.hasBadge,
+                        badgeCount = badgeCount,
                     ) {
                         onCardClick.invoke(item)
                     }

@@ -170,7 +170,7 @@ fun HydroAppNavigationGraph(mainViewModel: MainViewModel = hiltViewModel()) {
 
             composable(route = HydroAppRoutes.HomeScreen.route) {
                 BackHandler { showDialog = true }
-                CalculationTypeScreen { calcType ->
+                CalculationTypeScreen(badgeCount = resultsBadgeCount) { calcType ->
                     when (calcType.title) {
                         "Pressurized Pipes" -> navController.navigate(HydroAppRoutes.PressureScreen.route)
                         "Gravity Pipes" -> Log.d("Navigation", "Navigate to Gravity Pipes screen")

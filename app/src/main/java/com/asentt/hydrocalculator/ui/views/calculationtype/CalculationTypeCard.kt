@@ -1,5 +1,6 @@
 package com.asentt.hydrocalculator.ui.views.calculationtype
 
+import android.util.Log
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloatAsState
@@ -16,6 +17,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.BadgedBox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -38,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.asentt.hydrocalculator.R
 import com.asentt.hydrocalculator.ui.theme.HydroCyan
 import com.asentt.hydrocalculator.ui.theme.HydroGreen
@@ -46,6 +50,8 @@ import com.asentt.hydrocalculator.ui.theme.HydroGreen
 fun CalculationTypeCard(
     title: String,
     description: String,
+    hasBadge: Boolean = false,
+    badgeCount: Int = 0,
     onClick: () -> Unit
 ) {
     var targetRotation by remember { mutableFloatStateOf(-0.1f) }
@@ -107,13 +113,41 @@ fun CalculationTypeCard(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalArrangement = Arrangement.Bottom
             ) {
-                Text(
-                    text = title,
-                    style = MaterialTheme.typography.headlineSmall,
-                    fontWeight = FontWeight.Bold,
-                    textAlign = TextAlign.Center,
-                    color = Color.White
-                )
+                if (hasBadge) {
+                    BadgedBox(
+                        badge = {
+                            if (badgeCount > 0) {
+                                Badge(
+                                    modifier = Modifier.padding(bottom = 6.dp),
+                                    containerColor = Color.Red,
+                                    contentColor = Color.White
+                                ) {
+                                    val badgeText = badgeCount.toString()
+                                    Text(
+                                        text = badgeText,
+                                        fontSize = 10.sp
+                                    )
+                                }
+                            }
+                        }
+                    ) {
+                        Text(
+                            text = title,
+                            style = MaterialTheme.typography.headlineSmall,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            color = Color.White
+                        )
+                    }
+                } else {
+                    Text(
+                        text = title,
+                        style = MaterialTheme.typography.headlineSmall,
+                        fontWeight = FontWeight.Bold,
+                        textAlign = TextAlign.Center,
+                        color = Color.White
+                    )
+                }
 
                 Spacer(modifier = Modifier.padding(12.dp))
 
