@@ -13,9 +13,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class MainViewModel @Inject constructor(
-    private val getResultsCountUseCase: GetResultsCountUseCase
-) : ViewModel() {
+class MainViewModel @Inject constructor(getResultsCountUseCase: GetResultsCountUseCase) :
+    ViewModel() {
     private val _startupState = MutableStateFlow(LoadingAppUiState.LoadingSplashScreen)
     val startupState = _startupState.asStateFlow()
 
@@ -30,10 +29,10 @@ class MainViewModel @Inject constructor(
     }
 
     val resultsBadgeCount = getResultsCountUseCase.invoke().stateIn(
-            scope = viewModelScope,
-            started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
-        )
+        scope = viewModelScope,
+        started = kotlinx.coroutines.flow.SharingStarted.WhileSubscribed(5000),
+        initialValue = 0
+    )
 }
 
 enum class LoadingAppUiState {
@@ -41,5 +40,3 @@ enum class LoadingAppUiState {
     LoadingWelcomeScreen,
     Ready
 }
-
-
