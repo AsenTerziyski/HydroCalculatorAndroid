@@ -28,7 +28,7 @@ class MainActivity : ComponentActivity() {
             HydrocalculatorTheme(
                 darkTheme = true,
                 dynamicColor = false
-            ) { HydroAppNavigationGraph() }
+            ) { HydroAppNavigationGraph(mainViewModel) }
         }
     }
 }
