@@ -127,3 +127,14 @@ fun ConfirmationDialogPreview() = ConfirmationDialog(
     dialogTitle = "Exit App",
     dialogText = "Are you sure you want to exit the app?"
 )
+
+@Preview
+@Composable
+fun ConfirmationDialogWithoutIconPreview() = ConfirmationDialog(
+    onDismissRequest = {},
+    onConfirmation = {},
+    dialogTitle = "Delete result",
+    dialogText = "Are you sure you want to delete this result?",
+    confirmButtonText = "Delete",
+    hasIcon = false
+)
