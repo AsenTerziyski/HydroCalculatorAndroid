@@ -26,15 +26,20 @@ fun ConfirmationDialog(
     onConfirmation: () -> Unit,
     dialogTitle: String,
     dialogText: String,
+    hasIcon: Boolean = true,
+    confirmButtonText: String = "Exit",
+    dismissButtonText: String = "Cancel"
 ) {
 
     AlertDialog(
         icon = {
-            GradientIcon(
-                icon = Icons.AutoMirrored.Filled.ExitToApp,
-                contentDescription = "Exit App Icon",
-                brush = MaterialTheme.hydroGradient
-            )
+            if (hasIcon) {
+                GradientIcon(
+                    icon = Icons.AutoMirrored.Filled.ExitToApp,
+                    contentDescription = "Exit App Icon",
+                    brush = MaterialTheme.hydroGradient
+                )
+            }
         },
         title = {
             Text(
@@ -64,7 +69,7 @@ fun ConfirmationDialog(
                 }
             ) {
                 Text(
-                    text = "Exit",
+                    text = confirmButtonText,
                     style = MaterialTheme.typography.titleSmall.copy(
                         brush = MaterialTheme.hydroGradient,
                         textAlign = TextAlign.Center
@@ -79,7 +84,7 @@ fun ConfirmationDialog(
                 }
             ) {
                 Text(
-                    text = "Cancel",
+                    text = dismissButtonText,
                     style = MaterialTheme.typography.titleSmall.copy(
                         brush = MaterialTheme.hydroGradient,
                         textAlign = TextAlign.Center

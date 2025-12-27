@@ -25,11 +25,14 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import com.asentt.hydrocalculator.domain.model.ResultData
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
 import com.asentt.hydrocalculator.ui.views.LoadingView
+import com.asentt.hydrocalculator.ui.views.dialogs.ConfirmationDialog
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarEvent
 import com.asentt.hydrocalculator.utils.Resource
 import kotlinx.coroutines.launch
@@ -38,9 +41,9 @@ import kotlinx.coroutines.launch
 fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
     val resultsState by viewModel.sortedResultState.collectAsStateWithLifecycle()
     val currentSortOption by viewModel.sortOption.collectAsStateWithLifecycle()
-
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
+    var itemToDelete by remember { mutableStateOf<ResultData?>(null) }
 
     LaunchedEffect(key1 = Unit) {
         viewModel.snackBarEventChannel.collect { snackBarEvent ->
@@ -57,15 +60,29 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
         }
     }
 
+    if (itemToDelete != null) {
+        ConfirmationDialog(
+            dialogTitle = "Delete result",
+            dialogText = "Are you sure you want to delete this result?",
+            confirmButtonText = "Delete",
+            dismissButtonText = "Cancel",
+            hasIcon = false,
+            onDismissRequest = { itemToDelete = null },
+            onConfirmation = {
+                itemToDelete?.let { viewModel.deleteResultById(it.id) }
+                itemToDelete = null
+            }
+        )
+    }
+
     CalculationResultsScreen(
         resultsState = resultsState,
         currentSortOption = currentSortOption,
         snackBarHostState = snackBarHostState,
         onSortSelected = viewModel::onSortOptionSelected,
-        onDeleteClick = { viewModel.deleteResultById(it.id) },
+        onDeleteClick = { result -> itemToDelete = result },
         onShareClick = { /* Handle share */ }
     )
-
 }
 
 @Composable
@@ -154,11 +171,14 @@ fun ResultsList(
         contentPadding = PaddingValues(vertical = 8.dp)
     ) {
         items(
-            items = resultList, key = { result -> result.id }) { result ->
+            items = resultList,
+            key = { result -> result.id }
+        ) { result ->
             ResultItem(
                 calculationResult = result,
                 onDeleteClick = { onDeleteClick(result) },
-                onShareClick = { onShareClick(result) })
+                onShareClick = { onShareClick(result) }
+            )
         }
     }
 }
