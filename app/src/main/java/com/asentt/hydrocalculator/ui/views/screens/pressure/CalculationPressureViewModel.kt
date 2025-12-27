@@ -151,7 +151,6 @@ class CalculationPressureViewModel
                 _uiState.update {
                     it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
                 }
-//                _showDialogChannel.send(SaveDilaogEvent.ShowSnackBar("Flow and diameter cannot be empty"))
                 _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Flow and diameter cannot be empty"))
             } else {
                 val result = saveCalculationUseCase(
@@ -196,10 +195,6 @@ class CalculationPressureViewModel
         }
     }
 
-    fun resetSaveState() {
-        _uiState.update { state -> state.copy(saveOperationState = Resource.Idle) }
-    }
-
     fun onDismissDialog() {
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
@@ -226,5 +221,4 @@ class CalculationPressureViewModel
 sealed interface SaveDilaogEvent {
     data object Show : SaveDilaogEvent
     data object Hide : SaveDilaogEvent
-//    data class ShowSnackBar(val message: String) : CalculationPressureEvent
 }
