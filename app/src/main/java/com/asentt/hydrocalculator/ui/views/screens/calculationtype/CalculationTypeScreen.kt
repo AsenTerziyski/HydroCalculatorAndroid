@@ -1,6 +1,7 @@
 package com.asentt.hydrocalculator.ui.views.screens.calculationtype
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,6 +20,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.asentt.hydrocalculator.ui.theme.HydroCyan
+import com.asentt.hydrocalculator.ui.theme.HydroGreen
+import com.asentt.hydrocalculator.ui.theme.White
 import com.asentt.hydrocalculator.utils.CalculationTypeItem
 import com.asentt.hydrocalculator.utils.calculationTypeItems
 
@@ -60,7 +64,7 @@ fun CalculationTypeScreen(badgeCount: Int = 0, onCardClick: (CalculationTypeItem
             PageIndicator(
                 pageCount = pagerState.pageCount,
                 currentPage = pagerState.currentPage,
-                modifier = Modifier.padding(vertical = 32.dp) // Use vertical padding
+                modifier = Modifier.padding(vertical = 32.dp)
             )
         }
     }
@@ -78,13 +82,14 @@ fun PageIndicator(
     ) {
         repeat(pageCount) { pageIndex ->
             val color = if (pageIndex == currentPage) {
-                MaterialTheme.colorScheme.primary
+                HydroGreen.copy(alpha = 2F)
             } else {
-                MaterialTheme.colorScheme.onSurface.copy(alpha = 0.5f)
+                HydroCyan.copy(0.7F)
             }
             Box(
                 modifier = Modifier
                     .size(10.dp)
+                    .border(if (pageIndex == currentPage) 1.dp else 0.dp, White, CircleShape)
                     .clip(CircleShape)
                     .background(color)
             )
