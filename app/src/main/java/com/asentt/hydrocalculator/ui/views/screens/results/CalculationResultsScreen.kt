@@ -30,7 +30,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.asentt.hydrocalculator.domain.model.ResultData
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
 import com.asentt.hydrocalculator.ui.views.LoadingView
-import com.asentt.hydrocalculator.ui.views.screens.pressure.CalculationPressureEvent
+import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarEvent
 import com.asentt.hydrocalculator.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -42,16 +42,13 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
 
-
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventChannel.collect {
-            when (it) {
-                CalculationPressureEvent.HideSaveDialog -> {}
-                CalculationPressureEvent.ShowSaveDialog -> {}
-                is CalculationPressureEvent.ShowSnackBar -> {
+        viewModel.snackBarEventChannel.collect { snackBarEvent ->
+            when (snackBarEvent) {
+                is SnackBarEvent.ShowSnackBar -> {
                     scope.launch {
                         snackBarHostState.showSnackbar(
-                            message = it.message,
+                            message = snackBarEvent.message,
                             withDismissAction = true
                         )
                     }

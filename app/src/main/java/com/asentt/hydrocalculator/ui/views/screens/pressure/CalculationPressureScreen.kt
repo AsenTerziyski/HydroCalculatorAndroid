@@ -35,6 +35,7 @@ import com.asentt.hydrocalculator.ui.theme.HydroCyan
 import com.asentt.hydrocalculator.ui.views.NumericKeypad
 import com.asentt.hydrocalculator.ui.views.SavingView
 import com.asentt.hydrocalculator.ui.views.dialogs.SaveCalculationDialog
+import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarEvent
 import com.asentt.hydrocalculator.utils.Resource
 import kotlinx.coroutines.launch
 
@@ -59,20 +60,25 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.eventChannel.collect { event ->
-            when (event) {
-                CalculationPressureEvent.HideSaveDialog -> {
-                    isSaveResultDialogVisible = false
+        viewModel.showDialogChannel.collect { event ->
+            isSaveResultDialogVisible = when (event) {
+                SaveDilaogEvent.Hide -> {
+                    false
                 }
-
-                CalculationPressureEvent.ShowSaveDialog -> {
-                    isSaveResultDialogVisible = true
+                SaveDilaogEvent.Show -> {
+                    true
                 }
+            }
+        }
+    }
 
-                is CalculationPressureEvent.ShowSnackBar -> {
+    LaunchedEffect(key1 = Unit) {
+        viewModel.snackBarEventChannel.collect { snackBarEvent ->
+            when (snackBarEvent) {
+                is SnackBarEvent.ShowSnackBar -> {
                     scope.launch {
                         snackBarHostState.showSnackbar(
-                            message = event.message,
+                            message = snackBarEvent.message,
                             withDismissAction = true
                         )
                     }

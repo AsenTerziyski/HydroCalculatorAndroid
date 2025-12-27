@@ -4,10 +4,10 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.calculationengine.PressurePipeEngine
 import com.asentt.hydrocalculator.domain.usecase.SaveCalculationUseCase
+import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarEvent
 import com.asentt.hydrocalculator.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,8 +26,12 @@ class CalculationPressureViewModel
     private val _uiState = MutableStateFlow(CalculationPressureUiState())
     val uiState: StateFlow<CalculationPressureUiState> = _uiState.asStateFlow()
 
-    private val _eventChannel = Channel<CalculationPressureEvent>()
-    val eventChannel = _eventChannel.receiveAsFlow()
+    private val _showDialogChannel = Channel<SaveDilaogEvent>()
+    val showDialogChannel = _showDialogChannel.receiveAsFlow()
+
+    private val _snackBarEventChannel = Channel<SnackBarEvent>()
+    val snackBarEventChannel = _snackBarEventChannel.receiveAsFlow()
+
 
     fun onKeyClick(key: String) {
         val currentState = _uiState.value
@@ -119,7 +123,7 @@ class CalculationPressureViewModel
 
     fun onSaveIntent() {
         viewModelScope.launch {
-            _eventChannel.send(CalculationPressureEvent.ShowSaveDialog)
+            _showDialogChannel.send(SaveDilaogEvent.Show)
         }
     }
 
@@ -130,7 +134,7 @@ class CalculationPressureViewModel
     fun onConfirmSave() {
 
         viewModelScope.launch {
-            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+            _showDialogChannel.send(SaveDilaogEvent.Hide)
 
             val currentState = _uiState.value
 
@@ -147,7 +151,8 @@ class CalculationPressureViewModel
                 _uiState.update {
                     it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
                 }
-                _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Flow and diameter cannot be empty"))
+//                _showDialogChannel.send(SaveDilaogEvent.ShowSnackBar("Flow and diameter cannot be empty"))
+                _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Flow and diameter cannot be empty"))
             } else {
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
@@ -172,13 +177,13 @@ class CalculationPressureViewModel
                                 saveOperationState = Resource.Success(Unit)
                             )
                         }
-                        _eventChannel.send(CalculationPressureEvent.ShowSnackBar("Calculation saved successfully"))
+                        _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Calculation saved successfully"))
                     }
 
                     is Resource.Error -> {
                         val exception = result.exeption
-                        _eventChannel.send(
-                            CalculationPressureEvent.ShowSnackBar(
+                        _snackBarEventChannel.send(
+                            SnackBarEvent.ShowSnackBar(
                                 exception.message ?: "Unknown Error"
                             )
                         )
@@ -198,7 +203,7 @@ class CalculationPressureViewModel
     fun onDismissDialog() {
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
-            _eventChannel.send(CalculationPressureEvent.HideSaveDialog)
+            _showDialogChannel.send(SaveDilaogEvent.Hide)
         }
     }
 
@@ -218,8 +223,8 @@ class CalculationPressureViewModel
 
 }
 
-sealed interface CalculationPressureEvent {
-    data object ShowSaveDialog : CalculationPressureEvent
-    data object HideSaveDialog : CalculationPressureEvent
-    data class ShowSnackBar(val message: String) : CalculationPressureEvent
+sealed interface SaveDilaogEvent {
+    data object Show : SaveDilaogEvent
+    data object Hide : SaveDilaogEvent
+//    data class ShowSnackBar(val message: String) : CalculationPressureEvent
 }
