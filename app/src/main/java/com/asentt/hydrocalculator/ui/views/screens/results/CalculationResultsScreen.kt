@@ -39,8 +39,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
-    val resultsState by viewModel.sortedResultState.collectAsStateWithLifecycle()
-    val currentSortOption by viewModel.sortOption.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackBarHostState = remember { SnackbarHostState() }
     val scope = rememberCoroutineScope()
     var itemToDelete by remember { mutableStateOf<ResultData?>(null) }
@@ -76,8 +75,10 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
     }
 
     CalculationResultsScreen(
-        resultsState = resultsState,
-        currentSortOption = currentSortOption,
+        results = uiState.results,
+        isLoading = uiState.isLoading,
+        error = uiState.error,
+        currentSortOption = uiState.sortOption,
         snackBarHostState = snackBarHostState,
         onSortSelected = viewModel::onSortOptionSelected,
         onDeleteClick = { result -> itemToDelete = result },
@@ -87,7 +88,9 @@ fun CalculationResultsScreen(viewModel: ResultsViewModel = hiltViewModel()) {
 
 @Composable
 private fun CalculationResultsScreen(
-    resultsState: Resource<List<ResultData>>,
+    results: List<ResultData>,
+    isLoading: Boolean,
+    error: String?,
     currentSortOption: SortOption,
     snackBarHostState: SnackbarHostState,
     onSortSelected: (SortOption) -> Unit,
@@ -137,23 +140,18 @@ private fun CalculationResultsScreen(
                 modifier = Modifier.weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                when (resultsState) {
-                    is Resource.Loading -> LoadingView()
-                    is Resource.Success -> {
-                        val resultList = resultsState.data
-                        if (resultList.isEmpty()) {
-                            Text(text = "No calculation history found.")
-                        } else {
-                            ResultsList(
-                                resultList = resultList,
-                                onDeleteClick = onDeleteClick,
-                                onShareClick = onShareClick
-                            )
-                        }
-                    }
 
-                    is Resource.Error -> Text("Error loading results")
-                    else -> {}
+                when {
+                    isLoading -> LoadingView()
+                    error != null -> Text("Error: $error")
+                    results.isEmpty() -> Text(text = "No calculation history found.")
+                    else -> {
+                        ResultsList(
+                            resultList = results,
+                            onDeleteClick = onDeleteClick,
+                            onShareClick = onShareClick
+                        )
+                    }
                 }
             }
         }
