@@ -88,12 +88,10 @@ private fun KeyButton(
                 color = HydroCyan.copy(alpha = 0.5f),
                 shape = RoundedCornerShape(16.dp)
             )
-            .clickable
-                (
+            .clickable(
                 interactionSource = interactionSource,
                 indication = null,
-                onClick = onClick
-            ),
+                onClick = onClick),
         color = backgroundColor,
     ) {
         Box(

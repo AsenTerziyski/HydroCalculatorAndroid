@@ -12,7 +12,7 @@ data class CalculationPressureUiState(
     val headLoss: Float = 0f,
     val description: String = EMPTY_STRING,
     val focusedField: FocusedField? = FocusedField.FLOW,
-    val saveOperationState: Resource<Unit> = Resource.Idle
+    val saveState: Resource<Unit> = Resource.Idle
 )
 
 private const val EMPTY_STRING = ""

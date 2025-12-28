@@ -42,7 +42,21 @@ import kotlinx.coroutines.launch
 @Composable
 fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val scope = rememberCoroutineScope()
+
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
+    LaunchedEffect(key1 = Unit) {
+        viewModel.showDialogChannel.collect { event ->
+            isSaveResultDialogVisible = when (event) {
+                SaveDilaogEvent.Hide -> {
+                    false
+                }
+                SaveDilaogEvent.Show -> {
+                    true
+                }
+            }
+        }
+    }
 
     if (isSaveResultDialogVisible) {
         SaveCalculationDialog(
@@ -57,21 +71,6 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
     }
 
     val snackBarHostState = remember { SnackbarHostState() }
-    val scope = rememberCoroutineScope()
-
-    LaunchedEffect(key1 = Unit) {
-        viewModel.showDialogChannel.collect { event ->
-            isSaveResultDialogVisible = when (event) {
-                SaveDilaogEvent.Hide -> {
-                    false
-                }
-                SaveDilaogEvent.Show -> {
-                    true
-                }
-            }
-        }
-    }
-
     LaunchedEffect(key1 = Unit) {
         viewModel.snackBarEventChannel.collect { snackBarEvent ->
             when (snackBarEvent) {
@@ -92,7 +91,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
         containerColor = MaterialTheme.colorScheme.background
     ) { innerPadding ->
 
-        when (uiState.saveOperationState) {
+        when (uiState.saveState) {
             Resource.Loading -> {
                 SavingView()
             }
@@ -138,7 +137,6 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 isFocused = uiState.focusedField == FocusedField.ROUGHNESS,
                                 onFocus = { viewModel.onFocusChanged(FocusedField.ROUGHNESS) }
                             )
-                            HorizontalDivider(modifier = Modifier.padding(vertical = 8.dp))
                             ResultField(
                                 label = "Velocity",
                                 value = "%.2f".format(uiState.velocity),

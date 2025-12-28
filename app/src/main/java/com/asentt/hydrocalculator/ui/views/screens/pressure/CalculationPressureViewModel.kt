@@ -108,7 +108,7 @@ class CalculationPressureViewModel
         val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
         val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
 
-        if (waterFlow > 0 && pipeDiameter > 0) {
+        if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
             val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
             val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
             _uiState.update { state ->
@@ -138,7 +138,7 @@ class CalculationPressureViewModel
 
             val currentState = _uiState.value
 
-            _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
+            _uiState.update { state -> state.copy(saveState = Resource.Loading) }
 
             if ((currentState.flowText.isEmpty()
                         || currentState.diameterText.isEmpty()
@@ -149,9 +149,9 @@ class CalculationPressureViewModel
                         || currentState.roughnessText == "0")
             ) {
                 _uiState.update {
-                    it.copy(saveOperationState = Resource.Error(Exception("Flow and diameter cannot be empty")))
+                    it.copy(saveState = Resource.Error(Exception("Inputs cannot be 0")))
                 }
-                _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Flow and diameter cannot be empty"))
+                _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Inputs cannot be 0"))
             } else {
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
@@ -166,14 +166,14 @@ class CalculationPressureViewModel
                     Resource.Idle -> {}
 
                     Resource.Loading -> {
-                        _uiState.update { state -> state.copy(saveOperationState = Resource.Loading) }
+                        _uiState.update { state -> state.copy(saveState = Resource.Loading) }
                     }
 
                     is Resource.Success<*> -> {
                         _uiState.update { state ->
                             state.copy(
                                 description = "",
-                                saveOperationState = Resource.Success(Unit)
+                                saveState = Resource.Success(Unit)
                             )
                         }
                         _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Calculation saved successfully"))
@@ -187,7 +187,7 @@ class CalculationPressureViewModel
                             )
                         )
                         _uiState.update { state ->
-                            state.copy(saveOperationState = Resource.Error(exception))
+                            state.copy(saveState = Resource.Error(exception))
                         }
                     }
                 }
@@ -207,10 +207,11 @@ class CalculationPressureViewModel
             it.copy(
                 flowText = "0",
                 diameterText = "0",
+                roughnessText = "0",
                 velocity = 0f,
                 headLoss = 0f,
                 description = "",
-                saveOperationState = Resource.Idle,
+                saveState = Resource.Idle,
                 focusedField = FocusedField.FLOW
             )
         }
