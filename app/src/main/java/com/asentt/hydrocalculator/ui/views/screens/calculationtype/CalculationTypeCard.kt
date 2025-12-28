@@ -95,9 +95,10 @@ fun CalculationTypeCard(
                         brush = Brush.verticalGradient(
                             colors = listOf(
                                 Color.Transparent,
-                                HydroGreen.copy(alpha = 0.1f),
-                                HydroCyan.copy(alpha = 0.5f),
-                                Color.Transparent,
+                                Color.Black,
+                                HydroGreen.copy(alpha = 0.5f),
+                                HydroCyan.copy(alpha = 0.3f),
+                                Color.Black,
                                 Color.Transparent,
                             ),
                             startY = 100f
