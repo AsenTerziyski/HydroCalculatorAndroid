@@ -1,5 +1,7 @@
 package com.asentt.hydrocalculator.ui.views.screens.calculationtype
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.graphics.Color
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.asentt.hydrocalculator.ui.theme.HydroCalculatorTheme
 import com.asentt.hydrocalculator.ui.theme.HydroCyan
 import com.asentt.hydrocalculator.ui.theme.HydroGreen
 import com.asentt.hydrocalculator.ui.theme.White
@@ -29,7 +32,8 @@ import com.asentt.hydrocalculator.utils.calculationTypeItems
 @Composable
 fun CalculationTypeScreen(badgeCount: Int = 0, onCardClick: (CalculationTypeItem) -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
+        modifier = Modifier.fillMaxSize(),
+        color = MaterialTheme.colorScheme.background
     ) {
         val pagerState = rememberPagerState(pageCount = { calculationTypeItems.size })
 
@@ -94,6 +98,17 @@ fun PageIndicator(
                     .background(color)
             )
         }
+    }
+}
+
+@Composable
+@Preview(
+    showBackground = true,
+    uiMode = UI_MODE_NIGHT_YES
+)
+fun CalculationTypeScreenPreview() {
+    HydroCalculatorTheme {
+        CalculationTypeScreen(badgeCount = 3) {}
     }
 }
 
