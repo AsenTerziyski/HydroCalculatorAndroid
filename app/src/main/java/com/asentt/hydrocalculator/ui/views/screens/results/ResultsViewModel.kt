@@ -46,9 +46,7 @@ class ResultsViewModel @Inject constructor(
                 deleteResultByIdUseCase.invoke(resultId)
                 _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Deleted successfully"))
             } catch (e: Exception) {
-                _resultHistoryState.update {
-                    Resource.Error(e)
-                }
+                _resultHistoryState.update { Resource.Error(e) }
             }
         }
     }
@@ -96,6 +94,7 @@ class ResultsViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = Resource.Loading
     )
+
     fun onSortOptionSelected(newOption: SortOption) {
         _sortOption.update { _ -> newOption }
     }
