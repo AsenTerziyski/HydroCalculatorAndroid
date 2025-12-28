@@ -74,6 +74,24 @@ class CalculationPressureViewModel
         recalculateResults()
     }
 
+    private fun recalculateResults() {
+        val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
+        val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
+        val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
+
+        if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
+            val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
+            val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
+            _uiState.update { state ->
+                state.copy(velocity = velocityResult, headLoss = headLossResult)
+            }
+        } else {
+            _uiState.update { state ->
+                state.copy(velocity = 0f, headLoss = 0f)
+            }
+        }
+    }
+
     fun onFocusChanged(newFocus: FocusedField) {
         _uiState.update { currentState ->
             val cleanedFlowText = if (newFocus != FocusedField.FLOW) {
@@ -100,24 +118,6 @@ class CalculationPressureViewModel
                 diameterText = cleanedDiameterText,
                 roughnessText = cleanedRoughnessText
             )
-        }
-    }
-
-    private fun recalculateResults() {
-        val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
-        val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
-        val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
-
-        if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
-            val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
-            val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
-            _uiState.update { state ->
-                state.copy(velocity = velocityResult, headLoss = headLossResult)
-            }
-        } else {
-            _uiState.update { state ->
-                state.copy(velocity = 0f, headLoss = 0f)
-            }
         }
     }
 
