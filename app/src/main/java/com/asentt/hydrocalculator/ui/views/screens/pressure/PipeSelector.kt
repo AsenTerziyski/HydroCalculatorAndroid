@@ -53,10 +53,9 @@ fun CatalogSelectionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Min), // Forces both boxes to have the same height
+            .height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        // --- 1. Dropdown for DN (Matches UnitInputField Styling) ---
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -65,7 +64,6 @@ fun CatalogSelectionRow(
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.Transparent)
                 .clickable { expanded = true }
-                // EXACT PADDING as UnitInputField:
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             contentAlignment = Alignment.CenterStart
         ) {
@@ -82,7 +80,6 @@ fun CatalogSelectionRow(
                     )
                     Text(
                         text = selectedPipe.name,
-                        // EXACT FONT as UnitInputField to ensure same height:
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface
                     )
@@ -129,7 +126,6 @@ fun CatalogSelectionRow(
             verticalArrangement = Arrangement.SpaceEvenly, // Distributes space nicely within the fixed height
             horizontalAlignment = Alignment.Start
         ) {
-            // PN 10
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
@@ -140,7 +136,7 @@ fun CatalogSelectionRow(
                     selected = selectedPN == PressureRating.PN10,
                     onClick = { onPNSelected(PressureRating.PN10) },
                     colors = RadioButtonDefaults.colors(selectedColor = HydroCyan),
-                    modifier = Modifier.size(24.dp) // Compact size to fit well
+                    modifier = Modifier.size(24.dp)
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 Text(
@@ -151,7 +147,6 @@ fun CatalogSelectionRow(
                 Spacer(modifier = Modifier.width(8.dp))
             }
 
-            // PN 16
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier

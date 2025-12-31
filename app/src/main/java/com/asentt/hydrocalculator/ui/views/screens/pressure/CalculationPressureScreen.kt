@@ -1,5 +1,6 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
@@ -129,8 +130,12 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 CatalogSelectionRow(
                                     selectedPipe = CatalogPipes.DN32,
                                     selectedPN = PressureRating.PN10,
-                                    onPipeSelected = { },
-                                    onPNSelected = { }
+                                    onPipeSelected = {
+                                        Log.d("TAG101", "Pipe selected: ${it.name}")
+                                    },
+                                    onPNSelected = {
+                                        Log.d("TAG101", "Pipe selected: ${it.name}")
+                                    }
                                 )
                             } else {
                                 UnitInputField(
