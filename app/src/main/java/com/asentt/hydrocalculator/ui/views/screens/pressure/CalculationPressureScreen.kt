@@ -142,7 +142,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                             )
                             val velocity = uiState.velocity
                             val velocityWarningText =
-                                if (velocity > 2.5) "Warning: Velocity > 2.5"
+                                if (velocity > 2.5) "Velocity > 2.5"
                                 else if (velocity > 0 && velocity < 0.3) "Velocity < 0.3"
                                 else null
 
