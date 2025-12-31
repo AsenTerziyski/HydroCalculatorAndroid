@@ -1,6 +1,5 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
-import android.R
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -29,7 +27,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
@@ -45,6 +42,8 @@ import kotlinx.coroutines.launch
 fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
+
+    var isCatalogOptionSelected by remember { mutableStateOf(false) }
 
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
@@ -126,13 +125,23 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 isFocused = uiState.focusedField == FocusedField.FLOW,
                                 onFocus = { viewModel.onFocusChanged(FocusedField.FLOW) }
                             )
-                            UnitInputField(
-                                value = uiState.diameterText,
-                                label = "Diameter",
-                                unit = "mm",
-                                isFocused = uiState.focusedField == FocusedField.DIAMETER,
-                                onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
-                            )
+                            if (isCatalogOptionSelected) {
+                                CatalogSelectionRow(
+                                    selectedPipe = CatalogPipes.DN32,
+                                    selectedPN = PressureRating.PN10,
+                                    onPipeSelected = { },
+                                    onPNSelected = { }
+                                )
+                            } else {
+                                UnitInputField(
+                                    value = uiState.diameterText,
+                                    label = "Diameter",
+                                    unit = "mm",
+                                    isFocused = uiState.focusedField == FocusedField.DIAMETER,
+                                    onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
+                                )
+                            }
+
                             UnitInputField(
                                 value = uiState.roughnessText,
                                 label = "Roughness",
@@ -162,17 +171,36 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
 
                     NumericKeypad { key -> viewModel.onKeyClick(key) }
 
-                    SaveButton(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 28.dp)
-                            .padding(vertical = 12.dp),
+                            .padding(horizontal = 28.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        viewModel.apply {
-                            onSaveIntent()
-                            onFocusChanged(FocusedField.NONE)
+                        val optionButtonTitle =
+                            if (isCatalogOptionSelected) "By CATALOG" else "By INPUT"
+                        HydroActionButton(
+                            modifier = Modifier
+                                .weight(0.4f)
+                                .padding(vertical = 12.dp),
+                            title = optionButtonTitle,
+                            textColor = Color.White
+                        ) {
+                            isCatalogOptionSelected = !isCatalogOptionSelected
+                        }
+                        HydroActionButton(
+                            modifier = Modifier
+                                .weight(0.6f)
+                                .padding(vertical = 12.dp),
+                            textColor = Color.Red
+                        ) {
+                            viewModel.apply {
+                                onSaveIntent()
+                                onFocusChanged(FocusedField.NONE)
+                            }
                         }
                     }
+
                 }
             }
         }
@@ -268,8 +296,10 @@ private fun ResultField(
 }
 
 @Composable
-private fun SaveButton(
+private fun HydroActionButton(
     modifier: Modifier = Modifier,
+    title: String = "SAVE",
+    textColor: Color = HydroCyan,
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -308,8 +338,8 @@ private fun SaveButton(
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
-                text = "Save Result",
-                color = HydroCyan,
+                text = title,
+                color = textColor,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -319,5 +349,5 @@ private fun SaveButton(
 @Preview
 @Composable
 fun SaveButtonPreview() {
-    SaveButton(onClick = {})
+    HydroActionButton(onClick = {})
 }
