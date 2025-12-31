@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import com.asentt.hydrocalculator.navigation.HydroAppNavigationGraph
 import com.asentt.hydrocalculator.ui.theme.HydroCalculatorTheme
 import com.asentt.hydrocalculator.vm.LoadingAppUiState
@@ -23,7 +22,6 @@ class MainActivity : ComponentActivity() {
         }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
             HydroCalculatorTheme(
                 darkTheme = true,

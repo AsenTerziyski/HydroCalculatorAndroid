@@ -1,5 +1,6 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
+import android.R
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
@@ -28,6 +29,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
@@ -51,6 +53,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                 SaveDilaogEvent.Hide -> {
                     false
                 }
+
                 SaveDilaogEvent.Show -> {
                     true
                 }
@@ -137,10 +140,17 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 isFocused = uiState.focusedField == FocusedField.ROUGHNESS,
                                 onFocus = { viewModel.onFocusChanged(FocusedField.ROUGHNESS) }
                             )
+                            val velocity = uiState.velocity
+                            val velocityWarningText =
+                                if (velocity > 2.5) "Warning: Velocity > 2.5"
+                                else if (velocity > 0 && velocity < 0.3) "Velocity < 0.3"
+                                else null
+
                             ResultField(
                                 label = "Velocity",
                                 value = "%.2f".format(uiState.velocity),
-                                unit = "m/s"
+                                unit = "m/s",
+                                warningMessage = velocityWarningText
                             )
                             ResultField(
                                 label = "Head loss",
@@ -206,21 +216,47 @@ private fun UnitInputField(
 }
 
 @Composable
-private fun ResultField(label: String, value: String, unit: String) {
+private fun ResultField(
+    label: String,
+    value: String,
+    unit: String,
+    warningMessage: String? = null
+) {
+    val contentColor = if (warningMessage != null) MaterialTheme.colorScheme.error else HydroCyan
+    val displayValue = if (value.length > 7) {
+        value.take(7) + "..."
+    } else {
+        value
+    }
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 4.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.bodyLarge,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-        )
+        Column {
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+            )
+            if (warningMessage != null) {
+                Text(
+                    text = warningMessage,
+                    color = Color.Red,
+                    style = MaterialTheme.typography.labelSmall,
+                    textAlign = TextAlign.End
+                )
+            }
+        }
+
         Row(verticalAlignment = Alignment.Bottom) {
-            Text(text = value, style = MaterialTheme.typography.headlineSmall, color = HydroCyan)
+            Text(
+                text = displayValue,
+                style = MaterialTheme.typography.headlineSmall,
+                color = contentColor
+            )
             Spacer(modifier = Modifier.padding(start = 4.dp))
             Text(
                 text = unit,
