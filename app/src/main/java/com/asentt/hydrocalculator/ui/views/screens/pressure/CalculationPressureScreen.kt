@@ -50,11 +50,11 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
     LaunchedEffect(key1 = Unit) {
         viewModel.showDialogChannel.collect { event ->
             isSaveResultDialogVisible = when (event) {
-                SaveDilaogEvent.Hide -> {
+                SaveDialogEvent.Hide -> {
                     false
                 }
 
-                SaveDilaogEvent.Show -> {
+                SaveDialogEvent.Show -> {
                     true
                 }
             }

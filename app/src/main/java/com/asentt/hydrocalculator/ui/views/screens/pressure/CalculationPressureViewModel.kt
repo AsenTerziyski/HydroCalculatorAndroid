@@ -1,6 +1,5 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.calculationengine.PressurePipeEngine
@@ -27,7 +26,7 @@ class CalculationPressureViewModel
     private val _uiState = MutableStateFlow(CalculationPressureUiState())
     val uiState: StateFlow<CalculationPressureUiState> = _uiState.asStateFlow()
 
-    private val _showDialogChannel = Channel<SaveDilaogEvent>()
+    private val _showDialogChannel = Channel<SaveDialogEvent>()
     val showDialogChannel = _showDialogChannel.receiveAsFlow()
 
     private val _snackBarEventChannel = Channel<SnackBarEvent>()
@@ -141,7 +140,7 @@ class CalculationPressureViewModel
 
     fun onSaveIntent() {
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Show)
+            _showDialogChannel.send(SaveDialogEvent.Show)
         }
     }
 
@@ -152,7 +151,7 @@ class CalculationPressureViewModel
     fun onConfirmSave(isOptionSelected: Boolean = false) {
 
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Hide)
+            _showDialogChannel.send(SaveDialogEvent.Hide)
 
             val currentState = _uiState.value
             val pn = currentState.pressureRating
@@ -237,7 +236,7 @@ class CalculationPressureViewModel
     fun onDismissDialog() {
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Hide)
+            _showDialogChannel.send(SaveDialogEvent.Hide)
         }
     }
 
@@ -270,7 +269,7 @@ class CalculationPressureViewModel
 
 }
 
-sealed interface SaveDilaogEvent {
-    data object Show : SaveDilaogEvent
-    data object Hide : SaveDilaogEvent
+sealed interface SaveDialogEvent {
+    data object Show : SaveDialogEvent
+    data object Hide : SaveDialogEvent
 }
