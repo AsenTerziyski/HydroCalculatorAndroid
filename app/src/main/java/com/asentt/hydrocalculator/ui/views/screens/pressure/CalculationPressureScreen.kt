@@ -66,7 +66,9 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
             description = uiState.description,
             onDescriptionChange = viewModel::onDescriptionChange,
             onConfirm = {
-                viewModel.onConfirmSave()
+                viewModel.onConfirmSave(
+                    isOptionSelected = isCatalogOptionSelected
+                )
                 viewModel.onClearInputFields()
             },
             onDismiss = viewModel::onDismissDialog
@@ -128,13 +130,13 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                             )
                             if (isCatalogOptionSelected) {
                                 CatalogSelectionRow(
-                                    selectedPipe = CatalogPipes.DN32,
-                                    selectedPN = PressureRating.PN10,
+                                    selectedPipe = uiState.catalogPipe,
+                                    selectedPN = uiState.pressureRating,
                                     onPipeSelected = {
-                                        Log.d("TAG101", "Pipe selected: ${it.name}")
+                                        viewModel.onCatalogPipeSelected(it)
                                     },
                                     onPNSelected = {
-                                        Log.d("TAG101", "Pipe selected: ${it.name}")
+                                        viewModel.onPressureRatingSelected(it)
                                     }
                                 )
                             } else {

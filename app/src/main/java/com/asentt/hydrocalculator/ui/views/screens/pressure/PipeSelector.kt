@@ -38,13 +38,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.asentt.hydrocalculator.ui.theme.HydroCyan
 
-
-enum class PressureRating { PN10, PN16 }
-
 @Composable
 fun CatalogSelectionRow(
-    selectedPipe: CatalogPipes,
-    selectedPN: PressureRating,
+    selectedPipe: CatalogPipes?,
+    selectedPN: PressureRating?,
     onPipeSelected: (CatalogPipes) -> Unit,
     onPNSelected: (PressureRating) -> Unit
 ) {
@@ -78,11 +75,13 @@ fun CatalogSelectionRow(
                         style = MaterialTheme.typography.bodySmall,
                         color = HydroCyan
                     )
-                    Text(
-                        text = selectedPipe.name,
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
+                    selectedPipe?.name?.let {
+                        Text(
+                            text = it,
+                            style = MaterialTheme.typography.headlineMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                    }
                 }
                 Icon(
                     imageVector = Icons.Default.ArrowDropDown,
@@ -96,7 +95,7 @@ fun CatalogSelectionRow(
                 onDismissRequest = { expanded = false },
                 modifier = Modifier.background(Color.White)
             ) {
-                CatalogPipes.values().forEach { pipe ->
+                CatalogPipes.entries.forEach { pipe ->
                     DropdownMenuItem(
                         text = {
                             Text(

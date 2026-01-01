@@ -1,5 +1,6 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.asentt.hydrocalculator.calculationengine.PressurePipeEngine
@@ -80,8 +81,10 @@ class CalculationPressureViewModel
         val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
 
         if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
-            val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
-            val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
+            val velocityResult =
+                pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
+            val headLossResult =
+                pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
             _uiState.update { state ->
                 state.copy(velocity = velocityResult, headLoss = headLossResult)
             }
@@ -131,21 +134,44 @@ class CalculationPressureViewModel
         _uiState.update { state -> state.copy(description = description) }
     }
 
-    fun onConfirmSave() {
+    fun onConfirmSave(isOptionSelected: Boolean = false) {
 
         viewModelScope.launch {
             _showDialogChannel.send(SaveDilaogEvent.Hide)
 
             val currentState = _uiState.value
+            val pn = currentState.pressureRating
+            val dn = currentState.catalogPipe
+            var diameter: String?
+
+            if (isOptionSelected) {
+                diameter = when (pn) {
+                    PressureRating.PN10 -> {
+                        dn?.idPn10.toString()
+                    }
+
+                    PressureRating.PN16 -> {
+                        dn?.idPn16.toString()
+                    }
+
+                    null -> {
+                        ""
+                    }
+                }
+            } else {
+                diameter = currentState.diameterText
+            }
+
+            Log.d("TAG101", "DIAMETER!!!" + diameter)
 
             _uiState.update { state -> state.copy(saveState = Resource.Loading) }
 
             if ((currentState.flowText.isEmpty()
-                        || currentState.diameterText.isEmpty()
+                        || diameter.isEmpty()
                         || currentState.roughnessText.isEmpty())
                 ||
                 (currentState.flowText == "0"
-                        || currentState.diameterText == "0"
+                        || diameter == "0"
                         || currentState.roughnessText == "0")
             ) {
                 _uiState.update {
@@ -155,7 +181,7 @@ class CalculationPressureViewModel
             } else {
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
-                    pipeDiameter = currentState.diameterText.toFloat(),
+                    pipeDiameter = diameter.toFloat(),
                     roughness = currentState.roughnessText.toFloat(),
                     velocity = currentState.velocity,
                     headLoss = currentState.headLoss,
@@ -216,6 +242,25 @@ class CalculationPressureViewModel
             )
         }
     }
+
+    fun onPressureRatingSelected(newRating: PressureRating) {
+        _uiState.update { state ->
+            state.copy(
+                pressureRating = newRating,
+                focusedField = FocusedField.CATALOG_DIAMETER
+            )
+        }
+    }
+
+    fun onCatalogPipeSelected(newPipe: CatalogPipes) {
+        _uiState.update {
+            it.copy(
+                catalogPipe = newPipe,
+                focusedField = FocusedField.CATALOG_DIAMETER
+            )
+        }
+    }
+
 
 }
 
