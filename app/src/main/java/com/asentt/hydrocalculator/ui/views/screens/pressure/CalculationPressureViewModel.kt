@@ -260,10 +260,12 @@ class CalculationPressureViewModel
         _uiState.update { state ->
             state.copy(pressureRating = newRating)
         }
+        recalculateResults()
     }
 
     fun onCatalogPipeSelected(newPipe: CatalogPipes) {
         _uiState.update { it.copy(catalogPipe = newPipe) }
+        recalculateResults()
     }
 
 }

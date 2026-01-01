@@ -137,9 +137,11 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                         viewModel.onFocusChanged(FocusedField.CATALOG_DIAMETER)
                                     },
                                     onPipeSelected = {
+                                        Log.d("TAG101", "CalculationPressureScreen: $it")
                                         viewModel.onCatalogPipeSelected(it)
                                     },
                                     onPNSelected = {
+                                        Log.d("TAG101", "CalculationPressureScreen: $it")
                                         viewModel.onPressureRatingSelected(it)
                                     }
                                 )
