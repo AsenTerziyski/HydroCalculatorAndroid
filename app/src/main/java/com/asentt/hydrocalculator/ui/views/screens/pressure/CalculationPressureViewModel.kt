@@ -26,7 +26,7 @@ class CalculationPressureViewModel
     private val _uiState = MutableStateFlow(CalculationPressureUiState())
     val uiState: StateFlow<CalculationPressureUiState> = _uiState.asStateFlow()
 
-    private val _showDialogChannel = Channel<SaveDilaogEvent>()
+    private val _showDialogChannel = Channel<SaveDialogEvent>()
     val showDialogChannel = _showDialogChannel.receiveAsFlow()
 
     private val _snackBarEventChannel = Channel<SnackBarEvent>()
@@ -76,12 +76,29 @@ class CalculationPressureViewModel
 
     private fun recalculateResults() {
         val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
-        val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
+        var pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
         val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
+        val dn = _uiState.value.catalogPipe
+        val pn = _uiState.value.pressureRating
+
+        when(pn) {
+            PressureRating.PN10 -> {
+                pipeDiameter = dn.idPn10.toFloat()
+            }
+            PressureRating.PN16 -> {
+                pipeDiameter = dn.idPn16.toFloat()
+            }
+
+            null -> {}
+        }
+
+
 
         if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
-            val velocityResult = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
-            val headLossResult = pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
+            val velocityResult =
+                pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
+            val headLossResult =
+                pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
             _uiState.update { state ->
                 state.copy(velocity = velocityResult, headLoss = headLossResult)
             }
@@ -123,7 +140,7 @@ class CalculationPressureViewModel
 
     fun onSaveIntent() {
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Show)
+            _showDialogChannel.send(SaveDialogEvent.Show)
         }
     }
 
@@ -131,21 +148,42 @@ class CalculationPressureViewModel
         _uiState.update { state -> state.copy(description = description) }
     }
 
-    fun onConfirmSave() {
+    fun onConfirmSave(isOptionSelected: Boolean = false) {
 
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Hide)
+            _showDialogChannel.send(SaveDialogEvent.Hide)
 
             val currentState = _uiState.value
+            val pn = currentState.pressureRating
+            val dn = currentState.catalogPipe
+            var diameter: String?
+
+            if (isOptionSelected) {
+                diameter = when (pn) {
+                    PressureRating.PN10 -> {
+                        dn?.idPn10.toString()
+                    }
+
+                    PressureRating.PN16 -> {
+                        dn?.idPn16.toString()
+                    }
+
+                    null -> {
+                        ""
+                    }
+                }
+            } else {
+                diameter = currentState.diameterText
+            }
 
             _uiState.update { state -> state.copy(saveState = Resource.Loading) }
 
             if ((currentState.flowText.isEmpty()
-                        || currentState.diameterText.isEmpty()
+                        || diameter.isEmpty()
                         || currentState.roughnessText.isEmpty())
                 ||
                 (currentState.flowText == "0"
-                        || currentState.diameterText == "0"
+                        || diameter == "0"
                         || currentState.roughnessText == "0")
             ) {
                 _uiState.update {
@@ -155,7 +193,7 @@ class CalculationPressureViewModel
             } else {
                 val result = saveCalculationUseCase(
                     waterFlow = currentState.flowText.toFloat(),
-                    pipeDiameter = currentState.diameterText.toFloat(),
+                    pipeDiameter = diameter.toFloat(),
                     roughness = currentState.roughnessText.toFloat(),
                     velocity = currentState.velocity,
                     headLoss = currentState.headLoss,
@@ -198,7 +236,7 @@ class CalculationPressureViewModel
     fun onDismissDialog() {
         _uiState.update { state -> state.copy(description = "") }
         viewModelScope.launch {
-            _showDialogChannel.send(SaveDilaogEvent.Hide)
+            _showDialogChannel.send(SaveDialogEvent.Hide)
         }
     }
 
@@ -217,9 +255,21 @@ class CalculationPressureViewModel
         }
     }
 
+    fun onPressureRatingSelected(newRating: PressureRating?) {
+        _uiState.update { state ->
+            state.copy(pressureRating = newRating)
+        }
+        recalculateResults()
+    }
+
+    fun onCatalogPipeSelected(newPipe: CatalogPipes) {
+        _uiState.update { it.copy(catalogPipe = newPipe) }
+        recalculateResults()
+    }
+
 }
 
-sealed interface SaveDilaogEvent {
-    data object Show : SaveDilaogEvent
-    data object Hide : SaveDilaogEvent
+sealed interface SaveDialogEvent {
+    data object Show : SaveDialogEvent
+    data object Hide : SaveDialogEvent
 }

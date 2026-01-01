@@ -1,6 +1,6 @@
 package com.asentt.hydrocalculator.ui.views.screens.pressure
 
-import android.R
+import android.util.Log
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
@@ -29,7 +28,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.asentt.hydrocalculator.ui.views.snackbar.SnackBarToastView
@@ -46,15 +44,17 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
 
+    var isCatalogOptionSelected by remember { mutableStateOf(false) }
+
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = Unit) {
         viewModel.showDialogChannel.collect { event ->
             isSaveResultDialogVisible = when (event) {
-                SaveDilaogEvent.Hide -> {
+                SaveDialogEvent.Hide -> {
                     false
                 }
 
-                SaveDilaogEvent.Show -> {
+                SaveDialogEvent.Show -> {
                     true
                 }
             }
@@ -66,7 +66,9 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
             description = uiState.description,
             onDescriptionChange = viewModel::onDescriptionChange,
             onConfirm = {
-                viewModel.onConfirmSave()
+                viewModel.onConfirmSave(
+                    isOptionSelected = isCatalogOptionSelected
+                )
                 viewModel.onClearInputFields()
             },
             onDismiss = viewModel::onDismissDialog
@@ -126,13 +128,33 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 isFocused = uiState.focusedField == FocusedField.FLOW,
                                 onFocus = { viewModel.onFocusChanged(FocusedField.FLOW) }
                             )
-                            UnitInputField(
-                                value = uiState.diameterText,
-                                label = "Diameter",
-                                unit = "mm",
-                                isFocused = uiState.focusedField == FocusedField.DIAMETER,
-                                onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
-                            )
+                            if (isCatalogOptionSelected) {
+                                CatalogSelectionRow(
+                                    selectedPipe = uiState.catalogPipe,
+                                    selectedPN = uiState.pressureRating,
+                                    isFocused = uiState.focusedField == FocusedField.CATALOG_DIAMETER,
+                                    onFocus = {
+                                        viewModel.onFocusChanged(FocusedField.CATALOG_DIAMETER)
+                                    },
+                                    onPipeSelected = {
+                                        Log.d("TAG101", "CalculationPressureScreen: $it")
+                                        viewModel.onCatalogPipeSelected(it)
+                                    },
+                                    onPNSelected = {
+                                        Log.d("TAG101", "CalculationPressureScreen: $it")
+                                        viewModel.onPressureRatingSelected(it)
+                                    }
+                                )
+                            } else {
+                                UnitInputField(
+                                    value = uiState.diameterText,
+                                    label = "Diameter",
+                                    unit = "mm",
+                                    isFocused = uiState.focusedField == FocusedField.DIAMETER,
+                                    onFocus = { viewModel.onFocusChanged(FocusedField.DIAMETER) }
+                                )
+                            }
+
                             UnitInputField(
                                 value = uiState.roughnessText,
                                 label = "Roughness",
@@ -162,17 +184,43 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
 
                     NumericKeypad { key -> viewModel.onKeyClick(key) }
 
-                    SaveButton(
+                    Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 28.dp)
-                            .padding(vertical = 12.dp),
+                            .padding(horizontal = 28.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
-                        viewModel.apply {
-                            onSaveIntent()
-                            onFocusChanged(FocusedField.NONE)
+                        val optionButtonTitle =
+                            if (isCatalogOptionSelected) "By CATALOG" else "By INPUT"
+                        HydroActionButton(
+                            modifier = Modifier
+                                .weight(0.4f)
+                                .padding(vertical = 12.dp),
+                            title = optionButtonTitle,
+                            textColor = Color.White
+                        ) {
+                            isCatalogOptionSelected = !isCatalogOptionSelected
+
+                            if (isCatalogOptionSelected) {
+                                viewModel.onPressureRatingSelected(PressureRating.PN16)
+                            } else {
+                                viewModel.onPressureRatingSelected(null)
+                            }
+                            viewModel.onClearInputFields()
+                        }
+                        HydroActionButton(
+                            modifier = Modifier
+                                .weight(0.6f)
+                                .padding(vertical = 12.dp),
+                            textColor = Color.Red
+                        ) {
+                            viewModel.apply {
+                                onSaveIntent()
+                                onFocusChanged(FocusedField.NONE)
+                            }
                         }
                     }
+
                 }
             }
         }
@@ -268,8 +316,10 @@ private fun ResultField(
 }
 
 @Composable
-private fun SaveButton(
+private fun HydroActionButton(
     modifier: Modifier = Modifier,
+    title: String = "SAVE",
+    textColor: Color = HydroCyan,
     onClick: () -> Unit
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -308,8 +358,8 @@ private fun SaveButton(
     ) {
         Box(contentAlignment = Alignment.Center) {
             Text(
-                text = "Save Result",
-                color = HydroCyan,
+                text = title,
+                color = textColor,
                 style = MaterialTheme.typography.titleMedium
             )
         }
@@ -319,5 +369,5 @@ private fun SaveButton(
 @Preview
 @Composable
 fun SaveButtonPreview() {
-    SaveButton(onClick = {})
+    HydroActionButton(onClick = {})
 }
