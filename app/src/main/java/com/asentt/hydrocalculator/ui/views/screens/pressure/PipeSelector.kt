@@ -42,25 +42,30 @@ import com.asentt.hydrocalculator.ui.theme.HydroCyan
 fun CatalogSelectionRow(
     selectedPipe: CatalogPipes?,
     selectedPN: PressureRating?,
+    isFocused: Boolean = false,
+    onFocus: () -> Unit,
     onPipeSelected: (CatalogPipes) -> Unit,
     onPNSelected: (PressureRating) -> Unit
 ) {
     var expanded by remember { mutableStateOf(false) }
+    val borderColor =
+        if (isFocused) HydroCyan else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
 
     Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(IntrinsicSize.Min),
+        modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Box(
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
-                .border(2.dp, HydroCyan, RoundedCornerShape(12.dp))
+                .border(2.dp, borderColor, RoundedCornerShape(12.dp))
                 .clip(RoundedCornerShape(12.dp))
                 .background(Color.Transparent)
-                .clickable { expanded = true }
+                .clickable {
+                    onFocus.invoke()
+                    expanded = true
+                }
                 .padding(horizontal = 16.dp, vertical = 8.dp),
             contentAlignment = Alignment.CenterStart
         ) {
@@ -93,14 +98,14 @@ fun CatalogSelectionRow(
             DropdownMenu(
                 expanded = expanded,
                 onDismissRequest = { expanded = false },
-                modifier = Modifier.background(Color.White)
+                modifier = Modifier.background(Color.Black)
             ) {
                 CatalogPipes.entries.forEach { pipe ->
                     DropdownMenuItem(
                         text = {
                             Text(
                                 text = pipe.name,
-                                color = Color.Black
+                                color = HydroCyan
                             )
                         },
                         onClick = {
@@ -112,28 +117,30 @@ fun CatalogSelectionRow(
             }
         }
 
-        // --- 2. Radio Buttons for PN ---
         Column(
             modifier = Modifier
                 .fillMaxHeight()
                 .border(
                     width = 1.dp,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2f),
+                    color = borderColor,
                     shape = RoundedCornerShape(12.dp)
                 )
                 .padding(horizontal = 4.dp),
-            verticalArrangement = Arrangement.SpaceEvenly, // Distributes space nicely within the fixed height
+            verticalArrangement = Arrangement.SpaceEvenly,
             horizontalAlignment = Alignment.Start
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .clickable { onPNSelected(PressureRating.PN10) }
+                    .clickable {
+                        onFocus.invoke()
+                        onPNSelected(PressureRating.PN10)
+                    }
                     .padding(vertical = 2.dp)
             ) {
                 RadioButton(
                     selected = selectedPN == PressureRating.PN10,
-                    onClick = { onPNSelected(PressureRating.PN10) },
+                    onClick = null,
                     colors = RadioButtonDefaults.colors(selectedColor = HydroCyan),
                     modifier = Modifier.size(24.dp)
                 )
@@ -149,12 +156,15 @@ fun CatalogSelectionRow(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier
-                    .clickable { onPNSelected(PressureRating.PN16) }
+                    .clickable {
+                        onFocus.invoke()
+                        onPNSelected(PressureRating.PN16)
+                    }
                     .padding(vertical = 2.dp)
             ) {
                 RadioButton(
                     selected = selectedPN == PressureRating.PN16,
-                    onClick = { onPNSelected(PressureRating.PN16) },
+                    onClick = null,
                     colors = RadioButtonDefaults.colors(selectedColor = HydroCyan),
                     modifier = Modifier.size(24.dp)
                 )
@@ -177,6 +187,7 @@ fun PipeSelectionPreview() {
     CatalogSelectionRow(
         selectedPipe = CatalogPipes.DN32,
         selectedPN = PressureRating.PN10,
+        onFocus = {},
         onPipeSelected = {},
         onPNSelected = {}
     )

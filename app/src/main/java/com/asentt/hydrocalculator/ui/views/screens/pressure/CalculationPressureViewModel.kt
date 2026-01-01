@@ -77,8 +77,23 @@ class CalculationPressureViewModel
 
     private fun recalculateResults() {
         val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
-        val pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
+        var pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
         val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
+        val dn = _uiState.value.catalogPipe
+        val pn = _uiState.value.pressureRating
+
+        when(pn) {
+            PressureRating.PN10 -> {
+                pipeDiameter = dn.idPn10.toFloat()
+            }
+            PressureRating.PN16 -> {
+                pipeDiameter = dn.idPn16.toFloat()
+            }
+
+            null -> {}
+        }
+
+
 
         if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
             val velocityResult =
@@ -162,8 +177,6 @@ class CalculationPressureViewModel
                 diameter = currentState.diameterText
             }
 
-            Log.d("TAG101", "DIAMETER!!!" + diameter)
-
             _uiState.update { state -> state.copy(saveState = Resource.Loading) }
 
             if ((currentState.flowText.isEmpty()
@@ -243,24 +256,15 @@ class CalculationPressureViewModel
         }
     }
 
-    fun onPressureRatingSelected(newRating: PressureRating) {
+    fun onPressureRatingSelected(newRating: PressureRating?) {
         _uiState.update { state ->
-            state.copy(
-                pressureRating = newRating,
-                focusedField = FocusedField.CATALOG_DIAMETER
-            )
+            state.copy(pressureRating = newRating)
         }
     }
 
     fun onCatalogPipeSelected(newPipe: CatalogPipes) {
-        _uiState.update {
-            it.copy(
-                catalogPipe = newPipe,
-                focusedField = FocusedField.CATALOG_DIAMETER
-            )
-        }
+        _uiState.update { it.copy(catalogPipe = newPipe) }
     }
-
 
 }
 

@@ -132,6 +132,10 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                 CatalogSelectionRow(
                                     selectedPipe = uiState.catalogPipe,
                                     selectedPN = uiState.pressureRating,
+                                    isFocused = uiState.focusedField == FocusedField.CATALOG_DIAMETER,
+                                    onFocus = {
+                                        viewModel.onFocusChanged(FocusedField.CATALOG_DIAMETER)
+                                    },
                                     onPipeSelected = {
                                         viewModel.onCatalogPipeSelected(it)
                                     },
@@ -194,6 +198,13 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                             textColor = Color.White
                         ) {
                             isCatalogOptionSelected = !isCatalogOptionSelected
+
+                            if (isCatalogOptionSelected) {
+                                viewModel.onPressureRatingSelected(PressureRating.PN16)
+                            } else {
+                                viewModel.onPressureRatingSelected(null)
+                            }
+                            viewModel.onClearInputFields()
                         }
                         HydroActionButton(
                             modifier = Modifier
