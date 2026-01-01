@@ -116,12 +116,14 @@ fun HydroAppNavigationGraph(mainViewModel: MainViewModel = hiltViewModel()) {
                         }
                     },
                     onClickResults = {
-                        navController.navigate(route = HydroAppRoutes.ResultsScreen.route) {
-                            popUpTo(HydroAppRoutes.HomeScreen.route) {
-                                saveState = true
+                        if (currentRoute != HydroAppRoutes.ResultsScreen.route) {
+                            navController.navigate(route = HydroAppRoutes.ResultsScreen.route) {
+                                popUpTo(HydroAppRoutes.HomeScreen.route) {
+                                    saveState = true
+                                }
+                                launchSingleTop = true
+                                restoreState = true
                             }
-                            launchSingleTop = true
-                            restoreState = true
                         }
                     },
                     onSwitchOfClick = { showDialog = true })
