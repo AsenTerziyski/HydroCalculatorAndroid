@@ -49,7 +49,8 @@ fun CatalogSelectionRow(
 ) {
     var expanded by remember { mutableStateOf(false) }
     val borderColor =
-        if (isFocused) HydroCyan else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+        if (isFocused) HydroCyan
+        else MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
 
     Row(
         modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),

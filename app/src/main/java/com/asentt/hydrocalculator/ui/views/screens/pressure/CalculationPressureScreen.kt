@@ -43,7 +43,6 @@ import kotlinx.coroutines.launch
 fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val scope = rememberCoroutineScope()
-
     var isCatalogOptionSelected by remember { mutableStateOf(false) }
 
     var isSaveResultDialogVisible by remember { mutableStateOf(false) }
@@ -137,11 +136,9 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                                         viewModel.onFocusChanged(FocusedField.CATALOG_DIAMETER)
                                     },
                                     onPipeSelected = {
-                                        Log.d("TAG101", "CalculationPressureScreen: $it")
                                         viewModel.onCatalogPipeSelected(it)
                                     },
                                     onPNSelected = {
-                                        Log.d("TAG101", "CalculationPressureScreen: $it")
                                         viewModel.onPressureRatingSelected(it)
                                     }
                                 )
@@ -194,10 +191,10 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                             if (isCatalogOptionSelected) "By CATALOG" else "By INPUT"
                         HydroActionButton(
                             modifier = Modifier
-                                .weight(0.4f)
+                                .weight(0.33f)
                                 .padding(vertical = 12.dp),
                             title = optionButtonTitle,
-                            textColor = Color.White
+                            textColor = HydroCyan
                         ) {
                             isCatalogOptionSelected = !isCatalogOptionSelected
 
@@ -210,7 +207,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
                         }
                         HydroActionButton(
                             modifier = Modifier
-                                .weight(0.6f)
+                                .weight(0.67f)
                                 .padding(vertical = 12.dp),
                             textColor = Color.Red
                         ) {
