@@ -65,9 +65,7 @@ fun CalculationPressureScreen(viewModel: CalculationPressureViewModel = hiltView
             description = uiState.description,
             onDescriptionChange = viewModel::onDescriptionChange,
             onConfirm = {
-                viewModel.onConfirmSave(
-                    isOptionSelected = isCatalogOptionSelected
-                )
+                viewModel.onConfirmSave()
                 viewModel.onClearInputFields()
             },
             onDismiss = viewModel::onDismissDialog

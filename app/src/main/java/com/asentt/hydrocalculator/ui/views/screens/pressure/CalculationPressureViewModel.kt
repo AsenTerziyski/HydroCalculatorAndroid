@@ -75,37 +75,42 @@ class CalculationPressureViewModel
     }
 
     private fun recalculateResults() {
-        val waterFlow = _uiState.value.flowText.toFloatOrNull() ?: 0f
-        var pipeDiameter = _uiState.value.diameterText.toFloatOrNull() ?: 0f
-        val roughness = _uiState.value.roughnessText.toFloatOrNull() ?: 0f
-        val dn = _uiState.value.catalogPipe
-        val pn = _uiState.value.pressureRating
-
-        when(pn) {
-            PressureRating.PN10 -> {
-                pipeDiameter = dn.idPn10.toFloat()
-            }
-            PressureRating.PN16 -> {
-                pipeDiameter = dn.idPn16.toFloat()
-            }
-
-            null -> {}
-        }
-
-
-
-        if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
-            val velocityResult =
-                pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
-            val headLossResult =
-                pressurePipeEngine.estimateHeadloss(waterFlow, velocityResult, roughness)
+        val currentState = _uiState.value
+        val waterFlow = currentState.flowText.toFloatOrNull() ?: 0f
+        val roughness = currentState.roughnessText.toFloatOrNull() ?: 0f
+        val pipeDiameter = getEffectiveDiameter(currentState)
+        val (newVelocity, newHeadLoss)
+                = calculateVelocityAndHeadLoss(waterFlow, pipeDiameter, roughness)
+        if (currentState.velocity != newVelocity || currentState.headLoss != newHeadLoss) {
             _uiState.update { state ->
-                state.copy(velocity = velocityResult, headLoss = headLossResult)
+                state.copy(velocity = newVelocity, headLoss = newHeadLoss)
+            }
+        }
+    }
+
+    private fun calculateVelocityAndHeadLoss(
+        waterFlow: Float,
+        pipeDiameter: Float,
+        roughness: Float
+    ): Pair<Float, Float> {
+        return if (waterFlow > 0 && pipeDiameter > 0 && roughness > 0) {
+            val velocity = pressurePipeEngine.estimateVelocity(waterFlow, pipeDiameter, roughness)
+            val headLoss = pressurePipeEngine.estimateHeadloss(waterFlow, velocity, roughness)
+            velocity to headLoss
+        } else {
+            0f to 0f
+        }
+    }
+
+    private fun getEffectiveDiameter(state: CalculationPressureUiState): Float {
+        val pn = state.pressureRating
+        return if (pn != null) {
+            when (pn) {
+                PressureRating.PN10 -> state.catalogPipe.idPn10.toFloat()
+                PressureRating.PN16 -> state.catalogPipe.idPn16.toFloat()
             }
         } else {
-            _uiState.update { state ->
-                state.copy(velocity = 0f, headLoss = 0f)
-            }
+            state.diameterText.toFloatOrNull() ?: 0f
         }
     }
 
@@ -148,87 +153,52 @@ class CalculationPressureViewModel
         _uiState.update { state -> state.copy(description = description) }
     }
 
-    fun onConfirmSave(isOptionSelected: Boolean = false) {
-
+    fun onConfirmSave() {
         viewModelScope.launch {
             _showDialogChannel.send(SaveDialogEvent.Hide)
-
+            _uiState.update { it.copy(saveState = Resource.Loading) }
             val currentState = _uiState.value
-            val pn = currentState.pressureRating
-            val dn = currentState.catalogPipe
-            var diameter: String?
 
-            if (isOptionSelected) {
-                diameter = when (pn) {
-                    PressureRating.PN10 -> {
-                        dn?.idPn10.toString()
-                    }
+            val diameter = getEffectiveDiameter(currentState)
+            val waterFlow = currentState.flowText.toFloatOrNull() ?: 0f
+            val roughness = currentState.roughnessText.toFloatOrNull() ?: 0f
 
-                    PressureRating.PN16 -> {
-                        dn?.idPn16.toString()
-                    }
-
-                    null -> {
-                        ""
-                    }
+            if (waterFlow <= 0f || diameter <= 0f || roughness <= 0f) {
+                val errorMsg = "Inputs must be greater than 0"
+                _uiState.update {
+                    it.copy(saveState = Resource.Error(Exception(errorMsg)))
                 }
-            } else {
-                diameter = currentState.diameterText
+                _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar(errorMsg))
+                return@launch
             }
 
-            _uiState.update { state -> state.copy(saveState = Resource.Loading) }
+            val result = saveCalculationUseCase(
+                waterFlow = waterFlow,
+                pipeDiameter = diameter,
+                roughness = roughness,
+                velocity = currentState.velocity,
+                headLoss = currentState.headLoss,
+                description = currentState.description
+            )
 
-            if ((currentState.flowText.isEmpty()
-                        || diameter.isEmpty()
-                        || currentState.roughnessText.isEmpty())
-                ||
-                (currentState.flowText == "0"
-                        || diameter == "0"
-                        || currentState.roughnessText == "0")
-            ) {
-                _uiState.update {
-                    it.copy(saveState = Resource.Error(Exception("Inputs cannot be 0")))
-                }
-                _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Inputs cannot be 0"))
-            } else {
-                val result = saveCalculationUseCase(
-                    waterFlow = currentState.flowText.toFloat(),
-                    pipeDiameter = diameter.toFloat(),
-                    roughness = currentState.roughnessText.toFloat(),
-                    velocity = currentState.velocity,
-                    headLoss = currentState.headLoss,
-                    description = currentState.description
-                )
-
-                when (result) {
-                    Resource.Idle -> {}
-
-                    Resource.Loading -> {
-                        _uiState.update { state -> state.copy(saveState = Resource.Loading) }
-                    }
-
-                    is Resource.Success<*> -> {
-                        _uiState.update { state ->
-                            state.copy(
-                                description = "",
-                                saveState = Resource.Success(Unit)
-                            )
-                        }
-                        _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Calculation saved successfully"))
-                    }
-
-                    is Resource.Error -> {
-                        val exception = result.exeption
-                        _snackBarEventChannel.send(
-                            SnackBarEvent.ShowSnackBar(
-                                exception.message ?: "Unknown Error"
-                            )
+            when (result) {
+                is Resource.Success<*> -> {
+                    _uiState.update { state ->
+                        state.copy(
+                            description = "",
+                            saveState = Resource.Success(Unit)
                         )
-                        _uiState.update { state ->
-                            state.copy(saveState = Resource.Error(exception))
-                        }
+                    }
+                    _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar("Calculation saved successfully"))
+                }
+                is Resource.Error -> {
+                    val exception = result.exeption
+                    _snackBarEventChannel.send(SnackBarEvent.ShowSnackBar(exception.message ?: "Unknown Error"))
+                    _uiState.update { state ->
+                        state.copy(saveState = Resource.Error(exception))
                     }
                 }
+                else -> { /* Ignore Idle/Loading */ }
             }
         }
     }
@@ -249,6 +219,8 @@ class CalculationPressureViewModel
                 velocity = 0f,
                 headLoss = 0f,
                 description = "",
+                catalogPipe = CatalogPipes.DN32,
+                pressureRating = null,
                 saveState = Resource.Idle,
                 focusedField = FocusedField.FLOW
             )
